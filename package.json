@@ -1,0 +1,30 @@
+{
+  "name": "bibliotecanerds",
+  "version": "1.0.0",
+  "description": "um sistema de gerenciamento de livros para bibliotecas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabiss/bibliotecaNERDS.git"
+  },
+  "author": "Sabrina Bezerra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sabiss/bibliotecaNERDS/issues"
+  },
+  "homepage": "https://github.com/sabiss/bibliotecaNERDS#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.1.0",
+    "mongoose": "^7.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
+  }
+}
