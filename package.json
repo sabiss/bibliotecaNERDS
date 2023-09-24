@@ -2,11 +2,11 @@
   "name": "bibliotecanerds",
   "version": "1.0.0",
   "description": "um sistema de gerenciamento de livros para bibliotecas",
-  "main": "index.js",
+  "main": "./dist/routes/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "tsc",
-    "dev": "nodemon app.js"
+    "dev": "nodemon dist/server.js"
   },
   "repository": {
     "type": "git",
