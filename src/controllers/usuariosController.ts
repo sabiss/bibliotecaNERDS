@@ -80,6 +80,16 @@ class usuarioController {
       return res.status(500).send(`Erro ao deletar usuário - ${error}`);
     }
   };
+
+  static logarNoSistema = async (req, res) => {
+    const { email, senha } = req.body;
+
+    const usuarioExiste = this.verificaExistenciaDeUsuario(req, res);
+
+    if (!usuarioExiste) {
+      return res.status(404).send({ message: "Usuário não cadastrado" });
+    }
+  };
 }
 
 export default usuarioController;

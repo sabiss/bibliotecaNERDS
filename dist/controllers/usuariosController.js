@@ -80,4 +80,11 @@ usuarioController.deletarUsuario = (req, res) => __awaiter(void 0, void 0, void 
         return res.status(500).send(`Erro ao deletar usuário - ${error}`);
     }
 });
+usuarioController.logarNoSistema = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, senha } = req.body;
+    const usuarioExiste = _a.verificaExistenciaDeUsuario(req, res);
+    if (!usuarioExiste) {
+        return res.status(404).send({ message: "Usuário não cadastrado" });
+    }
+});
 exports.default = usuarioController;
