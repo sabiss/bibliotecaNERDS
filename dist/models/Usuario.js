@@ -27,7 +27,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const schemaUsuario = new mongoose_1.Schema({
     nome: { type: String, required: true },
     email: { type: String, required: true },
-    senha: { type: String, required: true },
+    senhaHash: { type: String, required: true },
 });
 const usuarios = mongoose_1.default.model("usuarios", schemaUsuario);
 exports.default = usuarios;
