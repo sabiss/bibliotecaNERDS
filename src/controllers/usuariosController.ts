@@ -3,13 +3,31 @@ import express from "express";
 import mongoose from "mongoose";
 
 class usuarioController {
+  static verificaExistenciaDeUsuario = async (req, res) => {
+    const { email } = req.body;
+    const usuarioExiste = await usuarios.findOne({ email: email });
+
+    if (usuarioExiste) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   static cadastrarUsuario = async (
     req: express.Request,
     res: express.Response
   ) => {
-    const usuario = new usuarios(req.body);
+    if (await this.verificaExistenciaDeUsuario(req, res)) {
+      return res
+        .status(422)
+        .send({ message: "Este email já está sendo usado" });
+    }
+
+    const novoUsuario = new usuarios(req.body);
+
     try {
-      await usuario.save();
+      await novoUsuario.save();
       res.status(201).send({ message: "Usuário Criado com Sucesso" });
     } catch (error) {
       res.status(500).send({
@@ -41,17 +59,15 @@ class usuarioController {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "ID de usuário inválido" });
     }
+
     try {
       const erro = await usuarios.findByIdAndDelete(id);
       if (!erro) {
-        res
-          .status(200)
-          .send({ message: "usuário deletado com sucesso" + erro });
-      } else {
-        res.status(404).send({ message: `usuário não encontrado - ${erro}` });
+        return res.status(404).send({ message: "Usuário não encontrado" });
       }
-    } catch (erro) {
-      res.status(500).send(`Usuário não encontrado - ${erro}`);
+      return res.status(200).send({ message: "Usuário deletado com sucesso" });
+    } catch (error) {
+      return res.status(500).send(`Erro ao deletar usuário - ${error}`);
     }
   };
 }

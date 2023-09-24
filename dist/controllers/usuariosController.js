@@ -18,10 +18,25 @@ const mongoose_1 = __importDefault(require("mongoose"));
 class usuarioController {
 }
 _a = usuarioController;
+usuarioController.verificaExistenciaDeUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    const usuarioExiste = yield Usuario_js_1.default.findOne({ email: email });
+    if (usuarioExiste) {
+        return true;
+    }
+    else {
+        return false;
+    }
+});
 usuarioController.cadastrarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const usuario = new Usuario_js_1.default(req.body);
+    if (yield _a.verificaExistenciaDeUsuario(req, res)) {
+        return res
+            .status(422)
+            .send({ message: "Este email já está sendo usado" });
+    }
+    const novoUsuario = new Usuario_js_1.default(req.body);
     try {
-        yield usuario.save();
+        yield novoUsuario.save();
         res.status(201).send({ message: "Usuário Criado com Sucesso" });
     }
     catch (error) {
@@ -49,16 +64,12 @@ usuarioController.deletarUsuario = (req, res) => __awaiter(void 0, void 0, void 
     try {
         const erro = yield Usuario_js_1.default.findByIdAndDelete(id);
         if (!erro) {
-            res
-                .status(200)
-                .send({ message: "usuário deletado com sucesso" + erro });
+            return res.status(404).send({ message: "Usuário não encontrado" });
         }
-        else {
-            res.status(404).send({ message: `usuário não encontrado - ${erro}` });
-        }
+        return res.status(200).send({ message: "Usuário deletado com sucesso" });
     }
-    catch (erro) {
-        res.status(500).send(`Usuário não encontrado - ${erro}`);
+    catch (error) {
+        return res.status(500).send(`Erro ao deletar usuário - ${error}`);
     }
 });
 exports.default = usuarioController;
