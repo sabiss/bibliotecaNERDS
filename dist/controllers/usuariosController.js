@@ -15,6 +15,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Usuario_js_1 = __importDefault(require("../models/Usuario.js"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 class usuarioController {
 }
 _a = usuarioController;
@@ -34,7 +35,14 @@ usuarioController.cadastrarUsuario = (req, res) => __awaiter(void 0, void 0, voi
             .status(422)
             .send({ message: "Este email já está sendo usado" });
     }
-    const novoUsuario = new Usuario_js_1.default(req.body);
+    const { email, senha, nome } = req.body;
+    const salt = yield bcrypt_1.default.genSalt();
+    const senhaHash = yield bcrypt_1.default.hash(senha, salt); //criando hash da senha para depois ser traduzida para senha normal e comparada
+    const novoUsuario = new Usuario_js_1.default({
+        nome,
+        email,
+        senhaHash,
+    });
     try {
         yield novoUsuario.save();
         res.status(201).send({ message: "Usuário Criado com Sucesso" });

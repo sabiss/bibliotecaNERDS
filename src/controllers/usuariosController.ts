@@ -1,6 +1,8 @@
 import usuarios from "../models/Usuario.js";
 import express from "express";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class usuarioController {
   static verificaExistenciaDeUsuario = async (req, res) => {
@@ -23,8 +25,16 @@ class usuarioController {
         .status(422)
         .send({ message: "Este email já está sendo usado" });
     }
+    const { email, senha, nome } = req.body;
 
-    const novoUsuario = new usuarios(req.body);
+    const salt = await bcrypt.genSalt();
+    const senhaHash = await bcrypt.hash(senha, salt); //criando hash da senha para depois ser traduzida para senha normal e comparada
+
+    const novoUsuario = new usuarios({
+      nome,
+      email,
+      senhaHash,
+    });
 
     try {
       await novoUsuario.save();
