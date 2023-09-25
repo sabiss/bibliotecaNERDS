@@ -21,13 +21,8 @@ class usuarioController {
 _a = usuarioController;
 usuarioController.verificaExistenciaDeUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
-    const usuarioExiste = yield Usuario_js_1.default.findOne({ email: email });
-    if (usuarioExiste) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    const usuario = yield Usuario_js_1.default.findOne({ email: email });
+    return usuario;
 });
 usuarioController.cadastrarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (yield _a.verificaExistenciaDeUsuario(req, res)) {
@@ -82,9 +77,13 @@ usuarioController.deletarUsuario = (req, res) => __awaiter(void 0, void 0, void 
 });
 usuarioController.logarNoSistema = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, senha } = req.body;
-    const usuarioExiste = _a.verificaExistenciaDeUsuario(req, res);
-    if (!usuarioExiste) {
-        return res.status(404).send({ message: "Usuário não cadastrado" });
+    const usuario = yield _a.verificaExistenciaDeUsuario(req, res);
+    if (!usuario) {
+        return res.status(404).send({ message: "usuário não encontrado" });
+    }
+    const senhaCerta = yield bcrypt_1.default.compare(senha, usuario.senhaHash);
+    if (!senhaCerta) {
+        return res.status(422).send({ message: "senha inválida" });
     }
 });
 exports.default = usuarioController;

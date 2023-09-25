@@ -7,13 +7,8 @@ import jwt from "jsonwebtoken";
 class usuarioController {
   static verificaExistenciaDeUsuario = async (req, res) => {
     const { email } = req.body;
-    const usuarioExiste = await usuarios.findOne({ email: email });
-
-    if (usuarioExiste) {
-      return true;
-    } else {
-      return false;
-    }
+    const usuario = await usuarios.findOne({ email: email });
+    return usuario;
   };
 
   static cadastrarUsuario = async (
@@ -84,10 +79,14 @@ class usuarioController {
   static logarNoSistema = async (req, res) => {
     const { email, senha } = req.body;
 
-    const usuarioExiste = this.verificaExistenciaDeUsuario(req, res);
+    const usuario = await this.verificaExistenciaDeUsuario(req, res);
+    if (!usuario) {
+      return res.status(404).send({ message: "usuário não encontrado" });
+    }
+    const senhaCerta = await bcrypt.compare(senha, usuario.senhaHash);
 
-    if (!usuarioExiste) {
-      return res.status(404).send({ message: "Usuário não cadastrado" });
+    if (!senhaCerta) {
+      return res.status(422).send({ message: "senha inválida" });
     }
   };
 }
