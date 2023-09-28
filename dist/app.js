@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dbconnect_js_1 = __importDefault(require("./config/dbconnect.js"));
 const index_js_1 = __importDefault(require("./routes/index.js"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ path: `${__dirname}/.env` });
 const app = (0, express_1.default)();
 dbconnect_js_1.default.on("error", console.log.bind(console, "erro na conexão com o MongoDB"));
 dbconnect_js_1.default.once("open", () => {

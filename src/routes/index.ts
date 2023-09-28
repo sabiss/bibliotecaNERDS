@@ -1,5 +1,5 @@
 import express from "express";
-import usuarios from "../routes/usuariosRouter.js";
+import usuarios from "../routes/usuariosRouter";
 
 const routes = (app) => {
   //pega a instância do express que é o app

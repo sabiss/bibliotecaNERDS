@@ -1,6 +1,9 @@
 import express from "express";
-import conexaoComDataBase from "./config/dbconnect.js";
-import router from "./routes/index.js";
+import conexaoComDataBase from "./config/dbconnect";
+import router from "./routes/index";
+import dotenv from "dotenv";
+
+dotenv.config({ path: `${__dirname}/.env` });
 
 const app = express();
 

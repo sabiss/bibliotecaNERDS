@@ -9,5 +9,9 @@ const router = express_1.default.Router();
 router
     .get("/usuarios", usuariosController_js_1.default.listarUsuarios)
     .post("/usuarios", usuariosController_js_1.default.cadastrarUsuario)
-    .delete("/usuarios/:id", usuariosController_js_1.default.deletarUsuario);
+    .delete("/usuarios/:id", usuariosController_js_1.default.deletarUsuario)
+    .post("/usuario", 
+/*usuariosController.logarNoSistema*/ (req, res) => {
+    res.send("oii");
+});
 exports.default = router;
