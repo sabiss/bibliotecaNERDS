@@ -1,4 +1,4 @@
-import usuarios from "../models/Usuario.js";
+import usuarios from "../models/Usuario";
 import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
@@ -80,14 +80,28 @@ class usuarioController {
     const { email, senha } = req.body;
 
     const usuario = await this.verificaExistenciaDeUsuario(req, res);
+    //testes para saber exstência dos dados de login
     if (!usuario) {
       return res.status(404).send({ message: "usuário não encontrado" });
     }
-    const senhaCerta = await bcrypt.compare(senha, usuario.senhaHash);
+    //const senhaCerta = await bcrypt.compare(senha, usuario.senhaHash);
 
-    if (!senhaCerta) {
-      return res.status(422).send({ message: "senha inválida" });
-    }
+    // if (!senhaCerta) {
+    //   return res.status(422).send({ message: "senha inválida" });
+    // }
+
+    const token = jwt.sign(
+      //payload chave e header
+      {
+        id: usuario._id,
+      },
+      `${process.env.APP_SECRET}`,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res.status(200).send(token);
   };
 }
 

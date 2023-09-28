@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Usuario_js_1 = __importDefault(require("../models/Usuario.js"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class usuarioController {
 }
 _a = usuarioController;
@@ -78,6 +79,7 @@ usuarioController.deletarUsuario = (req, res) => __awaiter(void 0, void 0, void 
 usuarioController.logarNoSistema = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, senha } = req.body;
     const usuario = yield _a.verificaExistenciaDeUsuario(req, res);
+    //testes para saber exstência dos dados de login
     if (!usuario) {
         return res.status(404).send({ message: "usuário não encontrado" });
     }
@@ -85,5 +87,14 @@ usuarioController.logarNoSistema = (req, res) => __awaiter(void 0, void 0, void 
     if (!senhaCerta) {
         return res.status(422).send({ message: "senha inválida" });
     }
+    const token = jsonwebtoken_1.default.sign(
+    //payload chave e header
+    {
+        email: email,
+        senha: senha,
+    }, `${process.env.APP_SECRET}`, {
+        expiresIn: "1d",
+    });
+    res.status(200).send(token);
 });
 exports.default = usuarioController;
