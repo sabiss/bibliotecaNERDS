@@ -8,7 +8,10 @@ class usuarioController {
   static verificaExistenciaDeUsuario = async (req, res) => {
     const { email } = req.body;
     const usuario = await usuarios.findOne({ email: email });
-    return usuario;
+    if (usuario) {
+      return usuario;
+    }
+    return false;
   };
 
   static cadastrarUsuario = async (
