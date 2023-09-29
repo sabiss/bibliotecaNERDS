@@ -9,11 +9,11 @@ export default async (req, res, next) => {
   }
 
   const [, token] = auth.split(" ");
-
-  const payload = jwt.verify(`${token}`, `${process.env.APP_SECRET}`);
-
-  if (!payload) {
+  try {
+    const payload = jwt.verify(`${token}`, `${process.env.APP_SECRET}`);
+  } catch (err) {
     return res.status(401).send({ message: "token inválido" });
   }
+
   return next();
 };
