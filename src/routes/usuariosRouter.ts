@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
   //rotas públicas
-  .post("/usuarios/login", usuariosController.logarNoSistema)
+  .post("/usuario/login", usuariosController.logarNoSistema) //irei pensar numa lógica melhor
 
   .use(middleware); //rotas que precisam de autenticação para serem acessadas
 
