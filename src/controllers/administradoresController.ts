@@ -21,7 +21,7 @@ class administradorController {
         return res.status(422).send({ message: "digite a senha" });
       }
 
-      const senhaCerta = await bcrypt.compare(`${senha}`, `${adm.senhaHash}`);
+      const senhaCerta = await bcrypt.compare(`${senha}`, `${adm.senha}`);
       if (!senhaCerta) {
         return res.status(422).send({ message: "Senha inválida" });
       }
@@ -50,9 +50,9 @@ class administradorController {
       const existeEmAdms = await administradores.findOne({ email: email });
 
       if (existeEmUsers || existeEmAdms) {
-        return res.status(500).send({ message: "Este email já está em uso" });
+        return existeEmAdms || existeEmUsers;
       }
-      return existeEmAdms || existeEmUsers;
+      return false;
     } catch (err) {
       return res
         .status(500)
@@ -71,13 +71,13 @@ class administradorController {
     const { email, senha, nome, tipo } = req.body;
 
     const salt = await bcrypt.genSalt();
-    const senhaHash = await bcrypt.hash(senha, salt); //criando hash da senha para depois ser traduzida para senha normal e comparada
+    const senhaHash = await bcrypt.hash(`${senha}`, `${salt}`); //criando hash da senha para depois ser traduzida para senha normal e comparada
 
     const novoUsuario = new usuarios({
       nome,
       email,
       tipo,
-      senhaHash,
+      senha: senhaHash,
     });
 
     try {
@@ -93,24 +93,28 @@ class administradorController {
     const { email, senha, tipo, nome } = req.body;
 
     try {
-      const existe = this.verificarUsoDeEmail(req, res);
+      const existe = await this.verificarUsoDeEmail(req, res);
 
       if (!existe) {
         const salt = await bcrypt.genSalt();
-        const senhaHash = await bcrypt.hash(senha, salt);
+        const senhaHash = await bcrypt.hash(`${senha}`, salt);
 
         const novoAdm = new administradores({
           nome,
           email,
-          senhaHash,
+          senha: senhaHash,
           tipo,
         });
 
         await novoAdm.save();
-        res.status(201).send({ message: "Administrador criado com sucesso" });
+        return res
+          .status(201)
+          .send({ message: "Administrador criado com sucesso" });
       }
     } catch (err) {
-      return res.status(500).send({ message: "Erro ao cadastrar" });
+      return res
+        .status(500)
+        .send({ message: `Erro ao cadastrar Administrador - ${err}` });
     }
   };
   static deletarUsuario = async (
