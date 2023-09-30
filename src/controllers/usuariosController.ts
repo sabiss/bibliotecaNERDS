@@ -28,10 +28,7 @@ class usuarioController {
         return res.status(422).send({ message: "digite a senha" });
       }
 
-      const senhaCerta = await bcrypt.compare(
-        `${senha}`,
-        `${usuario.senhaHash}`
-      );
+      const senhaCerta = await bcrypt.compare(`${senha}`, `${usuario.senha}`);
       if (!senhaCerta) {
         return res.status(422).send({ message: "Senha inválida" });
       }
