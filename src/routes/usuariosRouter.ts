@@ -6,10 +6,10 @@ const router = express.Router();
 
 router
   //rotas públicas
-  .get("/usuarios", usuariosController.listarUsuarios)
   .post("/usuarios/login", usuariosController.logarNoSistema)
 
   .use(middleware) //rotas que precisam de autenticação para serem acessadas
+  .get("/usuarios", usuariosController.listarUsuarios)
   .post("/usuarios", usuariosController.cadastrarUsuario)
   .delete("/usuarios/:id", usuariosController.deletarUsuario);
 
