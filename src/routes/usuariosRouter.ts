@@ -8,9 +8,6 @@ router
   //rotas públicas
   .post("/usuarios/login", usuariosController.logarNoSistema)
 
-  .use(middleware) //rotas que precisam de autenticação para serem acessadas
-  .get("/usuarios", usuariosController.listarUsuarios)
-  .post("/usuarios", usuariosController.cadastrarUsuario)
-  .delete("/usuarios/:id", usuariosController.deletarUsuario);
+  .use(middleware); //rotas que precisam de autenticação para serem acessadas
 
 export default router;
