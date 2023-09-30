@@ -9,9 +9,9 @@ class administradorController {
   static logarNoSistema = async (req, res) => {
     const { email, senha } = req.body;
     try {
-      const usuario = await this.verificaExistenciaDeUsuario(req, res);
+      const adm = await this.verificarUsoDeEmail(req, res);
       //testes para saber exstência dos dados de login
-      if (!usuario) {
+      if (!adm) {
         return res.status(404).send({ message: "usuário não encontrado" });
       }
       if (!email) {
@@ -21,17 +21,15 @@ class administradorController {
         return res.status(422).send({ message: "digite a senha" });
       }
 
-      const senhaCerta = await bcrypt.compare(
-        `${senha}`,
-        `${usuario.senhaHash}`
-      );
+      const senhaCerta = await bcrypt.compare(`${senha}`, `${adm.senhaHash}`);
       if (!senhaCerta) {
         return res.status(422).send({ message: "Senha inválida" });
       }
       const token = jwt.sign(
         //payload chave e header
         {
-          id: usuario._id,
+          id: adm._id,
+          tipo: adm.tipo,
         },
         `${process.env.APP_SECRET}`,
         {
@@ -43,20 +41,29 @@ class administradorController {
       res.status(500).send({ message: "Erro ao realizar login" });
     }
   };
-  static verificaExistenciaDeUsuario = async (req, res) => {
-    const { email } = req.body;
-    const usuario = await usuarios.findOne({ email: email });
-    if (usuario) {
-      return usuario;
-    }
-    return false;
-  };
 
+  static verificarUsoDeEmail = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+      const existeEmUsers = await usuarios.findOne({ email: email });
+      const existeEmAdms = await administradores.findOne({ email: email });
+
+      if (existeEmUsers || existeEmAdms) {
+        return res.status(500).send({ message: "Este email já está em uso" });
+      }
+      return existeEmAdms || existeEmUsers;
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: "Erro ao buscar existência de email no sistema" });
+    }
+  };
   static cadastrarUsuario = async (
     req: express.Request,
     res: express.Response
   ) => {
-    if (await this.verificaExistenciaDeUsuario(req, res)) {
+    if (await this.verificarUsoDeEmail(req, res)) {
       return res
         .status(422)
         .send({ message: "Este email já está sendo usado" });
@@ -82,7 +89,30 @@ class administradorController {
       });
     }
   };
+  static cadastrarAdministrador = async (req, res) => {
+    const { email, senha, tipo, nome } = req.body;
 
+    try {
+      const existe = this.verificarUsoDeEmail(req, res);
+
+      if (!existe) {
+        const salt = await bcrypt.genSalt();
+        const senhaHash = await bcrypt.hash(senha, salt);
+
+        const novoAdm = new administradores({
+          nome,
+          email,
+          senhaHash,
+          tipo,
+        });
+
+        await novoAdm.save();
+        res.status(201).send({ message: "Administrador criado com sucesso" });
+      }
+    } catch (err) {
+      return res.status(500).send({ message: "Erro ao cadastrar" });
+    }
+  };
   static deletarUsuario = async (
     req: express.Request,
     res: express.Response
