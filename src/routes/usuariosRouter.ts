@@ -5,10 +5,12 @@ import express from "express";
 const router = express.Router();
 
 router
-  .use(middleware)
+  //rotas públicas
   .get("/usuarios", usuariosController.listarUsuarios)
+  .post("/usuarios/login", usuariosController.logarNoSistema)
+
+  .use(middleware) //rotas que precisam de autenticação para serem acessadas
   .post("/usuarios", usuariosController.cadastrarUsuario)
-  .delete("/usuarios/:id", usuariosController.deletarUsuario)
-  .post("/usuario/login", usuariosController.logarNoSistema);
+  .delete("/usuarios/:id", usuariosController.deletarUsuario);
 
 export default router;
