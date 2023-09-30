@@ -94,28 +94,24 @@ class usuarioController {
         return res.status(422).send({ message: "digite a senha" });
       }
 
-      try {
-        const senhaCerta = await bcrypt.compare(
-          `${senha}`,
-          `${usuario.senhaHash}`
-        );
-        if (!senhaCerta) {
-          return res.status(422).send({ message: "Senha inválida" });
-        }
-        const token = jwt.sign(
-          //payload chave e header
-          {
-            id: usuario._id,
-          },
-          `${process.env.APP_SECRET}`,
-          {
-            expiresIn: "1h",
-          }
-        );
-        return res.status(200).send({ message: `seu token - ${token}` });
-      } catch (erro) {
-        res.status(500).send({ message: "Erro ao comparar senhas" });
+      const senhaCerta = await bcrypt.compare(
+        `${senha}`,
+        `${usuario.senhaHash}`
+      );
+      if (!senhaCerta) {
+        return res.status(422).send({ message: "Senha inválida" });
       }
+      const token = jwt.sign(
+        //payload chave e header
+        {
+          id: usuario._id,
+        },
+        `${process.env.APP_SECRET}`,
+        {
+          expiresIn: "1h",
+        }
+      );
+      return res.status(200).send({ message: `seu token - ${token}` });
     } catch (erro) {
       res.status(500).send({ message: "Erro ao realizar login" });
     }
