@@ -23,7 +23,7 @@ class usuarioController {
         .status(422)
         .send({ message: "Este email já está sendo usado" });
     }
-    const { email, senha, nome } = req.body;
+    const { email, senha, nome, tipo } = req.body;
 
     const salt = await bcrypt.genSalt();
     const senhaHash = await bcrypt.hash(senha, salt); //criando hash da senha para depois ser traduzida para senha normal e comparada
@@ -31,6 +31,7 @@ class usuarioController {
     const novoUsuario = new usuarios({
       nome,
       email,
+      tipo,
       senhaHash,
     });
 
