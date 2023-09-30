@@ -1,17 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
-interface Usuario extends Document {
-  nome: string;
-  email: string;
-  senhaHash: string;
-}
-
-const schemaUsuario = new Schema<Usuario>({
+const schemaUsuario = new Schema({
   nome: { type: String, required: true },
   email: { type: String, required: true },
+  tipo: { type: String, required: true },
   senhaHash: { type: String, required: true },
 });
 
-const usuarios = mongoose.model<Usuario>("usuarios", schemaUsuario);
+const usuarios = mongoose.model("usuarios", schemaUsuario);
 
 export default usuarios;
