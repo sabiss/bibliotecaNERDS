@@ -24,14 +24,19 @@ class responsaveisController {
     const idDoLivro = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(idDoLivro)) {
-      return res.status(422).send({ message: "iD do livro inválido" });
+      return res.status(400).send({ message: "iD do livro inválido" });
     }
     try {
       const livroASerEmprestado = await livros.findById(idDoLivro);
+
       if (!livroASerEmprestado) {
         return res.status(404).send({ message: "Livro não encontrado" });
       }
-
+      if ((livroASerEmprestado.quantidade = 0)) {
+        return res
+          .status(422)
+          .send({ message: "Não há mais cópias disponíveis para emprestimo" });
+      }
       await livros.findByIdAndUpdate(idDoLivro, {
         quantidade: (livroASerEmprestado.quantidade -= 1),
       });
@@ -54,10 +59,10 @@ class responsaveisController {
         return res.status(404).send({ message: "usuário não encontrado" });
       }
       if (!email) {
-        return res.status(422).send({ message: "digite o email" });
+        return res.status(400).send({ message: "digite o email" });
       }
       if (!senha) {
-        return res.status(422).send({ message: "digite a senha" });
+        return res.status(400).send({ message: "digite a senha" });
       }
 
       const senhaCerta = await bcrypt.compare(
@@ -65,7 +70,7 @@ class responsaveisController {
         `${responsavel.senha}`
       );
       if (!senhaCerta) {
-        return res.status(422).send({ message: "Senha inválida" });
+        return res.status(400).send({ message: "Senha inválida" });
       }
       const token = jwt.sign(
         //payload chave e header
