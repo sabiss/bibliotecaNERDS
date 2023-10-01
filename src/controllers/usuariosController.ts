@@ -22,15 +22,15 @@ class usuarioController {
         return res.status(404).send({ message: "usuário não encontrado" });
       }
       if (!email) {
-        return res.status(422).send({ message: "digite o email" });
+        return res.status(400).send({ message: "digite o email" });
       }
       if (!senha) {
-        return res.status(422).send({ message: "digite a senha" });
+        return res.status(400).send({ message: "digite a senha" });
       }
 
       const senhaCerta = await bcrypt.compare(`${senha}`, `${usuario.senha}`);
       if (!senhaCerta) {
-        return res.status(422).send({ message: "Senha inválida" });
+        return res.status(400).send({ message: "Senha inválida" });
       }
       const token = jwt.sign(
         //payload chave e header
