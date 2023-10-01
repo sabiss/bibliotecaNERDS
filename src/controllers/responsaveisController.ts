@@ -87,6 +87,35 @@ class responsaveisController {
       res.status(500).send({ message: "Erro ao realizar login" });
     }
   };
+  static listarLivros = async (req, res) => {
+    try {
+      const lista = await livros.find();
+
+      if (lista.length == 0) {
+        return res.status(200).send({ message: "Não há livros cadastrados" });
+      }
+      res.status(200).json(lista);
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: `Erro ao buscar livros para listagem - ${err}` });
+    }
+  };
+  static deletarLivro = async (req, res) => {
+    const id = req.params.iD;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).send({ message: "ID de livro inválido" });
+    }
+
+    try {
+      await livros.findByIdAndDelete(id);
+      return res.status(200).send({ message: "Livro deletado com sucesso" });
+    } catch (err) {
+      return res
+        .status(404)
+        .send({ message: `Erro ao deletar livro - ${err}` });
+    }
+  };
 }
 
 export default responsaveisController;
