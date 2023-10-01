@@ -8,6 +8,7 @@ router
   .post(
     "responsavel/emprestarLivro",
     responsaveisController.realizarEmprestimoDeLivro
-  );
+  )
+  .post("responsavel/login", responsaveisController.logarNoSistema);
 
 export default router;
