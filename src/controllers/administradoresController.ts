@@ -4,6 +4,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import usuarios from "../models/Usuario";
+import responsaveis from "../models/Responsavel";
 
 class administradorController {
   static logarNoSistema = async (req, res) => {
@@ -15,15 +16,15 @@ class administradorController {
         return res.status(404).send({ message: "usuário não encontrado" });
       }
       if (!email) {
-        return res.status(422).send({ message: "digite o email" });
+        return res.status(400).send({ message: "digite o email" });
       }
       if (!senha) {
-        return res.status(422).send({ message: "digite a senha" });
+        return res.status(400).send({ message: "digite a senha" });
       }
 
       const senhaCerta = await bcrypt.compare(`${senha}`, `${adm.senha}`);
       if (!senhaCerta) {
-        return res.status(422).send({ message: "Senha inválida" });
+        return res.status(400).send({ message: "Senha inválida" });
       }
       const token = jwt.sign(
         //payload chave e header
@@ -48,10 +49,12 @@ class administradorController {
     try {
       const existeEmUsers = await usuarios.findOne({ email: email });
       const existeEmAdms = await administradores.findOne({ email: email });
+      const existeResponsavel = await responsaveis.findOne({ email: email });
 
-      if (existeEmUsers || existeEmAdms) {
-        return existeEmAdms || existeEmUsers;
+      if (existeEmUsers || existeEmAdms || existeResponsavel) {
+        return existeEmAdms || existeEmUsers || existeResponsavel;
       }
+
       return false;
     } catch (err) {
       return res
@@ -65,7 +68,7 @@ class administradorController {
   ) => {
     if (await this.verificarUsoDeEmail(req, res)) {
       return res
-        .status(422)
+        .status(400)
         .send({ message: "Este email já está sendo usado" });
     }
     const { email, senha, nome, tipo } = req.body;
@@ -115,6 +118,29 @@ class administradorController {
       return res
         .status(500)
         .send({ message: `Erro ao cadastrar Administrador - ${err}` });
+    }
+  };
+  static cadastraResponsavel = async (req, res) => {
+    try {
+      const existe = await this.verificarUsoDeEmail(req, res);
+
+      if (!existe) {
+        const responsavel = new responsaveis(req.body);
+
+        const salt = await bcrypt.genSalt();
+        const senhaHash = await bcrypt.hash(`${responsavel.senha}`, `${salt}`);
+
+        responsavel.senha = senhaHash;
+        await responsavel.save();
+
+        return res
+          .status(201)
+          .send({ message: "Responsável criado com sucesso" });
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: ` Erro ao cadastrar responsável - ${err}` });
     }
   };
   static deletarUsuario = async (
