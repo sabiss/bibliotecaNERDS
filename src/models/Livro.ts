@@ -5,13 +5,13 @@ const livrosSchema = new mongoose.Schema({
   autor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "autores",
-    require: true,
+    required: true,
   },
-  isbn: { type: Number, require: true },
-  numero_paginas: { type: Number, require: true },
-  genero: { type: String, require: true },
-  editora: { type: String },
-  quantidade: { type: Number, require: true },
+  isbn: { type: Number, required: true },
+  numero_paginas: { type: Number, required: true },
+  genero: { type: String, required: true },
+  editora: { type: String, required: true },
+  quantidade: { type: Number, required: true },
   //TOMBO
 });
 

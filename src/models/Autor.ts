@@ -5,7 +5,7 @@ const autorSchema = new mongoose.Schema({
   obras: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "livros",
-    require: true,
+    required: true,
   },
 });
 

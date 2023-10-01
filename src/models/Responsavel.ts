@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
 const responsavelSchema = new mongoose.Schema({
-  nome: { type: String, require: true },
-  idade: { type: String, require: true },
-  matricula: { type: String, require: true },
-  cpf: { type: String, require: true },
+  nome: { type: String, required: true },
+  idade: { type: String, required: true },
+  matricula: { type: String, required: true },
+  cpf: { type: String, required: true },
+  senha: { type: String, required: true },
 });
 
 const responsaveis = mongoose.model("responsaveis", responsavelSchema);
