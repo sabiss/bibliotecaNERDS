@@ -11,10 +11,7 @@ router
   .post("/adm/cadastroAdm", administradoresController.cadastrarAdministrador)
   .get("/adm/listarUsers", administradoresController.listarUsuarios)
   .post("/adm/cadastroUser", administradoresController.cadastrarUsuario)
-  .post(
-    "/adm/cadastrarResponsavel",
-    administradoresController.cadastraResponsavel
-  )
+  .post("/adm/cadastrarResponsavel",administradoresController.cadastraResponsavel)
   .delete("/adm/deletarUser/:id", administradoresController.deletarUsuario);
 
 export default router;
