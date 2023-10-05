@@ -53,7 +53,7 @@ Bem-vindo ao Sistema de Gerenciamento de Livros, desenvolvido como parte do proj
 ## Autores
 
 - Sabrina Bezerra da Silva (@sabiss)
-- Marcal José de Oliveira Morais II
+- Marcal José de Oliveira Morais II (mentor)
 
 ## Licença
 
