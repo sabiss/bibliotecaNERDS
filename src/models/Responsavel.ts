@@ -6,6 +6,7 @@ const responsavelSchema = new mongoose.Schema({
   cpf: { type: String, required: true },
   email: { type: String, required: true },
   senha: { type: String, required: true },
+  tipo: { type: String, required: true },
 });
 
 const responsaveis = mongoose.model("responsaveis", responsavelSchema);
