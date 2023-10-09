@@ -1,13 +1,12 @@
-import express from "express";
 import jwt from "jsonwebtoken";
 
 interface JwtPayload {
   //faz a comando "req.idUserRequest = payload.id" funcionar
-  id: string;
+  tipo: string;
 }
 
 export default async (req, res, next) => {
-  const auth = req.headers.authorization; //pegando a autorização no header da requisição
+  const auth = req.headers.authorization; //pegando a autorização no header da requisiçã
 
   if (!auth) {
     //não tem autorização
@@ -19,17 +18,16 @@ export default async (req, res, next) => {
   const [, token] = auth.split(" ");
   try {
     const payload = jwt.verify(
+      //desencriptando payload
       `${token}`,
       `${process.env.APP_SECRET}`
     ) as JwtPayload;
-
-    req.id = payload.id;
+    req.tipo = payload.tipo;
   } catch (err) {
     //tem token, mas ele está errado ou expirado
     return res
       .status(401)
-      .send({ message: "Token inválido ou expirado. Faça login no sistema" });
+      .send({ message: "Token inválido. Faça login no sistema" });
   }
-
   return next(); //deu tudo certo, pode continuar o processo
 };
