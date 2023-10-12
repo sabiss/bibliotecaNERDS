@@ -5,7 +5,7 @@ interface JwtPayload {
   tipo: string;
 }
 
-export default async (req, res, next) => {
+export default (req, res, next) => {
   const auth = req.headers.authorization; //pegando a autorização no header da requisiçã
 
   if (!auth) {

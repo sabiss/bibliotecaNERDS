@@ -5,9 +5,8 @@ interface JwtPayload {
   tipo: string;
 }
 
-const checkRole = (roles: String[] | String) => async (req, res, next) => {
+const checkRole = (roles: String[] | String) => (req, res, next) => {
   const tipoDoUser = req.tipo;
-  console.log(tipoDoUser + " " + roles);
 
   if (roles == "all") {
     return next();
