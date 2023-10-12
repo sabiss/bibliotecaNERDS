@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
 const emprestimoSchema = new mongoose.Schema({
-  id_usuario: {
+  idUsuario: {
     type: mongoose.Schema.ObjectId,
     ref: "usuarios",
     required: true,
   },
-  id_livro: {
+  idLivro: {
     type: mongoose.Schema.ObjectId,
     ref: "livros",
     required: true,
   },
-  data_emprestimo: { type: Date, default: Date.now, required: true },
-  data_devolucao: { type: Date, required: true },
+  dataEmprestimo: { type: Date, default: Date.now },
+  dataDevolucao: { type: Date, required: true },
 });
 
 const emprestimos = mongoose.model("emprestimos", emprestimoSchema);
