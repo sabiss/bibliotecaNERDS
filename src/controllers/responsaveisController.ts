@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import livros from "../models/Livro";
 import responsaveis from "../models/Responsavel";
 import jwt from "jsonwebtoken";
+import emprestimos from "../models/Emprestimo";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
@@ -17,38 +18,25 @@ class responsaveisController {
         .status(201)
         .send({ message: "Novo livro cadastrado com Sucesso!" });
     } catch (err) {
-      return res.status(500).send({ message: "Erro ao cadastrar livro" });
+      return res
+        .status(500)
+        .send({ message: `Erro ao cadastrar livro - ${err}` });
     }
   };
   static realizarEmprestimoDeLivro = async (req, res) => {
-    const idDoLivro = req.params.id;
+    const { idLivro, idUsuario } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(idDoLivro)) {
+    if (!mongoose.Types.ObjectId.isValid(idLivro)) {
       return res.status(400).send({ message: "iD do livro inválido" });
     }
-    try {
-      const livroASerEmprestado = await livros.findById(idDoLivro);
-
-      if (!livroASerEmprestado) {
-        return res.status(404).send({ message: "Livro não encontrado" });
-      }
-      if ((livroASerEmprestado.quantidade = 0)) {
-        return res
-          .status(422)
-          .send({ message: "Não há mais cópias disponíveis para emprestimo" });
-      }
-      await livros.findByIdAndUpdate(idDoLivro, {
-        quantidade: (livroASerEmprestado.quantidade -= 1),
-      });
-
-      return res.status(200).send({
-        message: `Livro "${livroASerEmprestado.titulo}" emprestado com sucesso`,
-      });
-    } catch (err) {
-      return res
-        .status(500)
-        .send({ message: "erro ao fazer empréstimo de livro" });
+    if (!mongoose.Types.ObjectId.isValid(idUsuario)) {
+      return res.status(400).send({ message: "iD do usuário inválido" });
     }
+
+    const quantidadeEmprestimosDesteLivro = emprestimos.where({
+      idLivro: idLivro,
+    });
+    return res.send(quantidadeEmprestimosDesteLivro);
   };
   static logarNoSistema = async (req, res) => {
     const { email, senha } = req.body;
@@ -76,6 +64,7 @@ class responsaveisController {
         //payload chave e header
         {
           id: responsavel._id,
+          tipo: responsavel.tipo,
         },
         `${process.env.APP_SECRET}`,
         {
@@ -102,7 +91,7 @@ class responsaveisController {
     }
   };
   static deletarLivro = async (req, res) => {
-    const id = req.params.iD;
+    const id = req.params.id;
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).send({ message: "ID de livro inválido" });
     }
