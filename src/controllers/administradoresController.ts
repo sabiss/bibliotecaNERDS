@@ -4,7 +4,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import usuarios from "../models/Usuario";
 import responsaveis from "../models/Responsavel";
-import ferramentas from "../funcoesFerramentas/verificaExistenciaEmail";
+import ferramentas from "../funcoesAuxiliares/ferramentas";
 
 class administradorController {
   static cadastrarUsuario = async (

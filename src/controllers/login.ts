@@ -1,4 +1,4 @@
-import ferramentas from "../funcoesFerramentas/verificaExistenciaEmail";
+import ferramentas from "../funcoesAuxiliares/ferramentas";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import express from "express";
