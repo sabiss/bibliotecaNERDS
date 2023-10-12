@@ -38,44 +38,6 @@ class responsaveisController {
     });
     return res.send(quantidadeEmprestimosDesteLivro);
   };
-  static logarNoSistema = async (req, res) => {
-    const { email, senha } = req.body;
-    try {
-      const responsavel = await responsaveis.findOne({ email: email });
-      //testes para saber exstência dos dados de login
-      if (!responsavel) {
-        return res.status(404).send({ message: "usuário não encontrado" });
-      }
-      if (!email) {
-        return res.status(400).send({ message: "digite o email" });
-      }
-      if (!senha) {
-        return res.status(400).send({ message: "digite a senha" });
-      }
-
-      const senhaCerta = await bcrypt.compare(
-        `${senha}`,
-        `${responsavel.senha}`
-      );
-      if (!senhaCerta) {
-        return res.status(400).send({ message: "Senha inválida" });
-      }
-      const token = jwt.sign(
-        //payload chave e header
-        {
-          id: responsavel._id,
-          tipo: responsavel.tipo,
-        },
-        `${process.env.APP_SECRET}`,
-        {
-          expiresIn: "1h",
-        }
-      );
-      return res.status(200).send({ message: `seu token - ${token}` });
-    } catch (erro) {
-      res.status(500).send({ message: "Erro ao realizar login" });
-    }
-  };
   static listarLivros = async (req, res) => {
     try {
       const lista = await livros.find();

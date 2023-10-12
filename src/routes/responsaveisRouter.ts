@@ -5,9 +5,6 @@ import checkRole from "../middlewares/checkRoules";
 const router = express.Router();
 
 router
-  .post("/responsavel/login", responsaveisController.logarNoSistema)
-
-  .use(middleware, checkRole(["resp"]))
   .get("/responsavel/listarLivros", responsaveisController.listarLivros)
   .post("/responsavel/cadastrarLivro", responsaveisController.cadastrarLivro)
   .post("/responsavel/emprestarLivro",responsaveisController.realizarEmprestimoDeLivro)

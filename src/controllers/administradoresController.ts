@@ -2,71 +2,16 @@ import mongoose from "mongoose";
 import administradores from "../models/Administrador";
 import express from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import usuarios from "../models/Usuario";
 import responsaveis from "../models/Responsavel";
+import ferramentas from "../funcoesFerramentas/verificaExistenciaEmail";
 
 class administradorController {
-  static logarNoSistema = async (req, res) => {
-    const { email, senha } = req.body;
-    try {
-      const adm = await this.verificarUsoDeEmail(req, res);
-      //testes para saber exstência dos dados de login
-      if (!adm) {
-        return res.status(404).send({ message: "usuário não encontrado" });
-      }
-      if (!email) {
-        return res.status(400).send({ message: "digite o email" });
-      }
-      if (!senha) {
-        return res.status(400).send({ message: "digite a senha" });
-      }
-
-      const senhaCerta = await bcrypt.compare(`${senha}`, `${adm.senha}`);
-      if (!senhaCerta) {
-        return res.status(400).send({ message: "Senha inválida" });
-      }
-      const token = jwt.sign(
-        //payload chave e header
-        {
-          id: adm._id,
-          tipo: adm.tipo,
-        },
-        `${process.env.APP_SECRET}`,
-        {
-          expiresIn: "1h",
-        }
-      );
-      return res.status(200).send({ message: `seu token - ${token}` });
-    } catch (erro) {
-      res.status(500).send({ message: "Erro ao realizar login" });
-    }
-  };
-
-  static verificarUsoDeEmail = async (req, res) => {
-    const { email } = req.body;
-
-    try {
-      const existeEmUsers = await usuarios.findOne({ email: email });
-      const existeEmAdms = await administradores.findOne({ email: email });
-      const existeResponsavel = await responsaveis.findOne({ email: email });
-
-      if (existeEmUsers || existeEmAdms || existeResponsavel) {
-        return existeEmAdms || existeEmUsers || existeResponsavel;
-      }
-
-      return false;
-    } catch (err) {
-      return res
-        .status(500)
-        .send({ message: "Erro ao buscar existência de email no sistema" });
-    }
-  };
   static cadastrarUsuario = async (
     req: express.Request,
     res: express.Response
   ) => {
-    if (await this.verificarUsoDeEmail(req, res)) {
+    if (await ferramentas.verificarUsoDeEmail(req, res)) {
       return res
         .status(400)
         .send({ message: "Este email já está sendo usado" });
@@ -96,7 +41,7 @@ class administradorController {
     const { email, senha, tipo, nome } = req.body;
 
     try {
-      const existe = await this.verificarUsoDeEmail(req, res);
+      const existe = await ferramentas.verificarUsoDeEmail(req, res);
 
       if (!existe) {
         const salt = await bcrypt.genSalt();
@@ -122,7 +67,7 @@ class administradorController {
   };
   static cadastraResponsavel = async (req, res) => {
     try {
-      const existe = await this.verificarUsoDeEmail(req, res);
+      const existe = await ferramentas.verificarUsoDeEmail(req, res);
 
       if (!existe) {
         const { nome, idade, cpf, email, senha } = req.body;
