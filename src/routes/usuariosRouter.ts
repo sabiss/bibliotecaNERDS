@@ -1,5 +1,5 @@
 import usuariosController from "../controllers/usuariosController";
-import middleware from "../middleware/authMiddleware";
+import middleware from "../middlewares/authMiddleware";
 import express from "express";
 
 const router = express.Router();
