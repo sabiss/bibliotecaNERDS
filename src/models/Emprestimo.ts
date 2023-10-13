@@ -11,8 +11,9 @@ const emprestimoSchema = new mongoose.Schema({
     ref: "livros",
     required: true,
   },
-  dataEmprestimo: { type: Date, default: Date.now },
-  dataDevolucao: { type: Date, required: true },
+  dataEmprestimo: { type: String, default: Date.now },
+  dataDevolucao: { type: String, required: true },
+  emprestado: { type: Boolean, required: true },
 });
 
 const emprestimos = mongoose.model("emprestimos", emprestimoSchema);
