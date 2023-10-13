@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 import livros from "../models/Livro";
-import responsaveis from "../models/Responsavel";
 import emprestimos from "../models/Emprestimo";
-import jwt from "jsonwebtoken";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
@@ -34,10 +31,6 @@ class responsaveisController {
     }
 
     const livroASerEmprestado = await livros.findById(idLivro);
-    const emprestimosJaFeitos = await emprestimos.countDocuments({
-      idLivro: idLivro,
-    });
-    console.log(emprestimosJaFeitos);
 
     if (!livroASerEmprestado) {
       return res.status(404).send({ message: "Livro não encontrado" });
@@ -46,6 +39,7 @@ class responsaveisController {
     const emprestimoRepetido = await emprestimos.countDocuments({
       idLivro: idLivro,
       idUsuario: idUsuario,
+      emprestado: true,
     });
 
     if (emprestimoRepetido) {
@@ -53,20 +47,22 @@ class responsaveisController {
         .status(500)
         .send({ message: "Esse usuário ja pegou este livro emprestado" });
     }
+
+    const emprestimosJaFeitos = await emprestimos.countDocuments({
+      idLivro: idLivro,
+      status: true,
+    });
+
     if (emprestimosJaFeitos < livroASerEmprestado.quantidade) {
       //verifica se ainda há cópias disponíveis
-      const dataAtual = new Date();
-      const dia = dataAtual.getDate();
-      const mes = dataAtual.getMonth();
-      const ano = dataAtual.getFullYear();
-      const dataEmprestimo = `${dia}/${mes}/${ano}`;
-      const dataDevolucao = `${dia}/${mes + 1}/${ano}`;
-
+      const { dataEmprestimo, dataDevolucao } = req.body;
+      console.log(`emp ` + dataEmprestimo + " dev " + dataDevolucao);
       const novoEmprestimo = new emprestimos({
         idUsuario,
         idLivro,
         dataEmprestimo,
         dataDevolucao,
+        emprestado: true,
       });
       try {
         await novoEmprestimo.save();
@@ -78,6 +74,30 @@ class responsaveisController {
           .status(500)
           .send({ message: `Erro ao realizar emprésimo -  ${err}` });
       }
+    }
+  };
+  static registrarDevolucaoDeLivro = async (req, res) => {
+    const { idLivro, idUsuario } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(idLivro)) {
+      return res.status(400).send({ message: "iD do livro inválido" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(idUsuario)) {
+      return res.status(400).send({ message: "iD do usuário inválido" });
+    }
+
+    try {
+      await emprestimos.findOneAndUpdate(
+        { idLivro: idLivro, idUsuario: idUsuario, emprestado: true },
+        { emprestado: false }
+      );
+      return res
+        .status(200)
+        .send({ message: `Devolução registrada com sucesso!` });
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: `Erro ao registrar devolução - ${err}` });
     }
   };
   static listarLivros = async (req, res) => {

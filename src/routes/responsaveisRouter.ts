@@ -10,5 +10,6 @@ router
   .post("/responsavel/cadastrarLivro", responsaveisController.cadastrarLivro)
   .post("/responsavel/emprestarLivro",responsaveisController.realizarEmprestimoDeLivro)
   .delete("/responsavel/deletarLivro/:id", responsaveisController.deletarLivro)
+  .put("/registrarDevolucao", responsaveisController.registrarDevolucaoDeLivro)
 
 export default router;
