@@ -12,25 +12,47 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <!--GOOGLE FONTS-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Bem Vindo a Biblioteca NERDS!</h1>
-    <form>
-      <!-- Name input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="form5Example1" class="form-control" />
-        <label class="form-label" for="form5Example1">Email</label>
-      </div>
+    <div class="books">
+      <h1>Bem Vindo <br />a Biblioteca NERDS</h1>
+    </div>
+    <div class="formsContainer">
+      <form>
+        <!-- Email input -->
+        <img src="./assets/avatar.png" alt="imagem de avatar padrão de fundo
+        cinza e silhueta branca" / class="mb-4">
+        <div class="mb-4">
+          <input
+            type="email"
+            id="form1Example1"
+            placeholder="biblioteca@gmail.com"
+            class="form-control"
+          />
+          <label class="form-label" for="form1Example1">Email</label>
+        </div>
 
-      <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="form5Example2" class="form-control" />
-        <label class="form-label" for="form5Example2">Password</label>
-      </div>
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-4">
-        Entrar
-      </button>
-    </form>
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <input
+            type="password"
+            id="form1Example2"
+            placeholder="******"
+            class="form-control"
+          />
+          <label class="form-label" for="form1Example2">Senha</label>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+      </form>
+    </div>
   </body>
 </html>
