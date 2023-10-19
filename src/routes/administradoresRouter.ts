@@ -1,17 +1,16 @@
 import express from "express";
-import middleware from "../middlewares/authMiddleware";
 import administradoresController from "../controllers/administradoresController";
-import checkRole from "../middlewares/checkRoules";
+import checkRole from "../middlewares/checkRoles";
 
 const router = express.Router();
 
 router
-  .post("/adm/cadastroAdm", administradoresController.cadastrarAdministrador)
-  .get("/adm/listarUsers",administradoresController.listarUsuarios)
-  .get("/adm/listarResponsaveis", administradoresController.listarResponsaveis)
-  .post("/adm/cadastroUser", administradoresController.cadastrarUsuario)
-  .post("/adm/cadastrarResponsavel",administradoresController.cadastraResponsavel)
-  .delete("/adm/deletarUser/:id", administradoresController.deletarUsuario)
-  .delete("/adm/deletarResponsavel/:id", administradoresController.deletarResponsavel)
+  .post("/cadastroAdm", checkRole(["adm"]), administradoresController.cadastrarAdministrador)
+  .get("/listarUsers",checkRole(["adm"]),administradoresController.listarUsuarios)
+  .get("/listarResponsaveis", checkRole(["adm"]),administradoresController.listarResponsaveis)
+  .post("/cadastroUser", checkRole(["adm"]),administradoresController.cadastrarUsuario)
+  .post("/cadastrarResponsavel",checkRole(["adm"]),administradoresController.cadastraResponsavel)
+  .delete("/deletarUser/:id", checkRole(["adm"]),administradoresController.deletarUsuario)
+  .delete("/deletarResponsavel/:id", checkRole(["adm"]),administradoresController.deletarResponsavel)
 
 export default router;

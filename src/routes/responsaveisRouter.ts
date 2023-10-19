@@ -1,15 +1,14 @@
 import express from "express";
 import responsaveisController from "../controllers/responsaveisController";
-import middleware from "../middlewares/authMiddleware";
-import checkRole from "../middlewares/checkRoules";
+import checkRole from "../middlewares/checkRoles";
 const router = express.Router();
 
 router
-  .get("/responsavel/listarLivros", responsaveisController.listarLivros)
-  .get("/responsavel/listarEmprestimos", responsaveisController.listarEmprestimos)
-  .post("/responsavel/cadastrarLivro", responsaveisController.cadastrarLivro)
-  .post("/responsavel/emprestarLivro",responsaveisController.realizarEmprestimoDeLivro)
-  .delete("/responsavel/deletarLivro/:id", responsaveisController.deletarLivro)
-  .put("/registrarDevolucao", responsaveisController.registrarDevolucaoDeLivro)
+  .get("/listarLivros", checkRole(["resp", "adm"]), responsaveisController.listarLivros)
+  .get("/listarEmprestimos", checkRole(["resp", "adm"]), responsaveisController.listarEmprestimos)
+  .post("/cadastrarLivro", checkRole(["resp", "adm"]), responsaveisController.cadastrarLivro)
+  .post("/emprestarLivro", checkRole(["resp", "adm"]), responsaveisController.realizarEmprestimoDeLivro)
+  .delete("/deletarLivro/:id", checkRole(["resp", "adm"]), responsaveisController.deletarLivro)
+  .put("/registrarDevolucao", checkRole(["resp", "adm"]), responsaveisController.registrarDevolucaoDeLivro)
 
 export default router;
