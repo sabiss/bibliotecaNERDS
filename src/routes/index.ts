@@ -1,6 +1,4 @@
 import express from "express";
-import checkRole from "../middlewares/checkRoules";
-import usuarios from "../routes/usuariosRouter";
 import administradores from "../routes/administradoresRouter";
 import responsaveis from "../routes/responsaveisRouter";
 import login from "../routes/login";
@@ -13,8 +11,6 @@ const routes = (app) => {
     express.json(),
     login,
     authMiddleware,
-    usuarios,
-    checkRole(["resp", "adm"]),
     administradores,
     responsaveis
   );
