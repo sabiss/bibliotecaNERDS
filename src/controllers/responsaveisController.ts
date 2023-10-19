@@ -118,7 +118,7 @@ class responsaveisController {
     try {
       const listaDeEmprestimos = await emprestimos
         .find()
-        .populate("idUsuario")
+        .populate({ path: "idUsuario", select: "-senha" })
         .populate("idLivro");
       if (listaDeEmprestimos.length == 0) {
         res.status(200).send({ message: "Não há empréstimos realizados" });
