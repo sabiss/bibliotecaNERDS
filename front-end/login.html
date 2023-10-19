@@ -32,7 +32,7 @@
         <div class="mb-4">
           <input
             type="email"
-            id="form1Example1"
+            id="email"
             placeholder="biblioteca@gmail.com"
             class="form-control"
           />
@@ -43,7 +43,7 @@
         <div class="form-outline mb-4">
           <input
             type="password"
-            id="form1Example2"
+            id="senha"
             placeholder="******"
             class="form-control"
           />
@@ -51,8 +51,31 @@
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          onclick="logar()"
+        >
+          Entrar
+        </button>
       </form>
     </div>
+    <script>
+      async function logar() {
+        const email = document.querySelector("#email").value;
+        const senha = document.querySelector("#senha").value;
+
+        try {
+          const resposta = await fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(email, senha),
+          });
+          console.log(resposta);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    </script>
   </body>
 </html>
