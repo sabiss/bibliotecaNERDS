@@ -9,14 +9,14 @@ class login {
     try {
       const logando = await ferramentas.verificarUsoDeEmail(req, res); //retorna false ou a pessoa que quer logar
       //testes para saber exstência dos dados de login
-      if (!logando) {
-        return res.status(404).send({ message: "usuário não encontrado" });
-      }
       if (!email) {
         return res.status(400).send({ message: "digite o email" });
       }
       if (!senha) {
         return res.status(400).send({ message: "digite a senha" });
+      }
+      if (!logando) {
+        return res.status(404).send({ message: "usuário não existe" });
       }
 
       const senhaCerta = await bcrypt.compare(`${senha}`, `${logando.senha}`);
@@ -34,9 +34,9 @@ class login {
           expiresIn: "1h",
         }
       );
-      return res.status(200).send({ message: `seu token - ${token}` });
+      return res.status(200).send({ token: token });
     } catch (erro) {
-      res.status(500).send({ message: "Erro ao realizar login" });
+      res.status(500).send({ message: `Erro ao realizar login - ${erro}` });
     }
   };
 }
