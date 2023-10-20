@@ -46,3 +46,8 @@ form {
 form input {
   width: 600px;
 }
+#anuncioDeErro {
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
