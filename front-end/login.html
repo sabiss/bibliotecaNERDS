@@ -26,6 +26,7 @@
     </div>
     <div class="formsContainer">
       <div>
+        <div class="alert alert-danger" id="anuncioDeErro" role="alert"></div>
         <!-- Email input -->
         <img src="./assets/avatar.png" alt="imagem de avatar padrão de fundo
         cinza e silhueta branca" / class="mb-4">
@@ -62,23 +63,6 @@
         </button>
       </div>
     </div>
-    <script>
-      async function logar() {
-        const email = document.querySelector("#email").value;
-        const senha = document.querySelector("#senha").value;
-
-        const resposta = await fetch("http://localhost:3000/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          mode: "cors",
-          body: JSON.stringify({ email, senha }),
-        });
-        if (resposta.ok) {
-          alert(resposta.message);
-        } else {
-          alert("deu errado");
-        }
-      }
-    </script>
+    <script src="./login.js" type="module"></script>
   </body>
 </html>
