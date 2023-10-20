@@ -2,6 +2,7 @@ import express from "express";
 import conexaoComDataBase from "./config/dbconnect";
 import router from "./routes/index";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config({ path: `${__dirname}/.env` });
 
@@ -16,7 +17,7 @@ conexaoComDataBase.once("open", () => {
   console.log("Banco conectado");
 });
 
-app.use(express.json());
+app.use(express.json(), cors("*"));
 router(app);
 
 export default app;
