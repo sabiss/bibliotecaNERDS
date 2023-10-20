@@ -65,6 +65,16 @@ class administradorController {
         .send({ message: `Erro ao cadastrar Administrador - ${err}` });
     }
   };
+  static listarAdministradores = async (req, res) => {
+    try {
+      const adms = await administradores.find();
+      return res.status(200).send(adms);
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: `Erro ao listar administradores - ${err}` });
+    }
+  };
   static cadastraResponsavel = async (req, res) => {
     try {
       const existe = await ferramentas.verificarUsoDeEmail(req, res);
