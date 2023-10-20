@@ -25,7 +25,7 @@
       <h1>Bem Vindo <br />a Biblioteca NERDS</h1>
     </div>
     <div class="formsContainer">
-      <form>
+      <div>
         <!-- Email input -->
         <img src="./assets/avatar.png" alt="imagem de avatar padrão de fundo
         cinza e silhueta branca" / class="mb-4">
@@ -35,6 +35,7 @@
             id="email"
             placeholder="biblioteca@gmail.com"
             class="form-control"
+            name="email"
           />
           <label class="form-label" for="form1Example1">Email</label>
         </div>
@@ -46,34 +47,36 @@
             id="senha"
             placeholder="******"
             class="form-control"
+            name="senha"
           />
           <label class="form-label" for="form1Example2">Senha</label>
         </div>
 
         <!-- Submit button -->
         <button
-          type="submit"
+          type="button"
           class="btn btn-primary btn-block"
           onclick="logar()"
         >
           Entrar
         </button>
-      </form>
+      </div>
     </div>
     <script>
       async function logar() {
         const email = document.querySelector("#email").value;
         const senha = document.querySelector("#senha").value;
 
-        try {
-          const resposta = await fetch("http://localhost:3000/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(email, senha),
-          });
-          console.log(resposta);
-        } catch (err) {
-          console.log(err);
+        const resposta = await fetch("http://localhost:3000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          mode: "cors",
+          body: JSON.stringify({ email, senha }),
+        });
+        if (resposta.ok) {
+          alert(resposta.message);
+        } else {
+          alert("deu errado");
         }
       }
     </script>
