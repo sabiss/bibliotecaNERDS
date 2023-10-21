@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-
 function geraErro(texto) {
   const alert = document.querySelector("#anuncioDeErro");
   alert.style.display = "flex";
@@ -19,17 +17,24 @@ async function logar() {
     const token = resposta.token;
 
     if (!token) {
-      return geraErro(resposta.message);
+      geraErro(resposta.message);
     }
     localStorage.setItem("token", resposta.token);
 
-    const payload = jwt.verify(`${token}`, `${process.env.APP_SECRET}`);
-    if (payload.tipo === "adm") {
-      window.location.assign("https://www.instagram.com");
-    } else if (payload.tipo === "resp") {
-      window.location.assign("https://www.facebook.com");
-    } else {
-      window.location.assign("https://www.youtuber.com");
+    const payload = JSON.parse(atob(token.split(".")[1])); //atob() decodifica base64 para sua sequencia normal, ou seja, o payload[1] será descriptografado sem precisar do jwt.verify
+
+    const tipoDeUsuario = payload.tipo;
+
+    switch (tipoDeUsuario) {
+      case "adm":
+        window.location.assign("https://www.instagram.com");
+        break;
+      case "resp":
+        window.location.assign("https://www.facebook.com");
+        break;
+      default:
+        window.location.assign("https://www.youtuber.com");
+        break;
     }
   } catch (err) {
     geraErro(`Ocorreu um erro no sistema - ${err}`);
