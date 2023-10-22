@@ -19,7 +19,9 @@ class ferramentas {
     } catch (err) {
       return res
         .status(500)
-        .send({ message: "Erro ao buscar existência de email no sistema" });
+        .send({
+          message: `Erro ao buscar existência de email no sistema - ${err}`,
+        });
     }
   };
 }

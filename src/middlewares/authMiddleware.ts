@@ -27,7 +27,7 @@ export default (req, res, next) => {
     //tem token, mas ele está errado ou expirado
     return res
       .status(401)
-      .send({ message: "Token inválido. Faça login no sistema" });
+      .send({ message: `Token inválido. Faça login no sistema - ${err}` });
   }
   return next(); //deu tudo certo, pode continuar o processo
 };
