@@ -1,0 +1,52 @@
+body {
+  min-height: 100vh;
+  font-family: "Montserrat", sans-serif;
+  background-color: aliceblue;
+}
+.iconNav {
+  max-width: 60px;
+  max-height: 60px;
+}
+nav {
+  background-color: #4ea5d9;
+}
+.avatar {
+  max-width: 50px;
+  max-height: 50px;
+}
+.listaNav li a {
+  color: aliceblue;
+  font-weight: bold;
+  margin-left: 10px;
+}
+.avatar-options {
+  display: none;
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  list-style: none; /* Remove as marcações de lista */
+  padding: 5px 10px; /* Remove o espaçamento interno padrão das listas */
+  right: 0px;
+}
+
+.avatar-option a:hover {
+  background-color: #f0f0f0; /* Adiciona um efeito de hover ao fundo dos links */
+}
+.options a {
+  text-decoration: none;
+  color: grey; /* Define a cor do texto dos links */
+  display: block;
+  padding: 5px 20px;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid grey;
+}
+.menuContainer {
+  position: relative;
+}
+.nav-link:hover,
+.iconNav:hover,
+.avatar:hover {
+  transform: scale(1.1); /* Aumenta em 10% quando o mouse passa por cima */
+  transition: transform 0.2s; /* Adiciona uma transição suave para a animação */
+}
