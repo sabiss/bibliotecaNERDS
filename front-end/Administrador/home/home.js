@@ -1,15 +1,15 @@
-// document.addEventListener("DOMContentLoaded", minhaFuncao);
-// function minhaFuncao() {
-//   const token = localStorage.getItem("token");
-
-//   const payload = JSON.parse(atob(token.split(".")[1]));
-
-//   if (payload != "adm") {
-//     window.location.assign("../../login.html");
-//   }
-// }
-
-// Adicione um ouvinte de evento para o evento 'DOMContentLoaded'
+//verifica ao carregar a página se o usuário realmente é um adm
+document.addEventListener("DOMContentLoaded", verificaNivelDoUsuario);
+function verificaNivelDoUsuario() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.assign("../../login.html");
+  }
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  if (payload.tipo != "adm") {
+    window.location.assign("../../login.html");
+  }
+}
 
 //para o funcionamente da lista de opções ao clicar no avatar
 const avatarImg = document.getElementById("avatar-img");
@@ -27,3 +27,10 @@ avatarImg.addEventListener("click", function () {
     avatarOptions.style.display = "block";
   }
 });
+
+function sair() {
+  // Remove uma variável específica do localStorage
+  localStorage.removeItem("token");
+  // Recarregar a página atual
+  location.reload(true);
+}
