@@ -7,8 +7,12 @@ const livrosSchema = new mongoose.Schema({
   numero_paginas: { type: Number, required: true },
   genero: { type: String, required: true },
   editora: { type: String, required: true },
-  quantidade: { type: Number, required: true },
+  copias: { type: [Number] },
   //TOMBO
+});
+
+livrosSchema.virtual("quantidade").get(function () {
+  return this.copias.length;
 });
 
 const livros = mongoose.model("livros", livrosSchema);
