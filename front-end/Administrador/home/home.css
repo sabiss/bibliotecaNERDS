@@ -50,3 +50,40 @@ nav {
   transform: scale(1.1); /* Aumenta em 10% quando o mouse passa por cima */
   transition: transform 0.2s; /* Adiciona uma transição suave para a animação */
 }
+main {
+  padding: 20px 10px;
+  height: calc(90vh - var(--navHeight, 0px));
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.lista {
+  display: grid;
+  grid-template-rows: 0.5fr 5fr;
+  min-height: 700px;
+  max-height: 700px;
+  overflow: auto;
+  min-width: 380px;
+  max-width: 380px;
+  padding: 10px;
+  border-radius: 15px;
+  margin-left: 20px;
+  background-color: #224870;
+}
+.headerLista {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+}
+.atrasado {
+  background-color: #dd6d8c;
+}
+.ativos {
+  background-color: #72caaf;
+}
+.headerCard {
+  border-bottom: 1px solid grey;
+}
