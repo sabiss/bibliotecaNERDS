@@ -27,7 +27,7 @@ async function logar() {
 
     switch (tipoDeUsuario) {
       case "adm":
-        window.location.assign("https://www.instagram.com");
+        window.location.assign("./Administrador/home/home.html");
         break;
       case "resp":
         window.location.assign("https://www.facebook.com");
