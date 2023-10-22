@@ -1,5 +1,9 @@
 //verifica ao carregar a página se o usuário realmente é um adm
-document.addEventListener("DOMContentLoaded", verificaNivelDoUsuario);
+document.addEventListener(
+  "DOMContentLoaded",
+  verificaNivelDoUsuario,
+  preencherTotais
+);
 function verificaNivelDoUsuario() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -9,6 +13,7 @@ function verificaNivelDoUsuario() {
   if (payload.tipo != "adm") {
     window.location.assign("../../login.html");
   }
+  preencherTotais();
 }
 
 //para o funcionamente da lista de opções ao clicar no avatar
@@ -27,7 +32,30 @@ avatarImg.addEventListener("click", function () {
     avatarOptions.style.display = "block";
   }
 });
+async function preencherTotais() {
+  const totalLivrosAtrasados = document.querySelector("#totalAtrasados");
+  const totalEmprestimosAtivos = document.querySelector("#totalAtivos");
+  const totalLivrosCadastrados = document.querySelector("#totalCadastrados");
+  const totalEmprestimos = document.querySelector("#totalEmprestados");
 
+  const token = localStorage.getItem("token");
+  try {
+    const retornoApi = await fetch("http://localhost:3000/listarTotais", {
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const totais = await retornoApi.json();
+
+    totalEmprestimosAtivos.innerHTML = totais.totalLivrosAtivos;
+    totalLivrosCadastrados.innerHTML = totais.totalLivrosCadastrador;
+    totalEmprestimos.innerHTML = totais.totalEmprestados;
+  } catch (err) {
+    alert(`Ocorreu um Erro - ${err}`);
+  }
+}
 function sair() {
   // Remove uma variável específica do localStorage
   localStorage.removeItem("token");
