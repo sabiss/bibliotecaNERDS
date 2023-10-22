@@ -5,7 +5,9 @@ const router = express.Router();
 
 router
   .get("/listarLivros", checkRole(["resp", "adm"]), responsaveisController.listarLivros)
-  .get("/listarEmprestimos", checkRole(["resp", "adm"]), responsaveisController.listarEmprestimos)
+  .get("/listarEmprestimosAtivos", checkRole(["resp", "adm"]), responsaveisController.listarEmprestimosAtivos)
+  .get("listarTodosOsEmprestimos", checkRole(["resp", "adm"]), responsaveisController.listasTodosOsEmprestimos)
+  .get("/listarTotais", checkRole(["resp", "adm"]), responsaveisController.listarTotais)
   .post("/cadastrarLivro", checkRole(["resp", "adm"]), responsaveisController.cadastrarLivro)
   .post("/emprestarLivro", checkRole(["resp", "adm"]), responsaveisController.realizarEmprestimoDeLivro)
   .delete("/deletarLivro/:id", checkRole(["resp", "adm"]), responsaveisController.deletarLivro)

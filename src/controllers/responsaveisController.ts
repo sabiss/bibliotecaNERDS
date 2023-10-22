@@ -114,7 +114,23 @@ class responsaveisController {
         .send({ message: `Erro ao buscar livros para listagem - ${err}` });
     }
   };
-  static listarEmprestimos = async (req, res) => {
+  static listarEmprestimosAtivos = async (req, res) => {
+    try {
+      const listaDeEmprestimos = await emprestimos
+        .find({ emprestado: true })
+        .populate({ path: "idUsuario", select: "-senha" })
+        .populate("idLivro");
+      if (listaDeEmprestimos.length == 0) {
+        res.status(200).send({ message: "Não há empréstimos realizados" });
+      }
+      return res.status(200).json(listaDeEmprestimos);
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: `Erro ao listar empréstimo já feitos - ${err}` });
+    }
+  };
+  static listasTodosOsEmprestimos = async (req, res) => {
     try {
       const listaDeEmprestimos = await emprestimos
         .find()
@@ -155,6 +171,27 @@ class responsaveisController {
       return res.status(200).send({ message: `Cópia adicionada com sucesso` });
     } catch (err) {
       return res.status(404).send({ message: `Livro não encontrado - ${err}` });
+    }
+  };
+  static listarTotais = async (req, res) => {
+    try {
+      const totalLivrosAtivos = await livros.countDocuments({
+        emprestado: true,
+      });
+      //ainda vou fazer totalLivrosAtrasados
+      const totalLivrosCadastrador = await livros.countDocuments();
+      const totalEmprestimos = await emprestimos.countDocuments();
+      return res
+        .status(200)
+        .send({
+          totalLivrosAtivos: totalLivrosAtivos,
+          totalLivrosCadastrador: totalLivrosCadastrador,
+          totalEmprestados: totalEmprestimos,
+        });
+    } catch (err) {
+      return res.status(500).send({
+        message: `Erro ao consultar total de empréstimos ativos - ${err}`,
+      });
     }
   };
 }
