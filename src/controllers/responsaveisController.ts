@@ -52,11 +52,10 @@ class responsaveisController {
       idLivro: idLivro,
       status: true,
     });
-
-    if (emprestimosJaFeitos < livroASerEmprestado.quantidade) {
+    const quantidadeDeCopias = livroASerEmprestado.copias.length;
+    if (emprestimosJaFeitos < quantidadeDeCopias) {
       //verifica se ainda há cópias disponíveis
       const { dataEmprestimo, dataDevolucao } = req.body;
-      console.log(`emp ` + dataEmprestimo + " dev " + dataDevolucao);
       const novoEmprestimo = new emprestimos({
         idUsuario,
         idLivro,
@@ -143,6 +142,18 @@ class responsaveisController {
       return res
         .status(404)
         .send({ message: `Erro ao deletar livro - ${err}` });
+    }
+  };
+  static adicionarCopiaDeLivro = async (req, res) => {
+    const { idLivro, numeroDaCopia } = req.body;
+
+    try {
+      await livros.findByIdAndUpdate(idLivro, {
+        $push: { copias: numeroDaCopia },
+      });
+      return res.status(200).send({ message: `Cópia adicionada com sucesso` });
+    } catch (err) {
+      return res.status(404).send({ message: `Livro não encontrado - ${err}` });
     }
   };
 }
