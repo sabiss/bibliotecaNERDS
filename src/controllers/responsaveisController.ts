@@ -21,7 +21,7 @@ class responsaveisController {
     }
   };
   static realizarEmprestimoDeLivro = async (req, res) => {
-    const { idLivro, idUsuario } = req.body;
+    const { idLivro, idUsuario, numeroDaCopia } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(idLivro)) {
       return res.status(400).send({ message: "iD do livro inválido" });
@@ -62,6 +62,7 @@ class responsaveisController {
         dataEmprestimo,
         dataDevolucao,
         emprestado: true,
+        numeroDaCopia: numeroDaCopia,
       });
       try {
         await novoEmprestimo.save();
