@@ -49,7 +49,60 @@ nav {
 }
 .nav-link:hover,
 .iconNav:hover,
-.avatar:hover {
+.avatar:hover,
+.botoes:hover {
   transform: scale(1.1); /* Aumenta em 10% quando o mouse passa por cima */
   transition: transform 0.2s; /* Adiciona uma transição suave para a animação */
+}
+main,
+.botoesContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+main {
+  height: 80vh;
+}
+.botoesContainer {
+  flex-wrap: wrap;
+  height: 90vh;
+  height: 500px;
+  width: 700px;
+}
+.botoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-width: 300px;
+  max-width: 300px;
+  min-height: 150px;
+  max-height: 150px;
+  padding: 20px;
+  border-radius: 15px;
+  margin-right: 50px;
+}
+.botoes:hover {
+  cursor: pointer;
+}
+.livrosAtrasados {
+  background-color: rgb(205, 98, 98);
+}
+.emprestimosAtivos {
+  background-color: rgb(76, 146, 76);
+}
+.livrosCadastrados {
+  background-color: #4ea5d9;
+}
+.todosOsEmprestimosJaFeitos {
+  background-color: #f3f37a;
+}
+.imgCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.textCard {
+  color: white;
+}
+.cardAmarelo {
+  color: black;
 }
