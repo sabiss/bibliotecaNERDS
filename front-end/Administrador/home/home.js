@@ -53,7 +53,7 @@ async function preencherTotais() {
     totalLivrosCadastrados.innerHTML = totais.totalLivrosCadastrador;
     totalEmprestimos.innerHTML = totais.totalEmprestados;
   } catch (err) {
-    alert(`Ocorreu um Erro - ${err}`);
+    // alert(`Ocorreu um Erro - ${err}`);
   }
 }
 function sair() {
