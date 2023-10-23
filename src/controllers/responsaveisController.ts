@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import livros from "../models/Livro";
 import emprestimos from "../models/Emprestimo";
+import copias from "../models/Copia";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
@@ -39,7 +40,7 @@ class responsaveisController {
     const emprestimoRepetido = await emprestimos.countDocuments({
       idLivro: idLivro,
       idUsuario: idUsuario,
-      emprestado: true,
+      emprestimoAtivo: true,
     });
 
     if (emprestimoRepetido) {
@@ -47,13 +48,22 @@ class responsaveisController {
         .status(500)
         .send({ message: "Esse usuário ja pegou este livro emprestado" });
     }
-
-    const emprestimosJaFeitos = await emprestimos.countDocuments({
+    const aCopiaEDesteLivro = await copias.find({
       idLivro: idLivro,
-      status: true,
+      codigoDeIdentificacao: numeroDaCopia,
     });
-    const quantidadeDeCopias = livroASerEmprestado.copias.length;
-    if (emprestimosJaFeitos < quantidadeDeCopias) {
+
+    if (aCopiaEDesteLivro.length <= 0) {
+      return res.status(500).send({ message: "Esta cópia não é deste livro" });
+    }
+
+    const copiasDisponiveis = await copias.countDocuments({
+      idLivro: idLivro,
+      codigoDeIdentificacao: numeroDaCopia,
+      emprestado: false,
+    });
+
+    if (copiasDisponiveis) {
       //verifica se ainda há cópias disponíveis
       const { dataEmprestimo, dataDevolucao } = req.body;
       const novoEmprestimo = new emprestimos({
@@ -61,11 +71,16 @@ class responsaveisController {
         idLivro,
         dataEmprestimo,
         dataDevolucao,
-        emprestado: true,
         numeroDaCopia: numeroDaCopia,
       });
+
       try {
-        await novoEmprestimo.save();
+        await copias.findOneAndUpdate(
+          //cópia emprestada
+          { codigoDeIdentificacao: numeroDaCopia },
+          { emprestado: true }
+        );
+        await novoEmprestimo.save(); //emprestimo feito
         return res
           .status(201)
           .send({ message: "Empréstimo realizado com sucesso!" });
@@ -77,7 +92,7 @@ class responsaveisController {
     }
   };
   static registrarDevolucaoDeLivro = async (req, res) => {
-    const { idLivro, idUsuario } = req.body;
+    const { idLivro, idUsuario, numeroDaCopia } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(idLivro)) {
       return res.status(400).send({ message: "iD do livro inválido" });
@@ -88,7 +103,11 @@ class responsaveisController {
 
     try {
       await emprestimos.findOneAndUpdate(
-        { idLivro: idLivro, idUsuario: idUsuario, emprestado: true },
+        { idLivro: idLivro, idUsuario: idUsuario, emprestimoAtivo: true },
+        { emprestimoAtivo: false }
+      );
+      await copias.findOneAndUpdate(
+        { codigoDeIdentificacao: numeroDaCopia },
         { emprestado: false }
       );
       return res
@@ -162,17 +181,21 @@ class responsaveisController {
     }
   };
   static adicionarCopiaDeLivro = async (req, res) => {
-    const { idLivro, numeroDaCopia } = req.body;
-
+    const { idLivro } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(idLivro)) {
+      return res.status(500).send({ message: "Este ID de livro não é válido" });
+    }
     try {
-      await livros.findByIdAndUpdate(idLivro, {
-        $push: { copias: numeroDaCopia },
-      });
-      return res.status(200).send({ message: `Cópia adicionada com sucesso` });
+      const copia = new copias({ idLivro });
+
+      await copia.save();
+
+      return res.status(200).send({ message: `Cópia criada com sucesso` });
     } catch (err) {
-      return res.status(404).send({ message: `Livro não encontrado - ${err}` });
+      return res.status(500).send({ message: `Erro ao criar cópia - ${err}` });
     }
   };
+
   static listarTotais = async (req, res) => {
     try {
       const totalLivrosAtivos = await livros.countDocuments({
@@ -181,17 +204,26 @@ class responsaveisController {
       //ainda vou fazer totalLivrosAtrasados
       const totalLivrosCadastrador = await livros.countDocuments();
       const totalEmprestimos = await emprestimos.countDocuments();
-      return res
-        .status(200)
-        .send({
-          totalLivrosAtivos: totalLivrosAtivos,
-          totalLivrosCadastrador: totalLivrosCadastrador,
-          totalEmprestados: totalEmprestimos,
-        });
+      return res.status(200).send({
+        totalLivrosAtivos: totalLivrosAtivos,
+        totalLivrosCadastrador: totalLivrosCadastrador,
+        totalEmprestados: totalEmprestimos,
+      });
     } catch (err) {
       return res.status(500).send({
         message: `Erro ao consultar total de empréstimos ativos - ${err}`,
       });
+    }
+  };
+  static listarCopias = async (req, res) => {
+    const { id } = req.body;
+    try {
+      const lista = await copias.findOne({ idLivro: id }).populate("idLivro");
+      return res.status(200).json(lista);
+    } catch (err) {
+      return res
+        .status(404)
+        .send({ message: `Cópias não encontradas para esse livro` });
     }
   };
 }

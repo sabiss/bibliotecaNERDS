@@ -11,10 +11,10 @@ const emprestimoSchema = new mongoose.Schema({
     ref: "livros",
     required: true,
   },
+  numeroDaCopia: { type: String, required: true },
   dataEmprestimo: { type: String, default: Date.now },
   dataDevolucao: { type: String, required: true },
-  emprestado: { type: Boolean, required: true },
-  numeroDaCopia: { type: Number, required: true },
+  emprestimoAtivo: { type: Boolean, default: true },
 });
 
 const emprestimos = mongoose.model("emprestimos", emprestimoSchema);
