@@ -5,6 +5,7 @@ const schemaUsuario = new Schema({
   email: { type: String, required: true },
   tipo: { type: String, required: true },
   senha: { type: String, required: true },
+  cpf: { type: String, required: true },
 });
 
 const usuarios = mongoose.model("usuarios", schemaUsuario);
