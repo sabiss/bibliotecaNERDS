@@ -1,7 +1,7 @@
 body {
   min-height: 100vh;
   font-family: "Montserrat", sans-serif;
-  background-color: aliceblue;
+  background-color: #e9fff9;
 }
 .iconNav {
   max-width: 60px;
@@ -9,6 +9,7 @@ body {
 }
 nav {
   background-color: #4ea5d9;
+  padding: 20px;
 }
 .avatar {
   max-width: 50px;
@@ -17,10 +18,11 @@ nav {
 .avatar:hover {
   cursor: pointer;
 }
-.listaNav li a {
-  color: aliceblue;
-  font-weight: bold;
-  margin-left: 10px;
+.nomeDaSessao img {
+  margin-right: 20px;
+}
+.nomeDaSessao h1 {
+  color: white;
 }
 .avatar-options {
   display: none;
@@ -50,7 +52,8 @@ nav {
 .nav-link:hover,
 .iconNav:hover,
 .avatar:hover,
-.botoes:hover {
+.botoes:hover,
+.nomeDaSessao h1:hover {
   transform: scale(1.1); /* Aumenta em 10% quando o mouse passa por cima */
   transition: transform 0.2s; /* Adiciona uma transição suave para a animação */
 }
@@ -62,12 +65,12 @@ main,
 }
 main {
   height: 80vh;
+  padding: 30px 10px;
 }
 .botoesContainer {
   flex-wrap: wrap;
   height: 90vh;
   height: 500px;
-  width: 700px;
 }
 .botoes {
   display: grid;
@@ -79,6 +82,12 @@ main {
   padding: 20px;
   border-radius: 15px;
   margin-right: 50px;
+  margin-bottom: 20px;
+  opacity: 0; /* Comece com opacidade zero para ocultar os cards */
+  animation: fade-in 1s ease-in-out forwards;
+  -webkit-box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
 }
 .botoes:hover {
   cursor: pointer;
@@ -95,6 +104,24 @@ main {
 .todosOsEmprestimosJaFeitos {
   background-color: #f3f37a;
 }
+.novoLivro {
+  background-color: rgb(148, 74, 148);
+}
+.cadastrarUser {
+  background-color: #044b7f;
+}
+.cadastrarResp {
+  background-color: #06a77d;
+}
+.addCopia {
+  background-color: #f49d37;
+}
+.emprestimo {
+  background-color: #07070a;
+}
+.devolucao {
+  background-color: #143109;
+}
 .imgCard {
   display: flex;
   align-items: center;
@@ -105,4 +132,13 @@ main {
 }
 .cardAmarelo {
   color: black;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0; /* Opacidade inicial */
+  }
+  to {
+    opacity: 1; /* Opacidade final */
+  }
 }

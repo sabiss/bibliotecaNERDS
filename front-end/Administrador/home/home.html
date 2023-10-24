@@ -16,24 +16,11 @@
   <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#"
-          ><img src="../../assets/iconNavBar.png" class="iconNav"
-        /></a>
-        <div class="collapse navbar-collapse navBar">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 listaNav">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Cadastrar Livro</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Cadastrar Usuário</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Empréstimo</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Devolução</a>
-            </li>
-          </ul>
+        <div class="nomeDaSessao d-flex">
+          <img src="../../assets/iconNavBar.png" class="iconNav mr-2"/>
+          <h1>Página do Administrador</h1>
+        </div>
+        
           <div class="menuContainer">
             <img
               src="../../assets/avatar.png"
@@ -46,7 +33,6 @@
               <li class="options"><a href="#" onclick="sair()">Sair</a></li>
             </ul>
         </div>
-      </div>
     </nav>
     <main>
       <div class="botoesContainer">
@@ -65,6 +51,30 @@
         <div class="botoes todosOsEmprestimosJaFeitos">
           <div class="imgCard"><img src="../../assets/livroAberto.png" alt=""></div>
           <div class="textCard cardAmarelo"><h5>Ver Todos Os Empréstimos Já Feitos</h5><small>Total: <spa id="totalEmprestados"></spa></small></div>
+        </div>
+        <div class="botoes novoLivro">
+          <div class="imgCard"><img src="../../assets/novoLivro.png" alt=""></div>
+          <div class="textCard"><h5>Cadastrar Novo Livro</h5></div>
+        </div>
+        <div class="botoes cadastrarUser">
+          <div class="imgCard"><img src="../../assets/user.png" alt=""></div>
+          <div class="textCard"><h5>Cadastrar Usuário</h5></div>
+        </div>
+        <div class="botoes cadastrarResp">
+          <div class="imgCard"><img src="../../assets/bibliotecario.png" alt=""></div>
+          <div class="textCard"><h5>Cadastrar Bibliotecário</h5></div>
+        </div>
+        <div class="botoes addCopia">
+          <div class="imgCard"><img src="../../assets/cópia.png" alt=""></div>
+          <div class="textCard"><h5>Adicionar Nova Cópia de Livro</h5></div>
+        </div>
+        <div class="botoes emprestimo">
+          <div class="imgCard"><img src="../../assets/emprestimo.png" alt=""></div>
+          <div class="textCard"><h5>Realizar Empréstimo</h5></div>
+        </div>
+        <div class="botoes devolucao">
+          <div class="imgCard"><img src="../../assets/devolucao.png" alt=""></div>
+          <div class="textCard"><h5>Registrar Devolução</h5></div>
         </div>
       </div>
       
