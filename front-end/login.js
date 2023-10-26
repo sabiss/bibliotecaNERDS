@@ -19,7 +19,7 @@ async function logar() {
     if (!token) {
       geraErro(resposta.message);
     }
-    localStorage.setItem("token", resposta.token);
+    localStorage.setItem("token", token);
 
     const payload = JSON.parse(atob(token.split(".")[1])); //atob() decodifica base64 para sua sequencia normal, ou seja, o payload[1] será descriptografado sem precisar do jwt.verify
 
