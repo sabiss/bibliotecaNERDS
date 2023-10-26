@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
 
 const emprestimoSchema = new mongoose.Schema({
-  idUsuario: {
+  usuario: {
     type: mongoose.Schema.ObjectId,
     ref: "usuarios",
     required: true,
   },
-  idLivro: {
-    type: mongoose.Schema.ObjectId,
-    ref: "livros",
-    required: true,
-  },
+  livro: { type: mongoose.Schema.ObjectId, ref: "livros", required: true },
   numeroDaCopia: { type: String, required: true },
   dataEmprestimo: { type: String, default: Date.now },
   dataDevolucao: { type: String, required: true },

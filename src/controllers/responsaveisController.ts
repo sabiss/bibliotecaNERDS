@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import livros from "../models/Livro";
 import emprestimos from "../models/Emprestimo";
 import copias from "../models/Copia";
+import usuarios from "../models/Usuario";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
@@ -10,6 +11,13 @@ class responsaveisController {
     const novoLivro = new livros(req.body);
 
     try {
+      const isbnEmUso = await livros.find({ isbn: req.body.isbn });
+      console.log(isbnEmUso);
+      if (isbnEmUso.length > 0) {
+        return res
+          .status(400)
+          .send({ message: "Já há um livro cadastrado com esse isbn" });
+      }
       await novoLivro.save();
 
       return res
@@ -22,97 +30,101 @@ class responsaveisController {
     }
   };
   static realizarEmprestimoDeLivro = async (req, res) => {
-    const { idLivro, idUsuario, numeroDaCopia } = req.body;
+    const { tituloDoLivro, cpf, numeroDaCopia } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(idLivro)) {
-      return res.status(400).send({ message: "iD do livro inválido" });
-    }
-    if (!mongoose.Types.ObjectId.isValid(idUsuario)) {
-      return res.status(400).send({ message: "iD do usuário inválido" });
-    }
-
-    const livroASerEmprestado = await livros.findById(idLivro);
-
-    if (!livroASerEmprestado) {
+    const livro = await livros.findOne({ titulo: tituloDoLivro });
+    if (!livro) {
       return res.status(404).send({ message: "Livro não encontrado" });
     }
+    const usuario = await usuarios.findOne({ cpf: cpf });
+    if (!usuario) {
+      return res.status(404).send({ message: "usuário não encontrado" });
+    }
 
-    const emprestimoRepetido = await emprestimos.countDocuments({
-      idLivro: idLivro,
-      idUsuario: idUsuario,
+    const copiaParaEmprestar = await copias.findOne({
+      idLivro: livro._id,
+      codigoDeIdentificacao: numeroDaCopia,
+    });
+
+    if (!copiaParaEmprestar) {
+      return res
+        .status(404)
+        .send({ message: "cópia não encontrada ou não pertence a este livro" });
+    }
+    if (copiaParaEmprestar.emprestado == true) {
+      return res.status(200).send({
+        message: "Essa cópia já foi emprestada e não está mais disponível",
+      });
+    }
+
+    const emprestimoRepetido = await emprestimos.findOne({
+      usuario: usuario._id,
+      livro: livro._id,
       emprestimoAtivo: true,
     });
 
     if (emprestimoRepetido) {
       return res
-        .status(500)
-        .send({ message: "Esse usuário ja pegou este livro emprestado" });
+        .status(200)
+        .send({ message: "Este Usuário já está livro emprestado" });
     }
-    const aCopiaEDesteLivro = await copias.find({
-      idLivro: idLivro,
-      codigoDeIdentificacao: numeroDaCopia,
-    });
-
-    if (aCopiaEDesteLivro.length <= 0) {
-      return res.status(500).send({ message: "Esta cópia não é deste livro" });
-    }
-
-    const copiasDisponiveis = await copias.countDocuments({
-      idLivro: idLivro,
-      codigoDeIdentificacao: numeroDaCopia,
-      emprestado: false,
-    });
-
-    if (copiasDisponiveis) {
-      //verifica se ainda há cópias disponíveis
-      const { dataEmprestimo, dataDevolucao } = req.body;
-      const novoEmprestimo = new emprestimos({
-        idUsuario,
-        idLivro,
+    const { dataEmprestimo, dataDevolucao } = req.body;
+    try {
+      const emprestimo = new emprestimos({
+        usuario: usuario._id,
+        livro: livro._id,
+        numeroDaCopia: numeroDaCopia,
         dataEmprestimo,
         dataDevolucao,
-        numeroDaCopia: numeroDaCopia,
       });
-
-      try {
-        await copias.findOneAndUpdate(
-          //cópia emprestada
-          { codigoDeIdentificacao: numeroDaCopia },
-          { emprestado: true }
-        );
-        await novoEmprestimo.save(); //emprestimo feito
-        return res
-          .status(201)
-          .send({ message: "Empréstimo realizado com sucesso!" });
-      } catch (err) {
-        return res
-          .status(500)
-          .send({ message: `Erro ao realizar emprésimo -  ${err}` });
-      }
+      await emprestimo.save();
+      await copiaParaEmprestar.updateOne({ emprestado: true });
+      return res.status(200).send({ message: "Livro emprestado com sucesso" });
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: `Erro ao realizar empréstimo - ${err}` });
     }
   };
   static registrarDevolucaoDeLivro = async (req, res) => {
-    const { idLivro, idUsuario, numeroDaCopia } = req.body;
+    const { nomeLivro, cpf, numeroDaCopia } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(idLivro)) {
-      return res.status(400).send({ message: "iD do livro inválido" });
+    const livro = await livros.findOne({ titulo: nomeLivro });
+    const usuario = await usuarios.findOne({ cpf: cpf });
+
+    if (!livro) {
+      return res.status(404).send({ message: "Livro não encontrado" });
     }
-    if (!mongoose.Types.ObjectId.isValid(idUsuario)) {
-      return res.status(400).send({ message: "iD do usuário inválido" });
+    if (!usuario) {
+      return res.status(404).send({ message: "Usuário não encontrado" });
+    }
+
+    const copiaEmprestada = await copias.findOne({
+      codigoDeIdentificacao: numeroDaCopia,
+      emprestado: true,
+    });
+
+    if (!copiaEmprestada) {
+      return res
+        .status(404)
+        .send({ message: "Essa cópia não existe ou não foi emprestada" });
+    }
+    const emprestimo = await emprestimos.findOne({
+      livro: livro._id,
+      usuario: usuario._id,
+      numeroDaCopia: numeroDaCopia,
+      emprestimoAtivo: true,
+    });
+
+    if (!emprestimo) {
+      return res.status(404).send({ message: "Este empréstimo não existe" });
     }
 
     try {
-      await emprestimos.findOneAndUpdate(
-        { idLivro: idLivro, idUsuario: idUsuario, emprestimoAtivo: true },
-        { emprestimoAtivo: false }
-      );
-      await copias.findOneAndUpdate(
-        { codigoDeIdentificacao: numeroDaCopia },
-        { emprestado: false }
-      );
-      return res
-        .status(200)
-        .send({ message: `Devolução registrada com sucesso!` });
+      await emprestimo.updateOne({ $set: { emprestimoAtivo: false } });
+      await copiaEmprestada.updateOne({ $set: { emprestado: false } });
+
+      return res.status(200).send({ message: "livro devolvido" });
     } catch (err) {
       return res
         .status(500)
@@ -136,9 +148,9 @@ class responsaveisController {
   static listarEmprestimosAtivos = async (req, res) => {
     try {
       const listaDeEmprestimos = await emprestimos
-        .find({ emprestado: true })
-        .populate({ path: "idUsuario", select: "-senha" })
-        .populate("idLivro");
+        .find({ emprestimoAtivo: true })
+        .populate({ path: "usuario", select: "-senha" })
+        .populate("livro");
       if (listaDeEmprestimos.length == 0) {
         res.status(200).send({ message: "Não há empréstimos realizados" });
       }
@@ -153,8 +165,8 @@ class responsaveisController {
     try {
       const listaDeEmprestimos = await emprestimos
         .find()
-        .populate({ path: "idUsuario", select: "-senha" })
-        .populate("idLivro");
+        .populate({ path: "usuario", select: "-senha" })
+        .populate("livro");
       if (listaDeEmprestimos.length == 0) {
         res.status(200).send({ message: "Não há empréstimos realizados" });
       }
@@ -218,7 +230,7 @@ class responsaveisController {
   static listarCopias = async (req, res) => {
     const { id } = req.body;
     try {
-      const lista = await copias.findOne({ idLivro: id }).populate("idLivro");
+      const lista = await copias.find({ idLivro: id }).populate("idLivro");
       return res.status(200).json(lista);
     } catch (err) {
       return res
