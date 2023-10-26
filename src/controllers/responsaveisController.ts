@@ -210,20 +210,21 @@ class responsaveisController {
 
   static listarTotais = async (req, res) => {
     try {
-      const totalLivrosAtivos = await livros.countDocuments({
-        emprestado: true,
+      const totalEmprestimoAtivos = await emprestimos.countDocuments({
+        emprestimoAtivo: true,
       });
       //ainda vou fazer totalLivrosAtrasados
-      const totalLivrosCadastrador = await livros.countDocuments();
+      const totalLivrosCadastrados = await livros.countDocuments();
       const totalEmprestimos = await emprestimos.countDocuments();
+
       return res.status(200).send({
-        totalLivrosAtivos: totalLivrosAtivos,
-        totalLivrosCadastrador: totalLivrosCadastrador,
+        totalEmprestimoAtivos: totalEmprestimoAtivos,
+        totalLivrosCadastrados: totalLivrosCadastrados,
         totalEmprestados: totalEmprestimos,
       });
     } catch (err) {
       return res.status(500).send({
-        message: `Erro ao consultar total de empréstimos ativos - ${err}`,
+        message: `Erro ao preencher quantidades de livros e empréstimos - ${err}`,
       });
     }
   };
