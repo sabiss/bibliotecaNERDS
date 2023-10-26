@@ -56,7 +56,9 @@ async function preencherTotais() {
     totalLivrosCadastrados.innerHTML = totais.totalLivrosCadastrados;
     totalEmprestimos.innerHTML = totais.totalEmprestados;
   } catch (err) {
-    // alert(`Ocorreu um Erro - ${err}`);
+    alert(
+      `Ocorreu um Erro ao listar os totais de livros e emprestimos- ${err}`
+    );
   }
 }
 function sair() {
