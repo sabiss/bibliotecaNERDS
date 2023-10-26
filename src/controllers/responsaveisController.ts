@@ -12,7 +12,7 @@ class responsaveisController {
 
     try {
       const isbnEmUso = await livros.find({ isbn: req.body.isbn });
-      console.log(isbnEmUso);
+
       if (isbnEmUso.length > 0) {
         return res
           .status(400)
