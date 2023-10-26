@@ -1,9 +1,11 @@
 //verifica ao carregar a página se o usuário realmente é um adm
-document.addEventListener(
-  "DOMContentLoaded",
-  verificaNivelDoUsuario,
-  preencherTotais
-);
+document.addEventListener("DOMContentLoaded", paginaCarregou());
+
+function paginaCarregou() {
+  verificaNivelDoUsuario();
+  preencherTotais();
+}
+
 function verificaNivelDoUsuario() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -39,18 +41,19 @@ async function preencherTotais() {
   const totalEmprestimos = document.querySelector("#totalEmprestados");
 
   const token = localStorage.getItem("token");
+
   try {
     const retornoApi = await fetch("http://localhost:3000/listarTotais", {
       method: "GET",
       headers: {
-        Authorization: `${token}`,
         "Content-Type": "application/json",
+        Authorization: token,
       },
     });
     const totais = await retornoApi.json();
-
-    totalEmprestimosAtivos.innerHTML = totais.totalLivrosAtivos;
-    totalLivrosCadastrados.innerHTML = totais.totalLivrosCadastrador;
+    console.log(totais);
+    totalEmprestimosAtivos.innerHTML = totais.totalEmprestimoAtivos;
+    totalLivrosCadastrados.innerHTML = totais.totalLivrosCadastrados;
     totalEmprestimos.innerHTML = totais.totalEmprestados;
   } catch (err) {
     // alert(`Ocorreu um Erro - ${err}`);
