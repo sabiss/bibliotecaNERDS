@@ -47,11 +47,11 @@ async function preencherTotais() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     });
     const totais = await retornoApi.json();
-    console.log(totais);
+
     totalEmprestimosAtivos.innerHTML = totais.totalEmprestimoAtivos;
     totalLivrosCadastrados.innerHTML = totais.totalLivrosCadastrados;
     totalEmprestimos.innerHTML = totais.totalEmprestados;

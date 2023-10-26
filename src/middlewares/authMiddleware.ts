@@ -7,6 +7,7 @@ interface JwtPayload {
 
 export default (req, res, next) => {
   const auth = req.headers.authorization; //pegando a autorização no header da requisiçã
+
   if (!auth) {
     //não tem autorização
     return res
@@ -23,12 +24,10 @@ export default (req, res, next) => {
     ) as JwtPayload;
     req.tipo = payload.tipo;
   } catch (err) {
-    alert(`Token inválido. Faça login no sistema - ${err}`);
-    console.log("entrou");
     //tem token, mas ele está errado ou expirado
-    return res
-      .status(401)
-      .send({ message: `Token inválido. Faça login no sistema - ${err}` });
+    return res.status(401).send({
+      message: `Token inválido. Faça login no sistema - ${err}`,
+    });
   }
   return next(); //deu tudo certo, pode continuar o processo
 };
