@@ -21,7 +21,6 @@ function verificaNivelDoUsuario() {
 //para o funcionamente da lista de opções ao clicar no avatar
 const avatarImg = document.getElementById("avatar-img");
 const avatarOptions = document.getElementById("avatar-options");
-
 // Adiciona um ouvinte de evento de clique à imagem
 avatarImg.addEventListener("click", function () {
   // Verifica se a lista de opções está visível
@@ -59,6 +58,42 @@ async function preencherTotais() {
     alert(
       `Ocorreu um Erro ao listar os totais de livros e emprestimos- ${err}`
     );
+  }
+}
+function fechaModal(modalEspecifico) {
+  //fecha os modais de formulários
+  let modalParaFechar;
+  switch (modalEspecifico) {
+    case "modalCadastro":
+      modalParaFechar = document.querySelector(`#${modalEspecifico}`);
+      break;
+    case "modalEdicao":
+      modalParaFechar = document.querySelector(`#${modalEspecifico}`);
+      break;
+  }
+  const modal = bootstrap.Modal.getInstance(modalParaFechar);
+  modal.hide();
+}
+async function cadastrarNovoLivro() {
+  const titulo = document.querySelector("input#tituloLivro").value;
+  const nomeAutor = document.querySelector("input#nomeAutor").value;
+  const isbn = document.querySelector("input#isbn").value;
+  const numeroPaginas = document.querySelector("input#numeroPaginas").value;
+  const genero = document.querySelector("select#generoLiterario").value;
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const retornoApi = fetch("http://localhost:3000/cadastrarLivro", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    alert("Livro Cadastrado com Sucesso");
+  } catch (err) {
+    alert(`Erro ao cadastrar livro - ${err}`);
   }
 }
 function sair() {
