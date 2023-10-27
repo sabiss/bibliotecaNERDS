@@ -23,6 +23,7 @@ nav {
 }
 .nomeDaSessao h1 {
   color: white;
+  font-size: 30px;
 }
 .avatar-options {
   display: none;
@@ -64,8 +65,8 @@ main,
   align-items: center;
 }
 main {
-  height: 80vh;
   padding: 30px 10px;
+  height: 100%;
 }
 .botoesContainer {
   flex-wrap: wrap;
