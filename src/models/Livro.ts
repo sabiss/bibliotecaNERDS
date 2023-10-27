@@ -6,7 +6,6 @@ const livrosSchema = new mongoose.Schema({
   isbn: { type: Number, required: true },
   numero_paginas: { type: Number, required: true },
   genero: { type: String, required: true },
-  editora: { type: String, required: true },
 });
 
 const livros = mongoose.model("livros", livrosSchema);
