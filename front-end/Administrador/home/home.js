@@ -85,7 +85,10 @@ async function cadastrarNovoLivro() {
       body: JSON.stringify({ titulo, autor, isbn, numero_paginas, genero }),
     });
     const resposta = await retornoApi.json();
+
+    fechaModal("modalCadastroLivro");
     alert(resposta.message);
+    location.reload(true);
   } catch (err) {
     return alert(`Erro ao cadastrar livro - ${err.message}`);
   }
@@ -99,15 +102,7 @@ function sair() {
 
 function fechaModal(modalEspecifico) {
   //fecha os modais de formulários
-  let modalParaFechar;
-  switch (modalEspecifico) {
-    case "modalCadastro":
-      modalParaFechar = document.querySelector(`#${modalEspecifico}`);
-      break;
-    case "modalEdicao":
-      modalParaFechar = document.querySelector(`#${modalEspecifico}`);
-      break;
-  }
+  modalParaFechar = document.querySelector(`#${modalEspecifico}`);
   const modal = bootstrap.Modal.getInstance(modalParaFechar);
   modal.hide();
 }
