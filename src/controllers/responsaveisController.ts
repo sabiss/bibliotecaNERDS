@@ -6,23 +6,27 @@ import usuarios from "../models/Usuario";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
-    //não vou colocar os testes para garantir que todos os atributos de um livro venham na requisição POIS no front esses campos vão ser OBRIGATÓRIOS no forms
-
     const novoLivro = new livros(req.body);
 
     try {
-      const isbnEmUso = await livros.find({ isbn: req.body.isbn });
+      const isbnEmUso = await livros.findOne({ isbn: req.body.isbn });
+      const livroExiste = await livros.findOne({ titulo: req.body.titulo });
 
-      if (isbnEmUso.length > 0) {
+      if (isbnEmUso) {
         return res
           .status(400)
           .send({ message: "Já há um livro cadastrado com esse isbn" });
+      } else if (livroExiste) {
+        return res
+          .status(400)
+          .send({ message: "Já há um livro cadastrado com esse título" });
       }
       await novoLivro.save();
-
-      return res
-        .status(201)
-        .send({ message: "Novo livro cadastrado com Sucesso!" });
+      const copia = await this.adicionarCopiaDeLivro(req, res); //quando crio um livro automaticamente ele já tem uma cópia
+      console.log(copia);
+      return res.status(201).send({
+        message: `Novo livro de código ${copia.numero} cadastrado com Sucesso!`,
+      });
     } catch (err) {
       return res
         .status(500)
@@ -193,16 +197,21 @@ class responsaveisController {
     }
   };
   static adicionarCopiaDeLivro = async (req, res) => {
-    const { idLivro } = req.body;
-    if (!mongoose.Types.ObjectId.isValid(idLivro)) {
-      return res.status(500).send({ message: "Este ID de livro não é válido" });
+    const { titulo } = req.body;
+    const livro = await livros.findOne({ titulo: titulo });
+    if (!livro) {
+      return res.status(404).send({ message: "Livro não encontrado" });
     }
+
     try {
-      const copia = new copias({ idLivro });
+      const copia = new copias({ idLivro: livro._id });
 
       await copia.save();
 
-      return res.status(200).send({ message: `Cópia criada com sucesso` });
+      return res.status(200).send({
+        message: `Cópia criada com sucesso`,
+        numero: copia.codigoDeIdentificacao,
+      });
     } catch (err) {
       return res.status(500).send({ message: `Erro ao criar cópia - ${err}` });
     }
