@@ -15,18 +15,15 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg">
-      <div class="container-fluid">
-        <div class="nomeDaSessao d-flex align-items-center">
+      <div class="container-fluid justify-content-around">
           <img src="../../assets/iconNavBar.png" class="iconNav mr-2"/>
-          <h1>Página do Administrador</h1>
-        </div>
-        
+        <h1>Página do Administrador</h1>
           <div class="menuContainer">
             <img
               src="../../assets/avatar.png"
               alt="avatar com fundo cinza e silhueta de pessoa branca"
               class="avatar"
-              id="avatar-img"
+              id="avatar-img" onclick="abreFechaMenu()"
             />
             <ul class="avatar-options" id="avatar-options">
               <li class="options"><a href="#">Config</a></li>
@@ -77,7 +74,7 @@
           <div class="textCard"><h5>Registrar Devolução</h5></div>
         </div>
       </div>
-      <div class="modal fade" id="modalCadastroLivro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <form class="modal fade" id="modalCadastroLivro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">

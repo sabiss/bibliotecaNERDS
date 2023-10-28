@@ -10,6 +10,7 @@ body {
 nav {
   background-color: #4ea5d9;
   padding: 20px;
+  color: white;
 }
 .avatar {
   max-width: 50px;
