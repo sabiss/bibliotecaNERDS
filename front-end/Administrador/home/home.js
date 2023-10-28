@@ -1,29 +1,28 @@
-//verifica ao carregar a página se o usuário realmente é um adm
+const baseUrl = "http://localhost:3000";
+
 document.addEventListener("DOMContentLoaded", paginaCarregou());
 
 function paginaCarregou() {
-  verificaNivelDoUsuario();
+  verificaUsuario();
   preencherTotais();
 }
 
-function verificaNivelDoUsuario() {
+function verificaUsuario() {
   const token = localStorage.getItem("token");
   if (!token) {
     window.location.assign("../../login.html");
   }
+  const dataAtual = new Date();
   const payload = JSON.parse(atob(token.split(".")[1]));
-  if (payload.tipo != "adm") {
+  const dataExpiracaoToken = new Date(payload.exp * 1000);
+
+  if (payload.tipo != "adm" || dataExpiracaoToken < dataAtual) {
     window.location.assign("../../login.html");
   }
-  preencherTotais();
 }
 
-//para o funcionamente da lista de opções ao clicar no avatar
-const avatarImg = document.getElementById("avatar-img");
-const avatarOptions = document.getElementById("avatar-options");
-// Adiciona um ouvinte de evento de clique à imagem
-avatarImg.addEventListener("click", function () {
-  // Verifica se a lista de opções está visível
+function abreFechaMenu() {
+  const avatarOptions = document.getElementById("avatar-options");
   const visivel = getComputedStyle(avatarOptions).display !== "none";
 
   // Alterna a visibilidade da lista de opções
@@ -32,7 +31,8 @@ avatarImg.addEventListener("click", function () {
   } else {
     avatarOptions.style.display = "block";
   }
-});
+}
+
 async function preencherTotais() {
   const totalLivrosAtrasados = document.querySelector("#totalAtrasados");
   const totalEmprestimosAtivos = document.querySelector("#totalAtivos");
@@ -42,7 +42,7 @@ async function preencherTotais() {
   const token = localStorage.getItem("token");
 
   try {
-    const retornoApi = await fetch("http://localhost:3000/listarTotais", {
+    const retornoApi = await fetch(`${baseUrl}/listarTotais`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -60,6 +60,43 @@ async function preencherTotais() {
     );
   }
 }
+
+async function cadastrarNovoLivro() {
+  const titulo = document.querySelector("input#tituloLivro").value;
+  const autor = document.querySelector("input#nomeAutor").value;
+  const isbn = document.querySelector("input#isbn").value;
+  const numero_paginas = document.querySelector("input#numeroPaginas").value;
+  const genero = document.querySelector("select#generoLiterario").value;
+
+  if (!titulo || !autor || !isbn || !numeroPaginas || !genero) {
+    return alert("Preencha todos os campos");
+  }
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const retornoApi = await fetch(`${baseUrl}/cadastrarLivro`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ titulo, autor, isbn, numero_paginas, genero }),
+    });
+    const resposta = await retornoApi.json();
+    alert(resposta.message);
+  } catch (err) {
+    return alert(`Erro ao cadastrar livro - ${err.message}`);
+  }
+}
+function sair() {
+  // Remove uma variável específica do localStorage
+  localStorage.removeItem("token");
+  // Recarregar a página atual
+  location.reload(true);
+}
+
 function fechaModal(modalEspecifico) {
   //fecha os modais de formulários
   let modalParaFechar;
@@ -73,32 +110,4 @@ function fechaModal(modalEspecifico) {
   }
   const modal = bootstrap.Modal.getInstance(modalParaFechar);
   modal.hide();
-}
-async function cadastrarNovoLivro() {
-  const titulo = document.querySelector("input#tituloLivro").value;
-  const nomeAutor = document.querySelector("input#nomeAutor").value;
-  const isbn = document.querySelector("input#isbn").value;
-  const numeroPaginas = document.querySelector("input#numeroPaginas").value;
-  const genero = document.querySelector("select#generoLiterario").value;
-
-  const token = localStorage.getItem("token");
-
-  try {
-    const retornoApi = fetch("http://localhost:3000/cadastrarLivro", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    alert("Livro Cadastrado com Sucesso");
-  } catch (err) {
-    alert(`Erro ao cadastrar livro - ${err}`);
-  }
-}
-function sair() {
-  // Remove uma variável específica do localStorage
-  localStorage.removeItem("token");
-  // Recarregar a página atual
-  location.reload(true);
 }
