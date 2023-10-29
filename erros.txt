@@ -1,0 +1,2 @@
+- listarTotais só funciona quando entra na página pela 1° vez
+- a mensagem de cadastrarNovoLivro não está certa
