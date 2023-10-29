@@ -61,59 +61,7 @@ async function preencherTotais() {
     );
   }
 }
-function formatarTexto(input) {
-  const textoDigitado = input.value;
-  const palavras = textoDigitado.split(" ");
 
-  const palavrasFormatadas = palavras.map((palavra) => {
-    if (palavra.length > 0) {
-      return palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase();
-    } else {
-      return "";
-    }
-  });
-
-  return palavrasFormatadas.join(" ");
-}
-async function cadastrarNovoLivro() {
-  const titulo = formatarTexto(document.querySelector("input#tituloLivro"));
-  const autor = formatarTexto(document.querySelector("input#nomeAutor"));
-  const isbn = document.querySelector("input#isbn").value;
-  const numeroPaginas = document.querySelector("input#numeroPaginas").value;
-  const genero = formatarTexto(
-    document.querySelector("select#generoLiterario")
-  );
-
-  if (!titulo || !autor || !isbn || !numeroPaginas || !genero) {
-    return alert("Preencha todos os campos");
-  }
-
-  const token = localStorage.getItem("token");
-
-  try {
-    const retornoApi = await fetch(`${baseUrl}/cadastrarLivro`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        titulo: titulo,
-        autor: autor,
-        isbn: isbn,
-        numero_paginas: numeroPaginas,
-        genero: genero,
-      }),
-    });
-    const resposta = await retornoApi.json();
-
-    fechaModal("modalCadastroLivro");
-    alert(resposta.message);
-  } catch (err) {
-    return alert(`Erro ao cadastrar livro - ${err.message}`);
-  }
-}
 async function devolucao() {
   const nomeLivro = document.querySelector("input#livroDevolucao").value;
   const cpf = document.querySelector("input#cpfAlunoDevolucao").value;

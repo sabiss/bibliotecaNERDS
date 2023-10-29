@@ -49,10 +49,10 @@
           <div class="imgCard"><img src="../../assets/livroAberto.png" alt=""></div>
           <div class="textCard cardAmarelo"><h5>Ver Todos Os Empréstimos Já Feitos</h5><small>Total: <spa id="totalEmprestados"></spa></small></div>
         </div>
-        <div class="botoes novoLivro" data-bs-toggle="modal" data-bs-target="#modalCadastroLivro">
+        <a class="botoes novoLivro text-decoration-none" href="../empréstimo/emprestimo.html">
           <div class="imgCard"><img src="../../assets/novoLivro.png" alt=""></div>
           <div class="textCard"><h5>Cadastrar Novo Livro</h5></div>
-        </div>
+        </a>
         <div class="botoes cadastrarUser">
           <div class="imgCard"><img src="../../assets/user.png" alt=""></div>
           <div class="textCard"><h5>Cadastrar Usuário</h5></div>
@@ -74,47 +74,6 @@
           <div class="textCard"><h5>Registrar Devolução</h5></div>
         </div>
       </div>
-      <form class="modal fade" id="modalCadastroLivro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Preencha com as informações do novo livro</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Título do Livro</label>
-                <input type="text" class="form-control" id="tituloLivro" required title="Por favor, preencha o nome do livro">
-              </div>
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Nome do Autor</label>
-                <input type="text" class="form-control" id="nomeAutor" required title="Por favor, preencha o nome do autor">
-              </div>
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Número do ISBN</label>
-                <input type="number" class="form-control" id="isbn" required title="Por favor, preencha o número do ISBN do livro>
-              </div>
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Número do Páginas</label>
-                <input type="number" class="form-control" id="numeroPaginas" required title="Por favor, preencha o número de páginas">
-              </div>
-              <select class="form-select" aria-label="Default select example" id="generoLiterario" required title="Por favor, selecione um gênero literário">
-                <option selected>Selecione o Gênero</option>
-                <option value="romance">Romance</option>
-                <option value="Ficção">Ficção</option>
-                <option value="Terror">Terror</option>
-                <option value="Ação/Aventura">Ação/Aventura</option>
-                <option value="Biografia">Biografia</option>
-                <option value="Acadêmico">Acadêmico</option>
-              </select>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" onclick="cadastrarNovoLivro()">Cadastrar Livro</button>
-            </div>
-          </div>
-        </div>
-      </form>
       <form class="modal fade" id="modalRegistrarDevolucao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
