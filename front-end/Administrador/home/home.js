@@ -44,6 +44,7 @@ async function preencherTotais() {
   try {
     const retornoApi = await fetch(`${baseUrl}/listarTotais`, {
       method: "GET",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -109,15 +110,32 @@ async function cadastrarNovoLivro() {
 
     fechaModal("modalCadastroLivro");
     alert(resposta.message);
-    location.reload(true);
   } catch (err) {
     return alert(`Erro ao cadastrar livro - ${err.message}`);
   }
 }
 async function devolucao() {
   const nomeLivro = document.querySelector("input#livroDevolucao").value;
-  const cpf = document.querySelector("input#cpfAlunoDevolucao");
-  const numeroDaCopia = document.querySelector("input#numeroCopia");
+  const cpf = document.querySelector("input#cpfAlunoDevolucao").value;
+  const numeroDaCopia = document.querySelector("input#numeroCopia").value;
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const retornoApi = await fetch(`${baseUrl}/registrarDevolucao`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ nomeLivro, cpf, numeroDaCopia }),
+    });
+
+    const resposta = await retornoApi.json();
+    alert(resposta.message);
+  } catch (err) {
+    alert(`${err}`);
+  }
 }
 
 function fechaModal(modalEspecifico) {
