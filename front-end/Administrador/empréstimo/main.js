@@ -67,7 +67,7 @@ async function cadastrarNovoLivro() {
     const resposta = await retornoApi.json();
 
     alert(resposta.message);
-    window.location.assign("../home/home.html");
+    window.location.assign("../home/index.html");
   } catch (err) {
     return alert(`Erro ao cadastrar livro - ${err.message}`);
   }

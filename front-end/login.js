@@ -15,7 +15,7 @@ function verificaSeAindaTemToken() {
 
       switch (tipoDeUsuario) {
         case "adm":
-          window.location.assign("./Administrador/home/home.html");
+          window.location.assign("./Administrador/home/index.html");
           break;
         case "resp":
           window.location.assign("https://www.facebook.com");
@@ -57,7 +57,7 @@ async function logar() {
 
     switch (tipoDeUsuario) {
       case "adm":
-        window.location.assign("./Administrador/home/home.html");
+        window.location.assign("./Administrador/home/index.html");
         break;
       case "resp":
         window.location.assign("https://www.facebook.com");

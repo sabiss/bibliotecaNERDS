@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biblioteca NERDS</title>
+    <link rel="icon" href="../../assets/iconDaPagina.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid justify-content-around">
+          <img src="../../assets/iconNavBar.png" class="iconNav mr-2"/>
+        <h1>Página do Administrador</h1>
+          <div class="menuContainer">
+            <img
+              src="../../assets/avatar.png"
+              alt="avatar com fundo cinza e silhueta de pessoa branca"
+              class="avatar"
+              id="avatar-img" onclick="abreFechaMenu()"
+            />
+            <ul class="avatar-options" id="avatar-options">
+              <li class="options"><a href="#">Config</a></li>
+              <li class="options"><a href="#" onclick="sair()">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+      <div class="botoesContainer">
+        <div class="botoes livrosAtrasados">
+          <div class="imgCard"><img src="../../assets/relogio.png" alt=""></div>
+          <div class="textCard"><h5>Ver Livros Atrasados</h5><small>Total: <span id="totalAtrasados"></span></small></div>
+        </div>
+        <div class="botoes emprestimosAtivos">
+          <div class="imgCard"><img src="../../assets/livroVerde.png" alt=""></div>
+          <div class="textCard"><h5>Ver Empréstimos Ativos</h5><small>Total: <span id="totalAtivos"></span></small></div>
+        </div>
+        <div class="botoes livrosCadastrados">
+          <div class="imgCard"><img src="../../assets/estante.png" alt=""></div>
+          <div class="textCard"><h5>Ver Todos Os Livros Cadastrados</h5><small>Total: <span id="totalCadastrados"></span></small></div>
+        </div>
+        <div class="botoes todosOsEmprestimosJaFeitos">
+          <div class="imgCard"><img src="../../assets/livroAberto.png" alt=""></div>
+          <div class="textCard cardAmarelo"><h5>Ver Todos Os Empréstimos Já Feitos</h5><small>Total: <spa id="totalEmprestados"></spa></small></div>
+        </div>
+        <a class="botoes novoLivro text-decoration-none" href="../empréstimo/emprestimo.html">
+          <div class="imgCard"><img src="../../assets/novoLivro.png" alt=""></div>
+          <div class="textCard"><h5>Cadastrar Novo Livro</h5></div>
+        </a>
+        <div class="botoes cadastrarUser">
+          <div class="imgCard"><img src="../../assets/user.png" alt=""></div>
+          <div class="textCard"><h5>Cadastrar Usuário</h5></div>
+        </div>
+        <div class="botoes cadastrarResp">
+          <div class="imgCard"><img src="../../assets/bibliotecario.png" alt=""></div>
+          <div class="textCard"><h5>Cadastrar Bibliotecário</h5></div>
+        </div>
+        <div class="botoes addCopia">
+          <div class="imgCard"><img src="../../assets/cópia.png" alt=""></div>
+          <div class="textCard"><h5>Adicionar Nova Cópia de Livro</h5></div>
+        </div>
+        <div class="botoes emprestimo">
+          <div class="imgCard"><img src="../../assets/emprestimo.png" alt=""></div>
+          <div class="textCard"><h5>Realizar Empréstimo</h5></div>
+        </div>
+        <div class="botoes devolucao" data-bs-toggle="modal" data-bs-target="#modalRegistrarDevolucao">
+          <div class="imgCard"><img src="../../assets/devolucao.png" alt=""></div>
+          <div class="textCard"><h5>Registrar Devolução</h5></div>
+        </div>
+      </div>
+      <form class="modal fade" id="modalRegistrarDevolucao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Preencha com as informações</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Título do Livro</label>
+                <input type="text" class="form-control" id="livroDevolucao" required title="Por favor, preencha o nome do livro">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">CPF do Aluno</label>
+                <input type="text" class="form-control" id="cpfAlunoDevolucao" required title="Por favor, preencha o nome do autor" oninput="cpf(this)">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Número da Cópia</label>
+                <input type="number" class="form-control" id="numeroCopia" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="devolucao()">Registrar Devolução</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
