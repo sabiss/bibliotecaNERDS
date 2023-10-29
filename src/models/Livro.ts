@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const livrosSchema = new mongoose.Schema({
   titulo: { type: String, required: true },
   autor: { type: String, required: true },
-  isbn: { type: Number, required: true },
+  isbn: { type: String, required: true },
   numero_paginas: { type: Number, required: true },
   genero: { type: String, required: true },
 });
