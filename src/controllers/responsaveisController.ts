@@ -7,12 +7,12 @@ import usuarios from "../models/Usuario";
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
     const novoLivro = new livros(req.body);
-
     try {
       const isbnEmUso = await livros.findOne({ isbn: req.body.isbn });
       const livroExiste = await livros.findOne({ titulo: req.body.titulo });
 
       if (isbnEmUso) {
+        console.log("isbn")
         return res
           .status(400)
           .send({ message: "Já há um livro cadastrado com esse isbn" });
@@ -21,12 +21,15 @@ class responsaveisController {
           .status(400)
           .send({ message: "Já há um livro cadastrado com esse título" });
       }
+
       await novoLivro.save();
-      const numeroDaCopiaCriada = (await this.adicionarCopiaDeLivro(req, res))
-        .numero; //quando crio um livro automaticamente ele já tem uma cópia
-      console.log(numeroDaCopiaCriada);
+      const numero = (await this.adicionarCopiaDeLivro(req, res)).numero; //quando crio um livro automaticamente ele já tem uma cópia
+      if(numero.status == false){//vê se deu errado a criação da cópia
+        console.error(numero.erro)
+        return res.status(500).send({message: `erro ao criar uma cópia do livro`})
+      }
       return res.status(201).send({
-        message: `Novo livro de código ${numeroDaCopiaCriada} cadastrado com Sucesso!`,
+        message: `Novo livro de código ${numero} cadastrado com Sucesso!`,
       });
     } catch (err) {
       return res
@@ -203,18 +206,13 @@ class responsaveisController {
     if (!livro) {
       return res.status(404).send({ message: "Livro não encontrado" });
     }
-
     try {
       const copia = new copias({ idLivro: livro._id });
-
       await copia.save();
 
-      return res.status(200).send({
-        message: `Cópia criada com sucesso`,
-        numero: copia.codigoDeIdentificacao,
-      });
+      return {numero: copia.codigoDeIdentificacao, status: true};
     } catch (err) {
-      return res.status(500).send({ message: `Erro ao criar cópia - ${err}` });
+      return {status: false, erro: err}
     }
   };
 
