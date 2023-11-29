@@ -22,10 +22,11 @@ class responsaveisController {
           .send({ message: "Já há um livro cadastrado com esse título" });
       }
       await novoLivro.save();
-      const copia = await this.adicionarCopiaDeLivro(req, res); //quando crio um livro automaticamente ele já tem uma cópia
-      console.log(copia);
+      const numeroDaCopiaCriada = (await this.adicionarCopiaDeLivro(req, res))
+        .numero; //quando crio um livro automaticamente ele já tem uma cópia
+      console.log(numeroDaCopiaCriada);
       return res.status(201).send({
-        message: `Novo livro de código ${copia.numero} cadastrado com Sucesso!`,
+        message: `Novo livro de código ${numeroDaCopiaCriada} cadastrado com Sucesso!`,
       });
     } catch (err) {
       return res
