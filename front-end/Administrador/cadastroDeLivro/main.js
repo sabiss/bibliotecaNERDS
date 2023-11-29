@@ -47,22 +47,23 @@ async function cadastrarNovoLivro() {
   }
 
   const token = localStorage.getItem("token");
+  const livro = {
+    titulo: titulo,
+    autor: autor,
+    isbn: isbn,
+    numero_paginas: numeroPaginas,
+    genero: genero
+  }
   try {
     const retornoApi = await fetch(`${baseUrl}/cadastrarLivro`, {
-      method: "POST",
+      method: 'POST',
       mode: "cors",
       headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({
-        titulo: titulo,
-        autor: autor,
-        isbn: isbn,
-        numero_paginas: numeroPaginas,
-        genero: genero,
-      }),
-    });
+      body: JSON.stringify(livro)
+    })
     const resposta = await retornoApi.json();
     alert(resposta.message);
     window.location.assign("../home/index.html");
