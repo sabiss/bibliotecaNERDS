@@ -47,7 +47,6 @@ async function cadastrarNovoLivro() {
   }
 
   const token = localStorage.getItem("token");
-
   try {
     const retornoApi = await fetch(`${baseUrl}/cadastrarLivro`, {
       method: "POST",
@@ -65,7 +64,6 @@ async function cadastrarNovoLivro() {
       }),
     });
     const resposta = await retornoApi.json();
-
     alert(resposta.message);
     window.location.assign("../home/index.html");
   } catch (err) {
