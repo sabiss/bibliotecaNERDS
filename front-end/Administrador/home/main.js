@@ -2,11 +2,10 @@ const baseUrl = "http://localhost:3000";
 
 document.addEventListener("DOMContentLoaded", paginaCarregou());
 
-function paginaCarregou() {
+async function paginaCarregou() {
   verificaUsuario();
-  preencherTotais();
+  await preencherTotais();
 }
-
 function verificaUsuario() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -20,7 +19,6 @@ function verificaUsuario() {
     window.location.assign("../../login.html");
   }
 }
-
 function abreFechaMenu() {
   const avatarOptions = document.getElementById("avatar-options");
   const visivel = getComputedStyle(avatarOptions).display !== "none";
@@ -32,7 +30,6 @@ function abreFechaMenu() {
     avatarOptions.style.display = "block";
   }
 }
-
 async function preencherTotais() {
   const totalLivrosAtrasados = document.querySelector("#totalAtrasados");
   const totalEmprestimosAtivos = document.querySelector("#totalAtivos");
@@ -61,7 +58,6 @@ async function preencherTotais() {
     );
   }
 }
-
 async function devolucao() {
   const nomeLivro = document.querySelector("input#livroDevolucao").value;
   const cpf = document.querySelector("input#cpfAlunoDevolucao").value;
@@ -85,7 +81,6 @@ async function devolucao() {
     alert(`${err}`);
   }
 }
-
 function fechaModal(modalEspecifico) {
   //fecha os modais de formulários
   modalParaFechar = document.querySelector(`#${modalEspecifico}`);
