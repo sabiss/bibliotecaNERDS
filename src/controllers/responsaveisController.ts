@@ -237,7 +237,7 @@ class responsaveisController {
     }
   };
   static listarCopias = async (req, res) => {
-    const { id } = req.body;
+    const id = req.params.id;
     try {
       const lista = await copias.find({ idLivro: id }).populate("idLivro");
       return res.status(200).json(lista);
