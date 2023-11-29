@@ -36,6 +36,9 @@ function geraErro(texto) {
 async function logar() {
   const email = document.querySelector("#email").value;
   const senha = document.querySelector("#senha").value;
+  const loadingOverlay = document.querySelector(".loading-overlay");
+  loadingOverlay.style.display = "block";
+
   try {
     const retornoDaApi = await fetch("http://localhost:3000/login", {
       method: "POST",
