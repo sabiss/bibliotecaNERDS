@@ -40,6 +40,20 @@ body {
   border-radius: 4px;
   font-size: 16px;
 }
+.form-group input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
 
 .form-group input[type="number"] {
   width: 100%;
@@ -59,7 +73,7 @@ body {
 
 .form-group input[type="text"]:focus,
 .form-group input[type="number"]:focus,
-.form-group select:focus {
+.form-group select:focus, .form-group input[type="password"]:focus, .form-group input[type="email"]:focus {
   outline: none;
   border-color: #007bff;
 }
