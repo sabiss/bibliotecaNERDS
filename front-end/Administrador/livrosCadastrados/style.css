@@ -1,0 +1,16 @@
+body{
+    min-height: 100vh;
+}
+main{
+    padding: 20px;
+    height: 100%;
+}
+header{
+    background-color: #4ea5d9;
+}
+.iconNav{
+    width: 64px;
+    height: 64px;
+}
+
+  
