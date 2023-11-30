@@ -3,6 +3,7 @@ const baseUrl = "http://localhost:3000";
 document.addEventListener("DOMContentLoaded", paginaCarregou());
 
 async function paginaCarregou() {
+  preencherNomeUsuario()
   verificaUsuario();
   await preencherTotais();
 }
@@ -57,6 +58,12 @@ async function preencherTotais() {
       `Ocorreu um Erro ao listar os totais de livros e emprestimos- ${err}`
     );
   }
+}
+function preencherNomeUsuario(){
+  const token = localStorage.getItem("token");
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const nome = document.querySelector("p#nomeUser")
+  nome.innerHTML += `${payload.nome}`
 }
 async function devolucao() {
   const nomeLivro = document.querySelector("input#livroDevolucao").value;
