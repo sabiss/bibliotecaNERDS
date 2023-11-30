@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", paginaCarregou());
 function paginaCarregou() {
   verificaUsuario();
 }
-
 function verificaUsuario() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -19,7 +18,6 @@ function verificaUsuario() {
     window.location.assign("../../login.html");
   }
 }
-
 function formatarTexto(input) {
   const textoDigitado = input.value;
   const palavras = textoDigitado.split(" ");
@@ -34,7 +32,6 @@ function formatarTexto(input) {
 
   return palavrasFormatadas.join(" ");
 }
-
 async function cadastrarNovoLivro() {
   const titulo = formatarTexto(document.querySelector("input#tituloLivro"));
   const autor = formatarTexto(document.querySelector("input#nomeAutor"));
