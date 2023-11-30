@@ -1,2 +1,1 @@
-- listarTotais só funciona quando entra na página pela 1° vez
-- a mensagem de cadastrarNovoLivro não está certa
+- a barra de pesquisar os livros só funciona bem se eu digitar pausadamente
