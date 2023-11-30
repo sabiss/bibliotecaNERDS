@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biblioteca NERDS</title>
+    <link rel="icon" href="../../assets/iconDaPagina.png" type="image/x-icon" />
+    <link rel="stylesheet" href="../cadastroDeLivro/style.css" />
+    <link rel="stylesheet" href="./style.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro de Nova Cópia</h2>
+        <div>
+          <div class="form-group">
+            <label for="tituloLivro">Nome do livro</label>
+            <input
+              type="text"
+              id="barraPesquisa"
+              placeholder="Informe o nome do bibliotecário" 
+              autocapitalize="words"
+              oninput="buscarSugestoes()"
+              required
+            />
+          </div>
+          <div id="sugestoes"></div>
+          <button class="btn-submit">
+            Criar Cópia
+          </button>
+        </div>
+      </div>
+      <script src="main.js"></script>
+</body>
+</html>
