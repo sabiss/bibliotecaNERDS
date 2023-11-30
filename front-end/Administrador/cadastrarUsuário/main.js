@@ -36,7 +36,8 @@ function verificaUsuario() {
 }
 
 async function cadastrarNovoUsuario(){
-    const nome = document.querySelector('input#nome').value
+    const nomeSemFormatacao = document.querySelector('input#nome').value
+    const nome = capitalizarPalavras(nomeSemFormatacao)
     const email = document.querySelector('input#email').value
     const senha = document.querySelector('input#senha').value
     const cpf = document.querySelector('input#cpf').value
@@ -61,4 +62,7 @@ async function cadastrarNovoUsuario(){
         console.error(err.erro)
         alert(err.message)
     }
+}
+function capitalizarPalavras(str) {
+    return str.replace(/\b\w/g, l => l.toUpperCase());
 }

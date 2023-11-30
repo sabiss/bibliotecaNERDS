@@ -35,7 +35,8 @@ function verificaUsuario() {
     }
 }
 async function cadastrarNovoBibliotecario(){
-    const nome = document.querySelector('input#nome').value
+    const nomeSemFormatacao = document.querySelector('input#nome').value
+    const nome = capitalizarPalavras(nomeSemFormatacao)
     const email = document.querySelector('input#email').value
     const idade = document.querySelector('input#idade').value
     const senha = document.querySelector('input#senha').value
@@ -61,4 +62,7 @@ async function cadastrarNovoBibliotecario(){
         console.error(err.erro)
         alert(err.message)
     }
+}
+function capitalizarPalavras(str) {
+    return str.replace(/\b\w/g, l => l.toUpperCase());
 }
