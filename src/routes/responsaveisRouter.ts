@@ -9,11 +9,13 @@ router
   .get("/listarTodosOsEmprestimos", checkRole(["resp", "adm"]), responsaveisController.listasTodosOsEmprestimos)
   .get("/listarTotais", checkRole(["resp", "adm"]), responsaveisController.listarTotais)
   .get("/listarCopias/:id", checkRole(["resp", "adm"]),responsaveisController.listarCopias)
+  .get("/buscarLivros", checkRole(["resp", "adm"]), responsaveisController.buscarLivro)
   .post("/adicionarCopia", checkRole(["resp", "adm"]),responsaveisController.adicionarCopiaDeLivro)
   .post("/cadastrarLivro", checkRole(["resp", "adm"]), responsaveisController.cadastrarLivro)
   .post("/emprestarLivro", checkRole(["resp", "adm"]), responsaveisController.realizarEmprestimoDeLivro)
   .delete("/deletarLivro/:id", checkRole(["resp", "adm"]), responsaveisController.deletarLivro)
   .put("/registrarDevolucao", checkRole(["resp", "adm"]), responsaveisController.registrarDevolucaoDeLivro)
+  
   
   
 

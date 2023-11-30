@@ -215,7 +215,6 @@ class responsaveisController {
       return {status: false, erro: err}
     }
   };
-
   static listarTotais = async (req, res) => {
     try {
       const totalEmprestimoAtivos = await emprestimos.countDocuments({
@@ -247,6 +246,16 @@ class responsaveisController {
         .send({ message: `Cópias não encontradas para esse livro` });
     }
   };
+  static buscarLivro = async(req, res)=>{
+    const palavraChave = req.query.palavra
+    try{
+      const livrosEncontrados = await livros.find({ titulo: { $regex: new RegExp(palavraChave, 'i') } });
+      res.status(200).send(livrosEncontrados)
+    }catch(err){
+      res.status(500).send({message: "Erro ao listar livros com título semelhante", erro: err})
+    }
+    
+  }
 }
 
 export default responsaveisController;
