@@ -28,6 +28,7 @@ class login {
         {
           id: logando._id,
           tipo: logando.tipo,
+          nome: logando.nome
         },
         `${process.env.APP_SECRET}`,
         {
