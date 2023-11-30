@@ -12,6 +12,9 @@ nav {
   padding: 20px;
   color: white;
 }
+nav h1{
+  font-size: 1.5rem;
+}
 .avatar {
   max-width: 50px;
   max-height: 50px;
@@ -107,7 +110,7 @@ main {
   background-color: #f3f37a;
 }
 .novoLivro {
-  background-color: rgb(148, 74, 148);
+  background-color: rgb(132, 66, 132);
 }
 .cadastrarUser {
   background-color: #044b7f;
@@ -116,13 +119,13 @@ main {
   background-color: #06a77d;
 }
 .addCopia {
-  background-color: #f49d37;
+  background-color: rgb(95, 95, 95);
 }
 .emprestimo {
   background-color: #07070a;
 }
 .devolucao {
-  background-color: #143109;
+  background-color: #5dc460;
 }
 .imgCard {
   display: flex;
