@@ -34,7 +34,7 @@ class administradorController {
       res.status(201).send({ message: "Usuário Criado com Sucesso" });
     } catch (error) {
       res.status(500).send({
-        message: `Erro ao salvar usuário no Banco - ${error}`,
+        message: `Erro ao salvar usuário no Banco`, erro: error,
       });
     }
   };
