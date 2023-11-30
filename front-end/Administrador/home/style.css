@@ -38,6 +38,7 @@ nav h1{
   list-style: none; /* Remove as marcações de lista */
   padding: 5px 10px; /* Remove o espaçamento interno padrão das listas */
   right: 0px;
+  z-index: 1;
 }
 
 .options a:hover {
