@@ -105,7 +105,7 @@ class administradorController {
     } catch (err) {
       return res
         .status(500)
-        .send({ message: ` Erro ao cadastrar responsável - ${err}` });
+        .send({ message: ` Erro ao cadastrar responsável`, erro: err });
     }
   };
   static listarResponsaveis = async (req, res) => {
