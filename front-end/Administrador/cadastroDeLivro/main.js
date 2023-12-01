@@ -63,8 +63,32 @@ async function cadastrarNovoLivro() {
     })
     const resposta = await retornoApi.json();
     alert(resposta.message);
-    window.location.assign("../home/index.html");
+    await criarCopia(titulo)
   } catch (err) {
     return alert(`Erro ao cadastrar livro - ${err.message}`);
+  }
+}
+async function criarCopia(titulo){
+  const token = localStorage.getItem("token");
+
+  try{
+    const respostaApi = await fetch(`http://localhost:3000/adicionarCopia`, {
+      method: 'POST',
+      mode: "cors",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({titulo: titulo})
+    })
+    if(!respostaApi.ok){
+      alert("Erro ao adicionar cópia")
+    }
+    const numeroDaCopia = await respostaApi.json()
+    alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
+    window.location.assign("../home/index.html")
+  }catch(err){
+    console.error(err.erro)
+    alert(err.message)
   }
 }
