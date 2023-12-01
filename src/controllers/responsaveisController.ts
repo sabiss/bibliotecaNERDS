@@ -55,7 +55,7 @@ class responsaveisController {
         .send({ message: "cópia não encontrada ou não pertence a este livro" });
     }
     if (copiaParaEmprestar.emprestado == true) {
-      return res.status(200).send({
+      return res.status(400).send({
         message: "Essa cópia já foi emprestada e não está mais disponível",
       });
     }
@@ -68,10 +68,14 @@ class responsaveisController {
 
     if (emprestimoRepetido) {
       return res
-        .status(200)
+        .status(400)
         .send({ message: "Este Usuário já está livro emprestado" });
     }
     const { dataEmprestimo, dataDevolucao } = req.body;
+
+    if(!dataDevolucao || !dataEmprestimo){
+      res.status(400).send({message: "Informe as duas datas"})
+    }
     try {
       const emprestimo = new emprestimos({
         usuario: usuario._id,
