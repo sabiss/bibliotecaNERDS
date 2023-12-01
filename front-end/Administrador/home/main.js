@@ -3,8 +3,8 @@ const baseUrl = "http://localhost:3000";
 document.addEventListener("DOMContentLoaded", paginaCarregou());
 
 async function paginaCarregou() {
-  preencherNomeUsuario()
   verificaUsuario();
+  preencherNomeUsuario()
   await preencherTotais();
 }
 function verificaUsuario() {
