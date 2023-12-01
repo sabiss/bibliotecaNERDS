@@ -23,13 +23,8 @@ class responsaveisController {
       }
 
       await novoLivro.save();
-      const numero = (await this.adicionarCopiaDeLivro(req, res)).numero; //quando crio um livro automaticamente ele já tem uma cópia
-      if(numero.status == false){//vê se deu errado a criação da cópia
-        console.error(numero.erro)
-        return res.status(500).send({message: `erro ao criar uma cópia do livro`})
-      }
       return res.status(201).send({
-        message: `Novo livro de código ${numero} cadastrado com Sucesso!`,
+        message: `Novo livro criado com Sucesso!`,
       });
     } catch (err) {
       return res
@@ -202,17 +197,20 @@ class responsaveisController {
   };
   static adicionarCopiaDeLivro = async (req, res) => {
     const { titulo } = req.body;
+    console.log(titulo)
     const livro = await livros.findOne({ titulo: titulo });
+
     if (!livro) {
       return res.status(404).send({ message: "Livro não encontrado" });
     }
+
     try {
       const copia = new copias({ idLivro: livro._id });
       await copia.save();
 
-      return {numero: copia.codigoDeIdentificacao, status: true};
+      return res.status(201).send({numero: copia.codigoDeIdentificacao});
     } catch (err) {
-      return {status: false, erro: err}
+      return res.status(500).send({message: "Erro ao criar cópia do livro", erro: err})
     }
   };
   static listarTotais = async (req, res) => {
