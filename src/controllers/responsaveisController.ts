@@ -161,7 +161,7 @@ class responsaveisController {
     } catch (err) {
       return res
         .status(500)
-        .send({ message: `Erro ao listar empréstimo já feitos - ${err}` });
+        .send({ message: `Erro ao listar empréstimo já feitos`, erro: err });
     }
   };
   static listasTodosOsEmprestimos = async (req, res) => {
