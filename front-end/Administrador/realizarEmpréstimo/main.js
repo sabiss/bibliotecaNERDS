@@ -83,24 +83,29 @@ async function realizarEmprestimo(){
     const numeroDaCopia = document.querySelector('input#numeroCopia').value
     const dataEmprestimo = document.querySelector('input#dataEmprestimo').value
     const dataDevolucao = document.querySelector('input#dataDevolucao').value
-
+    const emprestimo = {
+        tituloDoLivro, 
+        cpf, 
+        numeroDaCopia, 
+        dataEmprestimo, 
+        dataDevolucao
+    }
     try{
         const respostaApi = await fetch('http://localhost:3000/emprestarLivro', {
             method: 'POST',
-            mode: "cors",
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(tituloDoLivro, cpf, numeroDaCopia, dataEmprestimo, dataDevolucao)
+            body: JSON.stringify(emprestimo)
         })
-        if(!respostaApi.ok){
-            alert(respostaApi.message)
-        }
+        
         const mensagem = await respostaApi.json()
-        alert(mensagem.mensagem)
+        alert(mensagem.message)
+        location.reload()
     }catch(err){
-        alert(err)
+        console.error(err.erro)
+        alert(err.message)
     }
     
 }
