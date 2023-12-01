@@ -59,3 +59,26 @@ function selecionarSugestao(sugestao) {
     barraPesquisa.value = sugestao;
     sugestoesDiv.style.display = 'none';
 }
+async function adicionarCopia(){
+    const tituloDoLivro = document.querySelector('input#barraPesquisa').value
+    try{
+        const respostaApi = await fetch(`http://localhost:3000/adicionarCopia`, {
+        method: 'POST',
+        mode: "cors",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({titulo: tituloDoLivro})
+        })
+        if(!respostaApi.ok){
+            alert("Erro ao adicionar cópia")
+        }
+        const numeroDaCopia = await respostaApi.json()
+        alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
+        window.location.assign("../home/index.html")
+    }catch(err){
+        console.error(err.erro)
+        alert(err.message)
+    }
+}
