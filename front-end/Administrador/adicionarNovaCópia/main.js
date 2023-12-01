@@ -41,9 +41,7 @@ async function buscarSugestoes() {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
                 }})
-            console.log(respostaApi)
             const sugestoes = await respostaApi.json()
-            console.log(sugestoes)
             exibirSugestoes(sugestoes);
         }catch(err){
             console.error(err.erro)
