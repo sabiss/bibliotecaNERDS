@@ -1,1 +1,2 @@
 - a barra de pesquisar os livros só funciona bem se eu digitar pausadamente
+- main dos forms não preenche a tela toda
