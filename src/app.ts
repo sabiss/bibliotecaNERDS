@@ -17,7 +17,7 @@ conexaoComDataBase.once("open", () => {
   console.log("Banco conectado");
 });
 
-app.use(express.json(), cors("*"));
+app.use(express.json(), cors('*'));
 router(app);
 
 export default app;
