@@ -98,7 +98,7 @@ function sair() {
   // Remove uma variável específica do localStorage
   localStorage.removeItem("token");
   // Recarregar a página atual
-  location.reload(true);
+  verificaUsuario()
 }
 function cpf(input) {
   let valor = input.value;
