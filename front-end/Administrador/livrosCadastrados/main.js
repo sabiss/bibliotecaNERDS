@@ -26,6 +26,7 @@ async function criarCards(){
                 <td>${livro.titulo}</td>
                 <td>${livro.autor}</td>
                 <td>${numeroCopias}</td>
+                <td>${livro.numero_paginas}</td>
             </tr>
         `
     }
