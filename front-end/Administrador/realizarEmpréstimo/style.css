@@ -1,0 +1,22 @@
+#sugestoes {
+    display: none;
+    position: absolute;
+    border: 1px solid #ccc;
+    width: 100%;
+    background-color: #fff;
+}
+
+#sugestoes ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sugestoes li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#sugestoes li:hover {
+    background-color: #f2f2f2;
+}
