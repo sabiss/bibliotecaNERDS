@@ -1,13 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const emprestimoSchema = new mongoose.Schema({
-  nomeUsuario: {
-    type: String,
-    required: true,
-  },
+const emprestimoSchema:Schema = new mongoose.Schema({
+  nomeUsuario: { type: String, required: true,},
   tituloLivro: { type: String, required: true },
   cpf: { type: String, required: true},
-  numeroDaCopia: { type: String, required: true },
+  numeroDaCopia: { type: Number, required: true },
   dataEmprestimo: { type: String, default: Date.now },
   dataDevolucao: { type: String, required: true },
   emprestimoAtivo: { type: Boolean, default: true },
