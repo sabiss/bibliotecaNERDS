@@ -1,7 +1,10 @@
+import { AtrasoInfo } from "../interfaces/ferramentas";
 import usuarios from "../models/Usuario";
 import responsaveis from "../models/Responsavel";
 import administradores from "../models/Administrador";
 import copias from "../models/Copia";
+
+
 
 class ferramentas {
   static verificarUsoDeEmail = async (req, res) => {
@@ -38,5 +41,19 @@ class ferramentas {
 
     return paddedNumber;
   };
+  static indicarAtraso(dataEmprestimo, dataDevolucao): AtrasoInfo{
+    const devolucao: Date = new Date(dataDevolucao) 
+    const emprestimo: Date = new Date(dataEmprestimo)
+    const agora: Date = new Date()
+
+    const diasDeAtraso: number = (agora.getTime() - devolucao.getTime())/(1000 * 60 * 60 * 24)
+
+    if(diasDeAtraso > 0){
+      const atraso:number = Math.floor(diasDeAtraso)
+      return {atrasado: true, atraso}
+    }else{
+      return {atrasado: false}
+    }
+  }
 }
 export default ferramentas;
