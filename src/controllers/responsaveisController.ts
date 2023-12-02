@@ -1,8 +1,12 @@
+import { AtrasoInfo } from "../interfaces/ferramentas";
+import { EmprestimoAtrasado } from "../interfaces/emprestimoAtrasado";
+import { Emprestimo } from "../interfaces/emprestimo";
 import mongoose from "mongoose";
 import livros from "../models/Livro";
 import emprestimos from "../models/Emprestimo";
 import copias from "../models/Copia";
 import usuarios from "../models/Usuario";
+import ferramentas from "../funcoesAuxiliares/ferramentas";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
@@ -179,6 +183,30 @@ class responsaveisController {
         .send({ message: `Erro ao listar empréstimo já feitos - ${err}` });
     }
   };
+  static listarEmprestimosAtrasados = async (req, res)=>{
+    try{
+      const emprestimosAtivos: Emprestimo[] = await emprestimos.find({emprestimoAtivo: true})
+
+      if(emprestimosAtivos.length === 0){
+        return res.status(404).send({message: "Não há empréstimos feitos"})
+      }
+      
+      const listaAtrasados: EmprestimoAtrasado[] = []
+  
+      for(let emprestimo of emprestimosAtivos){
+        const estaAtrasado: AtrasoInfo = ferramentas.indicarAtraso(emprestimo.dataEmprestimo, emprestimo.dataDevolucao)
+  
+        if(estaAtrasado.atrasado === true){
+          const emprestimoAtrasado: EmprestimoAtrasado = {emprestimo, atraso: estaAtrasado.atraso}
+          listaAtrasados.push(emprestimoAtrasado)
+        }
+      }
+      return res.status(200).send(listaAtrasados)
+    }catch(err){
+      res.status(500).send({message: "Erro ao listar empréstimos atrasados", erro: err})
+    }
+  }
+  
   static deletarLivro = async (req, res) => {
     const id = req.params.id;
     if (!mongoose.isValidObjectId(id)) {
