@@ -61,8 +61,8 @@ class responsaveisController {
     }
 
     const emprestimoRepetido = await emprestimos.findOne({
-      usuario: usuario._id,
-      livro: livro._id,
+      nomeUsuario: usuario.nome,
+      tituloLivro: livro.titulo,
       emprestimoAtivo: true,
     });
 
@@ -78,8 +78,9 @@ class responsaveisController {
     }
     try {
       const emprestimo = new emprestimos({
-        usuario: usuario._id,
-        livro: livro._id,
+        nomeUsuario: usuario.nome,
+        cpf: usuario.cpf,
+        tituloLivro: livro.titulo,
         numeroDaCopia: numeroDaCopia,
         dataEmprestimo,
         dataDevolucao,
@@ -142,7 +143,7 @@ class responsaveisController {
     try {
       const lista = await livros.find();
 
-      if (lista.length == 0) {
+      if (lista.length === 0) {
         return res.status(200).send({ message: "Não há livros cadastrados" });
       }
       res.status(200).json(lista);
@@ -154,12 +155,9 @@ class responsaveisController {
   };
   static listarEmprestimosAtivos = async (req, res) => {
     try {
-      const listaDeEmprestimos = await emprestimos
-        .find({ emprestimoAtivo: true })
-        .populate({ path: "usuario", select: "-senha" })
-        .populate("livro");
+      const listaDeEmprestimos = await emprestimos.find({ emprestimoAtivo: true })
       if (listaDeEmprestimos.length == 0) {
-        res.status(200).send({ message: "Não há empréstimos realizados" });
+        res.status(404).send({ message: "Não há empréstimos realizados" });
       }
       return res.status(200).json(listaDeEmprestimos);
     } catch (err) {
@@ -170,10 +168,7 @@ class responsaveisController {
   };
   static listasTodosOsEmprestimos = async (req, res) => {
     try {
-      const listaDeEmprestimos = await emprestimos
-        .find()
-        .populate({ path: "usuario", select: "-senha" })
-        .populate("livro");
+      const listaDeEmprestimos = await emprestimos.find()
       if (listaDeEmprestimos.length == 0) {
         res.status(200).send({ message: "Não há empréstimos realizados" });
       }
@@ -257,6 +252,25 @@ class responsaveisController {
       res.status(500).send({message: "Erro ao listar livros com título semelhante", erro: err})
     }
     
+  }
+  static buscarEmprestimo = async(req, res)=>{
+    const palavraChave = req.query.palavra
+    try{
+      const emprestimosEncontrados = await emprestimos.find({
+        $or: [
+          { 'nomeUsuario': { $regex: new RegExp(palavraChave, 'i') } },
+          { 'cpf': { $regex: new RegExp(palavraChave, 'i') } },
+          { 'tituloLivro': { $regex: new RegExp(palavraChave, 'i') } },
+          { 'numeroDaCopia': { $regex: new RegExp(palavraChave, 'i') } },
+        ],
+      })
+      if(emprestimosEncontrados.length === 0){
+        res.status(404).send({message: "Não nenhum empréstimo foi encontrado"})
+      }
+      res.status(200).send(emprestimosEncontrados)
+    }catch(err){
+      res.status(500).send({message: "Erro ao procurar empréstimo", erro: err})
+    }
   }
 }
 
