@@ -31,7 +31,7 @@ async function criarCards(){
         `
     }
 }
-async function criarCardsDeLivrosEspecificos(livros){
+async function exibirSugestoes(livros){
     const tableRow = document.querySelector('tbody.listaLivros')
 
     tableRow.innerHTML=""
@@ -89,21 +89,22 @@ async function getTotalCopiasDeUmLivro(idLivro){
 }
 async function buscarLivros(){
     const filtro = document.querySelector("input#palavra").value
-    if(filtro === ""){
-        await criarCards()
-    }else{
-        try{
-            const respostaApi = await fetch(`http://localhost:3000/buscarLivros?palavra=${filtro}`, {
-                headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            }})
-            const livros = await respostaApi.json()
-            await criarCardsDeLivrosEspecificos(livros)
-        }catch(err){
-            alert(err.message)
-            console.error(err.erro)
+    try{
+        const respostaApi = await fetch(`http://localhost:3000/buscarLivros?palavra=${filtro}`, {
+            headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        }})
+        if(!respostaApi.ok){
+            const mensagem = await respostaApi.json()
+            console.error(mensagem.erro)
+            alert(mensagem.message)
         }
+        const livros = await respostaApi.json()
+        exibirSugestoes(livros)
+    }catch(err){
+        alert(err.message)
+        console.error(err.erro)
     }
 }
 async function verificarToken(){
