@@ -45,7 +45,7 @@ class responsaveisController {
     }
     const usuario = await usuarios.findOne({ cpf: cpf });
     if (!usuario) {
-      return res.status(404).send({ message: "usuário não encontrado" });
+      return res.status(404).send({ message: "Nenhum usuário cadastrado possui esse CPF" });
     }
 
     const copiaParaEmprestar = await copias.findOne({
@@ -147,10 +147,7 @@ class responsaveisController {
     try {
       const lista = await livros.find();
 
-      if (lista.length === 0) {
-        return res.status(404).send({ message: "Não há livros cadastrados" });
-      }
-      res.status(200).json(lista);
+      res.status(200).json(lista);//mesmo que dê zero quero que retorne
     } catch (err) {
       return res
         .status(500)
@@ -160,9 +157,6 @@ class responsaveisController {
   static listarEmprestimosAtivos = async (req, res) => {
     try {
       const listaDeEmprestimos = await emprestimos.find({ emprestimoAtivo: true })
-      if (listaDeEmprestimos.length == 0) {
-        res.status(404).send({ message: "Não há empréstimos realizados" });
-      }
       return res.status(200).json(listaDeEmprestimos);
     } catch (err) {
       return res
@@ -173,9 +167,6 @@ class responsaveisController {
   static listasTodosOsEmprestimos = async (req, res) => {
     try {
       const listaDeEmprestimos = await emprestimos.find()
-      if (listaDeEmprestimos.length == 0) {
-        res.status(200).send({ message: "Não há empréstimos realizados" });
-      }
       return res.status(200).json(listaDeEmprestimos);
     } catch (err) {
       return res
@@ -186,10 +177,6 @@ class responsaveisController {
   static listarEmprestimosAtrasados = async (req, res)=>{
     try{
       const emprestimosAtivos: Emprestimo[] = await emprestimos.find({emprestimoAtivo: true})
-
-      if(emprestimosAtivos.length === 0){
-        return res.status(404).send({message: "Não há empréstimos feitos"})
-      }
       
       const listaAtrasados: EmprestimoAtrasado[] = []
   
