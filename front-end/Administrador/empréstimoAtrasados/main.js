@@ -87,7 +87,7 @@ async function buscarEmprestimoAtrasado(){
 
                 tbody.innerHTML = `
                     <tr>
-                        <th>Nenhum empréstimo econtrado</th>
+                        <th>Nenhum empréstimo encontrado</th>
                         <th>-</th>
                         <th>-</th>
                         <th>-</th>
