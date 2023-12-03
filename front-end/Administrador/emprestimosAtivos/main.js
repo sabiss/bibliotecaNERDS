@@ -83,15 +83,24 @@ async function buscarEmprestimo(){
         exibirSugestoes(emprestimosSemelhantes)
     }
 }
-
+function removerAcentos(str) {
+    console.log(str)
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 function buscarPalavraNoEmprestimo(arrayDeObjetos, palavra) {
-    const regex = new RegExp(`.*${palavra}.*`, 'i');
+    const regexComAcento = new RegExp(`.*${palavra}.*`, 'i');
+    const regexSemAcento = new RegExp(`.*${removerAcentos(palavra)}.*`, 'i');
 
     const objetosEncontrados = arrayDeObjetos.filter(objeto => {
         return (
-        objeto &&
-        typeof objeto === 'object' &&
-        Object.values(objeto).some(valor => regex.test(String(valor)))
+            objeto &&
+            typeof objeto === 'object' &&
+            Object.values(objeto).some(valor => {
+                return (
+                    regexComAcento.test(String((valor))) ||
+                    regexSemAcento.test(removerAcentos(String(valor)))
+                );
+            })
         );
     });
 
