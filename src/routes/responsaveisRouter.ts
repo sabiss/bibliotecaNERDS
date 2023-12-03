@@ -7,7 +7,6 @@ router
   .get("/listarLivros", checkRole(["resp", "adm"]), responsaveisController.listarLivros)
   .get("/listarEmprestimosAtivos", checkRole(["resp", "adm"]), responsaveisController.listarEmprestimosAtivos)
   .get("/listarTodosOsEmprestimos", checkRole(["resp", "adm"]), responsaveisController.listasTodosOsEmprestimos)
-  .get("/listarTotais", checkRole(["resp", "adm"]), responsaveisController.listarTotais)
   .get("/listarCopias/:id", checkRole(["resp", "adm"]),responsaveisController.listarCopias)
   .get("/buscarLivros", checkRole(["resp", "adm"]), responsaveisController.buscarLivro)
   .get('/buscarEmprestimos', checkRole(["resp", "adm"]), responsaveisController.buscarEmprestimo)

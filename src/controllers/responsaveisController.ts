@@ -148,13 +148,13 @@ class responsaveisController {
       const lista = await livros.find();
 
       if (lista.length === 0) {
-        return res.status(200).send({ message: "Não há livros cadastrados" });
+        return res.status(404).send({ message: "Não há livros cadastrados" });
       }
       res.status(200).json(lista);
     } catch (err) {
       return res
         .status(500)
-        .send({ message: `Erro ao buscar livros para listagem - ${err}` });
+        .send({ message: `Erro ao buscar livros para listagem`, erro: err });
     }
   };
   static listarEmprestimosAtivos = async (req, res) => {
@@ -206,7 +206,6 @@ class responsaveisController {
       res.status(500).send({message: "Erro ao listar empréstimos atrasados", erro: err})
     }
   }
-  
   static deletarLivro = async (req, res) => {
     const id = req.params.id;
     if (!mongoose.isValidObjectId(id)) {
@@ -238,26 +237,6 @@ class responsaveisController {
       return res.status(201).send({numero: copia.codigoDeIdentificacao});
     } catch (err) {
       return res.status(500).send({message: "Erro ao criar cópia do livro", erro: err})
-    }
-  };
-  static listarTotais = async (req, res) => {
-    try {
-      const totalEmprestimoAtivos = await emprestimos.countDocuments({
-        emprestimoAtivo: true,
-      });
-      //ainda vou fazer totalLivrosAtrasados
-      const totalLivrosCadastrados = await livros.countDocuments();
-      const totalEmprestimos = await emprestimos.countDocuments();
-
-      return res.status(200).send({
-        totalEmprestimoAtivos: totalEmprestimoAtivos,
-        totalLivrosCadastrados: totalLivrosCadastrados,
-        totalEmprestados: totalEmprestimos,
-      });
-    } catch (err) {
-      return res.status(500).send({
-        message: `Erro ao preencher quantidades de livros e empréstimos - ${err}`,
-      });
     }
   };
   static listarCopias = async (req, res) => {
