@@ -14,7 +14,18 @@ function verificaUsuario() {
       window.location.assign("../../login.html");
     }
 }
-
+function geraErro(texto) {
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.remove('d-none')
+    alert.classList.add('d-flex')
+    const text = document.querySelector('strong#textoDoErro')
+    text.innerHTML = `${texto}`;
+}
+function fecharAlert(){
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.add('d-none')
+    alert.classList.remove('d-flex')
+}
 const sugestoesDiv = document.getElementById('sugestoes');
 const barraPesquisa = document.getElementById('barraPesquisa');
 
