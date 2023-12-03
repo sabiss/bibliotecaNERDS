@@ -75,21 +75,25 @@ function exibirSugestoes(emprestimos){
 }
 async function buscarEmprestimo(){
     const palavraNaBarraDePesquisa = document.querySelector("input#barraDePesquisa").value
-    try{
-        const respostaApi = await fetch(`http://localhost:3000/buscarEmprestimos?palavra=${palavraNaBarraDePesquisa}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            }
-        })
-        if(!respostaApi.ok){
-            const mensagem = await respostaApi.json()
-            alert(mensagem.message)
-        }
-        const sugestoes = await respostaApi.json()
-        exibirSugestoes(sugestoes)
-    }catch(err){
-        console.error(err)
-        alert("Erro ao buscar por empréstimos")
+    if(palavraNaBarraDePesquisa === ""){
+        await preencherTabela()
+    }else{
+        const emprestimosAtivos = await getEmprestimosAtivos()
+        const emprestimosSemelhantes = buscarPalavraNoEmprestimo(emprestimosAtivos, palavraNaBarraDePesquisa)
+        exibirSugestoes(emprestimosSemelhantes)
     }
+}
+
+function buscarPalavraNoEmprestimo(arrayDeObjetos, palavra) {
+    const regex = new RegExp(`.*${palavra}.*`, 'i');
+
+    const objetosEncontrados = arrayDeObjetos.filter(objeto => {
+        return (
+        objeto &&
+        typeof objeto === 'object' &&
+        Object.values(objeto).some(valor => regex.test(String(valor)))
+        );
+    });
+
+    return objetosEncontrados;
 }
