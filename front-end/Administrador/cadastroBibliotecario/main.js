@@ -57,7 +57,7 @@ async function cadastrarNovoBibliotecario(){
         })
         const mensagem = await respostaApi.json()
         alert(mensagem.message)
-        window.location.assign("./index.html");
+        location.reload()
     }catch(err){
         console.error(err.erro)
         alert(err.message)

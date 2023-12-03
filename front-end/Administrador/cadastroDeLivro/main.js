@@ -64,6 +64,7 @@ async function cadastrarNovoLivro() {
     const resposta = await retornoApi.json();
     alert(resposta.message);
     await criarCopia(titulo)
+    location.reload()
   } catch (err) {
     return alert(`Erro ao cadastrar livro - ${err.message}`);
   }
@@ -86,7 +87,6 @@ async function criarCopia(titulo){
     }
     const numeroDaCopia = await respostaApi.json()
     alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
-    window.location.assign("../home/index.html")
   }catch(err){
     console.error(err.erro)
     alert(err.message)

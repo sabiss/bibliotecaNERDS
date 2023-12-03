@@ -74,7 +74,7 @@ async function adicionarCopia(){
         }
         const numeroDaCopia = await respostaApi.json()
         alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
-        window.location.assign("../home/index.html")
+        location.reload()
     }catch(err){
         console.error(err.erro)
         alert(err.message)
