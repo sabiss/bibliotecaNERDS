@@ -15,8 +15,9 @@ async function criarCards(){
     }
     let numeroCopias
     for(let livro of livros){
+        console.log(livro)
         try{
-            numeroCopias = await getTotalCopiasDeUmLivro(livro._id)
+            numeroCopias = await getCopiasDeUmLivro(livro._id)
         }catch(err){
             console.error(err.message)
             alert("erro ao listar total de cópias")
@@ -25,7 +26,7 @@ async function criarCards(){
             <tr>
                 <td>${livro.titulo}</td>
                 <td>${livro.autor}</td>
-                <td>${numeroCopias}</td>
+                <td>${numeroCopias.length}</td>
                 <td>${livro.numero_paginas}</td>
             </tr>
         `
@@ -35,20 +36,13 @@ async function exibirSugestoes(livros){
     const tableRow = document.querySelector('tbody.listaLivros')
 
     tableRow.innerHTML=""
-    let numeroCopias
     for(let livro of livros){
-        try{
-            numeroCopias = await getTotalCopiasDeUmLivro(livro._id)
-        }catch(err){
-            console.error(err.message)
-            alert("erro ao listar total de cópias")
-        }
         tableRow.innerHTML += `
             <tr>
-                <td>${livro.titulo}</td>
-                <td>${livro.autor}</td>
-                <td>${numeroCopias}</td>
-                <td>${livro.numero_paginas}</td>
+                <td>${livro.livro.titulo}</td>
+                <td>${livro.livro.autor}</td>
+                <td>${livro.numeroDeCopias}</td>
+                <td>${livro.livro.numero_paginas}</td>
             </tr>
         `
     }
@@ -70,7 +64,7 @@ async function getLivros(){
         alert("Erro ao listar livros")
     }
 }
-async function getTotalCopiasDeUmLivro(idLivro){
+async function getCopiasDeUmLivro(idLivro){
     try{
         const respostaApi = await fetch(`http://localhost:3000/listarCopias/${idLivro}`, {
             method: "GET",
@@ -80,8 +74,13 @@ async function getTotalCopiasDeUmLivro(idLivro){
               Authorization: `Bearer ${token}`,
             }
         })
+        if(!respostaApi.ok){
+            const mensagem = await respostaApi.json()
+            console.erro(mensagem.erro)
+            alert(mensagem.message)
+        }
         const copias = await respostaApi.json()
-        return copias.length
+        return copias
     }catch(err){
         console.error(err.message)
         alert("erro ao listar total de cópias dos livros")
@@ -89,6 +88,9 @@ async function getTotalCopiasDeUmLivro(idLivro){
 }
 async function buscarLivros(){
     const filtro = document.querySelector("input#palavra").value
+    if(filtro === ""){
+        await criarCards()
+    }
     try{
         const respostaApi = await fetch(`http://localhost:3000/buscarLivros?palavra=${filtro}`, {
             headers: {
@@ -101,10 +103,37 @@ async function buscarLivros(){
             alert(mensagem.message)
         }
         const livros = await respostaApi.json()
-        exibirSugestoes(livros)
+        const livrosComQuantidadeDeCopias = []
+
+        for(let livro of livros){
+            const copias = await getCopiasDeUmLivro(livro._id) 
+            livrosComQuantidadeDeCopias.push({livro, numeroDeCopias: copias.length})
+        }
+
+        exibirSugestoes(livrosComQuantidadeDeCopias)
     }catch(err){
         alert(err.message)
         console.error(err.erro)
+    }
+}
+async function getLivros(){
+    try{
+        const respostaApi = await fetch('http://localhost:3000/listarLivros',{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        if(!respostaApi.ok){
+            const mensagem = await respostaApi.json()
+            alert(mensagem.message)
+        }
+
+        const livros = await respostaApi.json()
+        return livros
+    }catch(err){
+        console.error(err.erro)
+        alert(err.message)
     }
 }
 async function verificarToken(){
