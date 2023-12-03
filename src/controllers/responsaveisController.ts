@@ -258,26 +258,6 @@ class responsaveisController {
     }catch(err){
       res.status(500).send({message: "Erro ao listar livros com título semelhante", erro: err})
     }
-    
-  }
-  static buscarEmprestimo = async(req, res)=>{
-    const palavraChave = req.query.palavra
-    try{
-      const emprestimosEncontrados = await emprestimos.find({
-        $or: [
-          { 'nomeUsuario': { $regex: new RegExp(palavraChave, 'i') } },
-          { 'cpf': { $regex: new RegExp(palavraChave, 'i') } },
-          { 'tituloLivro': { $regex: new RegExp(palavraChave, 'i') } },
-          { 'numeroDaCopia': { $regex: new RegExp(palavraChave, 'i') } },
-        ],
-      })
-      if(emprestimosEncontrados.length === 0){
-        res.status(404).send({message: "Não nenhum empréstimo foi encontrado"})
-      }
-      res.status(200).send(emprestimosEncontrados)
-    }catch(err){
-      res.status(500).send({message: "Erro ao procurar empréstimo", erro: err})
-    }
   }
 }
 
