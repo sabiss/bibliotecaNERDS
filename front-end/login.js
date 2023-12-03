@@ -5,11 +5,11 @@ function verificaSeAindaTemToken() {
 
   if (token) {
     //tem token
-    const payload = JSON.parse(atob(token.split(".")[1]));
+    const payload = JSON.parse(atob(decodeURIComponent(token.split(".")[1])));
     const dataAtual = new Date();
     const dataExpiracaoToken = new Date(payload.exp * 1000);
 
-    if (!dataAtual > dataExpiracaoToken) {
+    if (dataAtual <= dataExpiracaoToken) {
       //o token não está expirado ainda, então pode entrar sem logar
       const tipoDeUsuario = payload.tipo;
 
@@ -47,29 +47,32 @@ async function logar() {
       body: JSON.stringify({ email, senha }),
     });
     const resposta = await retornoDaApi.json();
-    const token = resposta.token;
 
-    if (!token) {
-      geraErro(resposta.message);
+    if(!retornoDaApi.ok){
+      geraErro(resposta.message)
+    }else{
+        const token = resposta.token;
+        localStorage.setItem("token", token);
+
+        const payload = JSON.parse(atob(decodeURIComponent(token.split(".")[1])));//atob() decodifica base64 para sua sequencia normal, ou seja, o payload[1] será descriptografado sem precisar do jwt.verify
+    
+        const tipoDeUsuario = payload.tipo;
+    
+        switch (tipoDeUsuario) {
+          case "adm":
+            window.location.assign("./Administrador/home/index.html");
+            break;
+          case "resp":
+            window.location.assign("https://www.facebook.com");
+            break;
+          default:
+            window.location.assign("https://www.youtuber.com");
+            break;
+        }
     }
-    localStorage.setItem("token", token);
-
-    const payload = JSON.parse(atob(token.split(".")[1])); //atob() decodifica base64 para sua sequencia normal, ou seja, o payload[1] será descriptografado sem precisar do jwt.verify
-
-    const tipoDeUsuario = payload.tipo;
-
-    switch (tipoDeUsuario) {
-      case "adm":
-        window.location.assign("./Administrador/home/index.html");
-        break;
-      case "resp":
-        window.location.assign("https://www.facebook.com");
-        break;
-      default:
-        window.location.assign("https://www.youtuber.com");
-        break;
-    }
+    
   } catch (err) {
-    geraErro(`Ocorreu um erro no sistema - ${err}`);
+    console.error(err.erro)
+    geraErro(err.message);
   }
 }
