@@ -49,7 +49,7 @@ class ferramentas {
     const diasDeAtraso: number = (agora.getTime() - devolucao.getTime())/(1000 * 60 * 60 * 24)
 
     if(diasDeAtraso > 0){
-      const atraso:number = Math.floor(diasDeAtraso)
+      const atraso:number = Math.floor(diasDeAtraso) - 1
       return {atrasado: true, atraso}
     }else{
       return {atrasado: false}
