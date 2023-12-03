@@ -77,35 +77,57 @@ function formatarCpf(event) {
     // Atualiza o valor do campo
     event.target.value = cpf;
 };
+
+function formatarDataParaString(data) {
+    const ano = data.getFullYear();
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0'); // adiciona zero à esquerda se for necessário
+    const dia = data.getDate().toString().padStart(2, '0'); // adiciona zero à esquerda se for necessário
+
+    return `${ano}-${mes}-${dia}`;
+}
 async function realizarEmprestimo(){
     const cpf = document.querySelector("input#cpf").value
     const tituloDoLivro = document.querySelector('input#tituloLivro').value
     const numeroDaCopia = document.querySelector('input#numeroCopia').value
-    const dataEmprestimo = document.querySelector('input#dataEmprestimo').value
-    const dataDevolucao = document.querySelector('input#dataDevolucao').value
-    const emprestimo = {
-        tituloDoLivro, 
-        cpf, 
-        numeroDaCopia, 
-        dataEmprestimo, 
-        dataDevolucao
+    const devolucao = document.querySelector('input#dataDevolucao').value
+
+    if(cpf == "" || tituloDoLivro == "" || numeroDaCopia == "" || devolucao == ""){
+        alert("Preencha todos os campos do formulário")
+    }else{
+        const hoje = new Date()
+        const dataDevolucao = new Date(devolucao)
+
+        if(dataDevolucao.getTime() <= hoje.getTime() ){
+            alert("Insira uma data de devolução válida")
+        }else{
+            const emprestimo = {
+                tituloDoLivro, 
+                cpf, 
+                numeroDaCopia, 
+                dataEmprestimo: formatarDataParaString(new Date()), 
+                dataDevolucao: devolucao
+            }
+            try{
+                const respostaApi = await fetch('http://localhost:3000/emprestarLivro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(emprestimo)
+                })
+                
+                const mensagem = await respostaApi.json()
+                if(!respostaApi.ok){
+                    alert(mensagem.message)
+                }else{
+                    alert(mensagem.message)
+                    location.reload()
+                }
+            }catch(err){
+                console.error(err.erro)
+                alert(err.message)
+            }
+        }
     }
-    try{
-        const respostaApi = await fetch('http://localhost:3000/emprestarLivro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(emprestimo)
-        })
-        
-        const mensagem = await respostaApi.json()
-        alert(mensagem.message)
-        location.reload()
-    }catch(err){
-        console.error(err.erro)
-        alert(err.message)
-    }
-    
 }
