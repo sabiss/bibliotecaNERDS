@@ -5,6 +5,13 @@ async function paginaCarregou() {
     verificarToken()
     await criarCards()
 }
+function geraErro(texto) {
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.remove('d-none')
+    alert.classList.add('d-flex')
+    const text = document.querySelector('strong#textoDoErro')
+    text.innerHTML = `${texto}`;
+}
 async function criarCards(){
     const tbody = document.querySelector('tbody.listaLivros')
     tbody.innerHTML = ""
@@ -42,8 +49,18 @@ async function criarCards(){
 }
 async function exibirSugestoes(livros){
     const tableRow = document.querySelector('tbody.listaLivros')
-
     tableRow.innerHTML=""
+    if(livros.length === 0){
+        tableRow.innerHTML += `
+        <tr>
+            <td>Nenhum Livro Foi Cadastrado Ainda Com Esses Caracteres</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        `
+    }
+    
     for(let livro of livros){
         tableRow.innerHTML += `
             <tr>
@@ -68,8 +85,8 @@ async function getLivros(){
         const livros = await respostaApi.json()
         return livros
     }catch(err){
-        console.error(err.message)
-        alert("Erro ao listar livros")
+        console.error(err.erro)
+        geraErro(err.message)
     }
 }
 async function getCopiasDeUmLivro(idLivro){
@@ -85,13 +102,13 @@ async function getCopiasDeUmLivro(idLivro){
         if(!respostaApi.ok){
             const mensagem = await respostaApi.json()
             console.erro(mensagem.erro)
-            alert(mensagem.message)
+            geraErro(mensagem.message)
         }
         const copias = await respostaApi.json()
         return copias
     }catch(err){
-        console.error(err.message)
-        alert("erro ao listar total de cópias dos livros")
+        console.error(err.erro)
+        geraErro(err.message)
     }
 }
 async function buscarLivros(){
@@ -120,7 +137,7 @@ async function buscarLivros(){
 
         exibirSugestoes(livrosComQuantidadeDeCopias)
     }catch(err){
-        alert(err.message)
+        geraErro(err.message)
         console.error(err.erro)
     }
 }
@@ -141,7 +158,7 @@ async function getLivros(){
         return livros
     }catch(err){
         console.error(err.erro)
-        alert(err.message)
+        geraErro(err.message)
     }
 }
 async function verificarToken(){
