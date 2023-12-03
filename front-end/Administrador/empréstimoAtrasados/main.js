@@ -28,8 +28,8 @@ function exibirEmprestimos(emprestimosAtrasados){
                 <th>${emprestimo.emprestimo.nomeUsuario}</th>
                 <th>${emprestimo.emprestimo.cpf}</th>
                 <th>${emprestimo.emprestimo.tituloLivro}</th>
-                <th>${emprestimo.emprestimo.numeroDaCopia}</th>
-                <th>${emprestimo.atraso} ${emprestimo.atraso == 1? 'dia' : 'dias'}</th>
+                <th>#${emprestimo.emprestimo.numeroDaCopia}</th>
+                <th>${emprestimo.atraso} ${emprestimo.atraso === 1? 'dia' : 'dias'}</th>
             </tr>
         `
     }
