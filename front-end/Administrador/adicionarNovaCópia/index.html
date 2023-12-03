@@ -18,7 +18,12 @@
     <header>
       <a href="../home/index.html"><img src="../../assets/seta.png"></a>
     </header>
-    <div class="container">
+    <main class="bg-body-tertiary d-flex justify-content-around align-items-center flex-column">
+      <div class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeErro">
+        <strong id="textoDoErro"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
+      </div>
+      <div class="container">
         <h2>Cadastro de Nova Cópia</h2>
         <div>
           <div class="form-group">
@@ -38,6 +43,7 @@
           </button>
         </div>
       </div>
-      <script src="main.js"></script>
+    </main>
+    <script src="main.js"></script>
 </body>
 </html>

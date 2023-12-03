@@ -17,69 +17,76 @@
     <header>
       <a href="../home/index.html"><img src="../../assets/seta.png"></a>
     </header>
-    <div class="container">
-      <h2>Formulário de Cadastro de Livro</h2>
-      <div>
-        <div class="form-group">
-          <label for="tituloLivro">Título do Livro</label>
-          <input
-            type="text"
-            id="tituloLivro"
-            placeholder="Informe o título do livro"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="nomeAutor">Nome do Autor</label>
-          <input
-            type="text"
-            id="nomeAutor"
-            placeholder="Informe o nome do autor"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="isbn">Número ISBN</label>
-          <input
-            type="text"
-            id="isbn"
-            placeholder="Informe o número ISBN"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="numeroPaginas">Número de Páginas</label>
-          <input
-            type="number"
-            id="numeroPaginas"
-            placeholder="Informe o número de páginas"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="genero">Gênero</label>
-          <select id="genero" required>
-            <option value="" disabled selected>Selecione o gênero</option>
-            <option value="Ficção">Ficção</option>
-            <option value="Não Ficção">Não Ficção</option>
-            <option value="Romance">Romance</option>
-            <option value="Aventura">Aventura</option>
-            <option value="Mistério">Mistério</option>
-            <option value="Biografia">Biografia</option>
-            <option value="Acadêmico">Acadêmico</option>
-            <option value="Acadêmico">Auto Ajuda</option>
-          </select>
-        </div>
-
-        <button class="btn-submit" onclick="cadastrarNovoLivro()">
-          Cadastrar Livro
-        </button>
+    <main class="d-flex flex-column justify-content-around align-items-center">
+      <div class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeErro">
+        <strong id="textoDoErro"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
       </div>
-    </div>
+      <div class="container">
+        <h2>Formulário de Cadastro de Livro</h2>
+        <div>
+          <div class="form-group">
+            <label for="tituloLivro">Título do Livro</label>
+            <input
+              type="text"
+              id="tituloLivro"
+              placeholder="Informe o título do livro"
+              required
+            />
+          </div>
+  
+          <div class="form-group">
+            <label for="nomeAutor">Nome do Autor</label>
+            <input
+              type="text"
+              id="nomeAutor"
+              placeholder="Informe o nome do autor"
+              required
+            />
+          </div>
+  
+          <div class="form-group">
+            <label for="isbn">Número ISBN</label>
+            <input
+              type="text"
+              id="isbn"
+              placeholder="Informe o número ISBN"
+              required
+            />
+          </div>
+  
+          <div class="form-group">
+            <label for="numeroPaginas">Número de Páginas</label>
+            <input
+              type="number"
+              id="numeroPaginas"
+              placeholder="Informe o número de páginas"
+              required
+            />
+          </div>
+  
+          <div class="form-group">
+            <label for="genero">Gênero</label>
+            <select id="genero" required>
+              <option value="" disabled selected>Selecione o gênero</option>
+              <option value="Ficção">Ficção</option>
+              <option value="Não Ficção">Não Ficção</option>
+              <option value="Romance">Romance</option>
+              <option value="Aventura">Aventura</option>
+              <option value="Mistério">Mistério</option>
+              <option value="Biografia">Biografia</option>
+              <option value="Acadêmico">Acadêmico</option>
+              <option value="Acadêmico">Auto Ajuda</option>
+            </select>
+          </div>
+  
+          <button class="btn-submit" onclick="cadastrarNovoLivro()">
+            Cadastrar Livro
+          </button>
+        </div>
+      </div>
+    </main>
+    
     <script src="./main.js"></script>
   </body>
 </html>

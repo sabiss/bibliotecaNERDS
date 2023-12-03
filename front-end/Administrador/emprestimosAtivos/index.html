@@ -14,7 +14,7 @@
       crossorigin="anonymous"
     />
 </head>
-<body>
+<body class="bg-body-tertiary">
     <header>
         <nav class="navbar ">
             <div class="container-fluid">
@@ -25,7 +25,11 @@
             </div>
           </nav>
     </header>
-    <main class="bg-body-tertiary d-flex justify-content-center align-items-center">
+    <main class="d-flex justify-content-center align-items-center flex-column">
+      <div class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeErro">
+        <strong id="textoDoErro"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
+      </div>
       <table class="table">
         <thead class="table-dark">
           <tr>
