@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", paginaCarregou());
 
 async function paginaCarregou() {
     verificaUsuario();
-    await getEmprestimosAtrasados()
+    await exibirEmprestimos()
 }
 function verificaUsuario() {
     const token = localStorage.getItem("token");
@@ -17,12 +17,30 @@ function verificaUsuario() {
         window.location.assign("../../login.html");
     }
 }
-function exibirEmprestimos(emprestimosAtrasados){
+async function exibirEmprestimos(){
+    const emprestimosAtrasados = await getEmprestimosAtrasados()
     const tbody = document.querySelector('tbody')
 
     tbody.innerHTML=""
 
     for(let emprestimo of emprestimosAtrasados){
+        tbody.innerHTML += `
+            <tr>
+                <th>${emprestimo.emprestimo.nomeUsuario}</th>
+                <th>${emprestimo.emprestimo.cpf}</th>
+                <th>${emprestimo.emprestimo.tituloLivro}</th>
+                <th>#${emprestimo.emprestimo.numeroDaCopia}</th>
+                <th>${emprestimo.atraso} ${emprestimo.atraso === 1? 'dia' : 'dias'}</th>
+            </tr>
+        `
+    }
+}
+function exibirSugestoes(emprestimosSemelhantes){
+    const tbody = document.querySelector('tbody')
+
+    tbody.innerHTML=""
+
+    for(let emprestimo of emprestimosSemelhantes){
         tbody.innerHTML += `
             <tr>
                 <th>${emprestimo.emprestimo.nomeUsuario}</th>
@@ -50,9 +68,53 @@ async function getEmprestimosAtrasados(){
         }
 
         const emprestimos = await respostaApi.json()
-        exibirEmprestimos(emprestimos)
+        return emprestimos
     }catch(err){
         console.error(err.erro)
         alert(err.message)
     }
 }
+async function buscarEmprestimoAtrasado(){
+    const palavraNaBarraDePesquisa = document.querySelector('#palavra').value
+    if(palavraNaBarraDePesquisa === ""){
+        exibirEmprestimos()
+    }else{
+        try{
+            const emprestimosAtrasados = await getEmprestimosAtrasados()
+            const emprestimosSemelhantes = buscarPalavraNoEmprestimo(emprestimosAtrasados, palavraNaBarraDePesquisa)
+            if(emprestimosSemelhantes.length === 0){
+                const tbody = document.querySelector('tbody')
+
+                tbody.innerHTML = `
+                    <tr>
+                        <th>Nenhum empréstimo econtrado</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                    </tr>
+                `
+            }else{
+                exibirSugestoes(emprestimosSemelhantes)
+            }
+        }catch(err){
+            console.error(err.erro)
+            alert(err.message)
+        }
+    }
+    
+}
+function buscarPalavraNoEmprestimo(arrayDeObjetos, palavra) {
+    const regex = new RegExp(`.*${palavra}.*`, 'i');
+
+    const objetosEncontrados = arrayDeObjetos.filter(objeto => {
+        return (
+        objeto.emprestimo &&
+        typeof objeto.emprestimo === 'object' &&
+        Object.values(objeto.emprestimo).some(valor => regex.test(String(valor)))
+        );
+    });
+
+    return objetosEncontrados;
+}
+  
