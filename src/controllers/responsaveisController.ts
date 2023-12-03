@@ -234,7 +234,7 @@ class responsaveisController {
     } catch (err) {
       return res
         .status(404)
-        .send({ message: `Cópias não encontradas para esse livro` });
+        .send({ message: `Cópias não encontradas para esse livro`, erro: err });
     }
   };
   static buscarLivro = async(req, res)=>{
