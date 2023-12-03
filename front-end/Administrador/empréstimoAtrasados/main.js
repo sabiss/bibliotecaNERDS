@@ -22,18 +22,31 @@ async function exibirEmprestimos(){
     const tbody = document.querySelector('tbody')
 
     tbody.innerHTML=""
-
-    for(let emprestimo of emprestimosAtrasados){
+    if(emprestimosAtrasados.length === 0){
         tbody.innerHTML += `
             <tr>
-                <th>${emprestimo.emprestimo.nomeUsuario}</th>
-                <th>${emprestimo.emprestimo.cpf}</th>
-                <th>${emprestimo.emprestimo.tituloLivro}</th>
-                <th>#${emprestimo.emprestimo.numeroDaCopia}</th>
-                <th>${emprestimo.atraso} ${emprestimo.atraso === 1? 'dia' : 'dias'}</th>
+                <th>Nenhum empréstimo realizado</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
             </tr>
         `
+    }else{
+        for(let emprestimo of emprestimosAtrasados){
+            tbody.innerHTML += `
+                <tr>
+                    <th>${emprestimo.emprestimo.nomeUsuario}</th>
+                    <th>${emprestimo.emprestimo.cpf}</th>
+                    <th>${emprestimo.emprestimo.tituloLivro}</th>
+                    <th>#${emprestimo.emprestimo.numeroDaCopia}</th>
+                    <th>${emprestimo.atraso} ${emprestimo.atraso === 1? 'dia' : 'dias'}</th>
+                </tr>
+            `
+        }
     }
+    
 }
 function exibirSugestoes(emprestimosSemelhantes){
     const tbody = document.querySelector('tbody')

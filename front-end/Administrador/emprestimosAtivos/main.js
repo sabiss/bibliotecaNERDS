@@ -44,18 +44,34 @@ async function preencherTabela(){
     const emprestimos = await getEmprestimosAtivos()
     const tbody = document.querySelector("tbody")
     tbody.innerHTML = ""
-    for(let emprestimo of emprestimos){
-        tbody.innerHTML += `
+
+    if(emprestimos.length === 0){
+        tbody.innerHTML = `
             <tr>
-                <th>${emprestimo.nomeUsuario}</th>
-                <th>${emprestimo.cpf}</th>
-                <th>${emprestimo.tituloLivro}</th>
-                <th>${emprestimo.numeroDaCopia}</th>
-                <th>${emprestimo.dataEmprestimo}</th>
-                <th>${emprestimo.dataDevolucao}</th>
+                <th>Nenhum empréstimo realizado</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
             </tr>
         `
+    }else{
+        for(let emprestimo of emprestimos){
+            tbody.innerHTML += `
+                <tr>
+                    <th>${emprestimo.nomeUsuario}</th>
+                    <th>${emprestimo.cpf}</th>
+                    <th>${emprestimo.tituloLivro}</th>
+                    <th>${emprestimo.numeroDaCopia}</th>
+                    <th>${emprestimo.dataEmprestimo}</th>
+                    <th>${emprestimo.dataDevolucao}</th>
+                </tr>
+            `
+        }
     }
+    
+    
 }
 function exibirSugestoes(emprestimos){
     const tbody = document.querySelector("tbody")

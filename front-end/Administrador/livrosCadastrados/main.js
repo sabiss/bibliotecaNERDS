@@ -6,30 +6,38 @@ async function paginaCarregou() {
     await criarCards()
 }
 async function criarCards(){
-    const tableRow = document.querySelector('tbody.listaLivros')
-    tableRow.innerHTML = ""
+    const tbody = document.querySelector('tbody.listaLivros')
+    tbody.innerHTML = ""
     let livros = await getLivros()
     
-    if(livros.length == 0){
-        alert(livros.message)
-    }
-    let numeroCopias
-    for(let livro of livros){
-        console.log(livro)
-        try{
-            numeroCopias = await getCopiasDeUmLivro(livro._id)
-        }catch(err){
-            console.error(err.message)
-            alert("erro ao listar total de cópias")
-        }
-        tableRow.innerHTML += `
+    if(livros.length === 0){
+        tbody.innerHTML = `
             <tr>
-                <td>${livro.titulo}</td>
-                <td>${livro.autor}</td>
-                <td>${numeroCopias.length}</td>
-                <td>${livro.numero_paginas}</td>
+                <th>Nenhum empréstimo realizado</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
             </tr>
         `
+    }else{
+        let numeroCopias
+        for(let livro of livros){
+            console.log(livro)
+            try{
+                numeroCopias = await getCopiasDeUmLivro(livro._id)
+            }catch(err){
+                console.error(err.message)
+                alert("erro ao listar total de cópias")
+            }
+            tbody.innerHTML += `
+                <tr>
+                    <td>${livro.titulo}</td>
+                    <td>${livro.autor}</td>
+                    <td>${numeroCopias.length}</td>
+                    <td>${livro.numero_paginas}</td>
+                </tr>
+            `
+        }
     }
 }
 async function exibirSugestoes(livros){
