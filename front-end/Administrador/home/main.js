@@ -40,23 +40,72 @@ async function preencherTotais() {
   const token = localStorage.getItem("token");
 
   try {
-    const retornoApi = await fetch(`${baseUrl}/listarTotais`, {
-      method: "GET",
-      mode: "cors",
+    //Total de livro
+    const respostaApiTotalLivros = await fetch(`${baseUrl}/listarLivros`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-      },
-    });
-    const totais = await retornoApi.json();
+    }
+    })
+    if(!respostaApiTotalLivros.ok){
+      const messageTotalLivros = await respostaApiTotalLivros.json()
+      console.error(messageTotalLivros.erro)
+      alert(messageTotalLivros.message)
+    }else{
+      const livros = await respostaApiTotalLivros.json()
+      totalLivrosCadastrados.innerHTML = livros.length
+    }
 
-    totalEmprestimosAtivos.innerHTML = totais.totalEmprestimoAtivos;
-    totalLivrosCadastrados.innerHTML = totais.totalLivrosCadastrados;
-    totalEmprestimos.innerHTML = totais.totalEmprestados;
+    //Empréstimos Ativos
+    const respostaApiTotalEmprestimosAtivos = await fetch(`${baseUrl}/listarEmprestimosAtivos`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    if(!respostaApiTotalEmprestimosAtivos.ok){
+      const messageTotalEmprestimosAtivos = await respostaApiTotalEmprestimosAtivos.json()
+      console.error(messageTotalEmprestimosAtivos.erro)
+      alert(messageTotalEmprestimosAtivos.message)
+    }else{
+      const emprestimosAtivos = await respostaApiTotalEmprestimosAtivos.json()
+      totalEmprestimosAtivos.innerHTML = emprestimosAtivos.length
+    }
+
+    //Livros atrasados
+    const respostaApiTotalEmprestimosAtrasados = await fetch(`${baseUrl}/listarEmprestimosAtrasados`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    if(!respostaApiTotalEmprestimosAtrasados.ok){
+      const messageTotalEmprestimosAtrasados = await respostaApiTotalEmprestimosAtrasados.json()
+      console.error(messageTotalEmprestimosAtrasados.erro)
+      alert(messageTotalEmprestimosAtrasados.message)
+    }else{
+      const emprestimosAtrasados = await respostaApiTotalEmprestimosAtrasados.json()
+      totalLivrosAtrasados.innerHTML = emprestimosAtrasados.length
+    }
+
+    //Todos os empréstimos já feitos
+    const respostaApiTotalEmprestimos = await fetch(`${baseUrl}/listarTodosOsEmprestimos`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    if(!respostaApiTotalEmprestimos.ok){
+      const messageTotalEmprestimos = await respostaApiTotalEmprestimos.json()
+      console.error(messageTotalEmprestimos.erro)
+      alert(messageTotalEmprestimos.message)
+    }else{
+      const emprestimos = await respostaApiTotalEmprestimos.json()
+      totalEmprestimos.innerHTML = emprestimos.length
+    }
   } catch (err) {
-    alert(
-      `Ocorreu um Erro ao listar os totais de livros e emprestimos- ${err}`
-    );
+    console.error(err.erro)
+    alert(err.message);
   }
 }
 function preencherNomeUsuario(){
