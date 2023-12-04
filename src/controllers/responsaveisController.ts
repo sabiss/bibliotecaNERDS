@@ -33,7 +33,7 @@ class responsaveisController {
     } catch (err) {
       return res
         .status(500)
-        .send({ message: `Erro ao cadastrar livro - ${err}` });
+        .send({ message: `Erro ao cadastrar livro`, erro: err });
     }
   };
   static realizarEmprestimoDeLivro = async (req, res) => {
@@ -95,7 +95,7 @@ class responsaveisController {
     } catch (err) {
       return res
         .status(500)
-        .send({ message: `Erro ao realizar empréstimo - ${err}` });
+        .send({ message: `Erro ao realizar empréstimo`, erro: err });
     }
   };
   static registrarDevolucaoDeLivro = async (req, res) => {
@@ -210,7 +210,6 @@ class responsaveisController {
   };
   static adicionarCopiaDeLivro = async (req, res) => {
     const { titulo } = req.body;
-    console.log(titulo)
     const livro = await livros.findOne({ titulo: titulo });
 
     if (!livro) {
