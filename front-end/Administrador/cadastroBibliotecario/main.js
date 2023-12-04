@@ -34,6 +34,19 @@ function verificaUsuario() {
       window.location.assign("../../login.html");
     }
 }
+function geraErro(texto) {
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.remove('d-none')
+    alert.classList.add('d-flex')
+    const text = document.querySelector('strong#textoDoErro')
+    text.innerHTML = `${texto}`;
+}
+function fecharAlert(){
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.add('d-none')
+    alert.classList.remove('d-flex')
+    location.reload()
+}
 async function cadastrarNovoBibliotecario(){
     const nomeSemFormatacao = document.querySelector('input#nome').value
     const nome = capitalizarPalavras(nomeSemFormatacao)
@@ -42,25 +55,29 @@ async function cadastrarNovoBibliotecario(){
     const senha = document.querySelector('input#senha').value
     const cpf = document.querySelector('input#cpf').value
 
-    try{
-        const bibliotecario = {
-            nome, idade, cpf, email, senha
+    if(nomeSemFormatacao === "" || email === "" || idade === "" || senha === "" || cpf === ""){
+        geraErro("Preencha todos os campos do formulário")
+    }else{
+        try{
+            const bibliotecario = {
+                nome, idade, cpf, email, senha
+            }
+            const respostaApi = await fetch("http://localhost:3000/cadastrarResponsavel", {
+                method: 'POST',
+                mode: "cors",
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(bibliotecario)
+            })
+            const mensagem = await respostaApi.json()
+            geraErro(mensagem.message)
+            
+        }catch(err){
+            console.error(err.erro)
+            geraErro(err.message)
         }
-        const respostaApi = await fetch("http://localhost:3000/cadastrarResponsavel", {
-            method: 'POST',
-            mode: "cors",
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(bibliotecario)
-        })
-        const mensagem = await respostaApi.json()
-        alert(mensagem.message)
-        location.reload()
-    }catch(err){
-        console.error(err.erro)
-        alert(err.message)
     }
 }
 function capitalizarPalavras(str) {
