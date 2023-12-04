@@ -4,6 +4,18 @@ async function paginaCarregou() {
     verificaUsuario();
     await exibirEmprestimos()
 }
+function geraErro(texto) {
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.remove('d-none')
+    alert.classList.add('d-flex')
+    const text = document.querySelector('strong#textoDoErro')
+    text.innerHTML = `${texto}`;
+}
+function fecharAlert(){
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.add('d-none')
+    alert.classList.remove('d-flex')
+}
 function verificaUsuario() {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -84,7 +96,7 @@ async function getEmprestimosAtrasados(){
         return emprestimos
     }catch(err){
         console.error(err.erro)
-        alert(err.message)
+        geraErro(err.message)
     }
 }
 async function buscarEmprestimoAtrasado(){
@@ -112,7 +124,7 @@ async function buscarEmprestimoAtrasado(){
             }
         }catch(err){
             console.error(err.erro)
-            alert(err.message)
+            geraErro(err.message)
         }
     }
     

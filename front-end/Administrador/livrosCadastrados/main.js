@@ -12,6 +12,11 @@ function geraErro(texto) {
     const text = document.querySelector('strong#textoDoErro')
     text.innerHTML = `${texto}`;
 }
+function fecharAlert(){
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.add('d-none')
+    alert.classList.remove('d-flex')
+}
 async function criarCards(){
     const tbody = document.querySelector('tbody.listaLivros')
     tbody.innerHTML = ""

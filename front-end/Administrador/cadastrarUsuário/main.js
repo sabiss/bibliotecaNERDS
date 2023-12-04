@@ -1,5 +1,6 @@
 const token = localStorage.getItem("token");
 
+
 document.getElementById('cpf').addEventListener('input', function (event) {
     let cpf = event.target.value;
     
@@ -34,7 +35,18 @@ function verificaUsuario() {
       window.location.assign("../../login.html");
     }
 }
-
+function geraErro(texto) {
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.remove('d-none')
+    alert.classList.add('d-flex')
+    const text = document.querySelector('strong#textoDoErro')
+    text.innerHTML = `${texto}`;
+}
+function fecharAlert(){
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.add('d-none')
+    alert.classList.remove('d-flex')
+}
 async function cadastrarNovoUsuario(){
     const nomeSemFormatacao = document.querySelector('input#nome').value
     const nome = capitalizarPalavras(nomeSemFormatacao)
@@ -42,25 +54,31 @@ async function cadastrarNovoUsuario(){
     const senha = document.querySelector('input#senha').value
     const cpf = document.querySelector('input#cpf').value
 
-    const usuario = {
-        email, senha, nome, cpf
-    }
-    try{
-        const respostaApi = await fetch("http://localhost:3000/cadastroUser", {
-            method: 'POST',
-            mode: "cors",
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(usuario)
-        })
-        const mensagem = await respostaApi.json()
-        alert(mensagem.message)
-        window.location.assign("../home/index.html");
-    }catch(err){
-        console.error(err.erro)
-        alert(err.message)
+    if(nome === "" || email === "" || senha === "" || cpf === ""){
+        geraErro("Preencha todos os campos do formulário")
+    }else{
+        const usuario = {
+            email, senha, nome, cpf
+        }
+        try{
+            const respostaApi = await fetch("http://localhost:3000/cadastroUser", {
+                method: 'POST',
+                mode: "cors",
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(usuario)
+            })
+            const mensagem = await respostaApi.json()
+            geraErro(mensagem.message)
+            if(respostaApi.ok){
+                location.reload()
+            }
+        }catch(err){
+            console.error(err.erro)
+            geraErro(err.message)
+        }
     }
 }
 function capitalizarPalavras(str) {

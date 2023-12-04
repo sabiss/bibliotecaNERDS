@@ -18,7 +18,18 @@ function verificaUsuario() {
       window.location.assign("../../login.html");
     }
 }
-
+function geraErro(texto) {
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.remove('d-none')
+    alert.classList.add('d-flex')
+    const text = document.querySelector('strong#textoDoErro')
+    text.innerHTML = `${texto}`;
+}
+function fecharAlert(){
+    const alert = document.querySelector("div#anuncioDeErro");
+    alert.classList.add('d-none')
+    alert.classList.remove('d-flex')
+}
 async function getEmprestimosAtivos(){
     try{
         const respostaApi = await fetch("http://localhost:3000/listarEmprestimosAtivos", {
@@ -36,7 +47,7 @@ async function getEmprestimosAtivos(){
         return emprestimos
     }catch(err){
         console.error(err.erro)
-        alert(err.message)
+        geraErro(err.message)
     }
 }
 

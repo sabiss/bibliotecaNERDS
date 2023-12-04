@@ -18,6 +18,18 @@ function verificaUsuario() {
     window.location.assign("../../login.html");
   }
 }
+function geraErro(texto) {
+  const alert = document.querySelector("div#anuncioDeErro");
+  alert.classList.remove('d-none')
+  alert.classList.add('d-flex')
+  const text = document.querySelector('strong#textoDoErro')
+  text.innerHTML = `${texto}`;
+}
+function fecharAlert(){
+  const alert = document.querySelector("div#anuncioDeErro");
+  alert.classList.add('d-none')
+  alert.classList.remove('d-flex')
+}
 function formatarTexto(input) {
   const textoDigitado = input.value;
   const palavras = textoDigitado.split(" ");
@@ -62,11 +74,12 @@ async function cadastrarNovoLivro() {
       body: JSON.stringify(livro)
     })
     const resposta = await retornoApi.json();
-    alert(resposta.message);
+    geraErro(resposta.message);
     await criarCopia(titulo)
     location.reload()
   } catch (err) {
-    return alert(`Erro ao cadastrar livro - ${err.message}`);
+    console.error(err.erro)
+    geraErro(err.message);
   }
 }
 async function criarCopia(titulo){
@@ -83,7 +96,9 @@ async function criarCopia(titulo){
       body: JSON.stringify({titulo: titulo})
     })
     if(!respostaApi.ok){
-      alert("Erro ao adicionar cópia")
+      const mensagem = await respostaApi.json()
+      console.error(mensagem.erro)
+      geraErro(mensagem.message)
     }
     const numeroDaCopia = await respostaApi.json()
     alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
