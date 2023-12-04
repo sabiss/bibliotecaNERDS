@@ -89,7 +89,7 @@ async function getEmprestimosAtrasados(){
         if(!respostaApi.ok){
             const message = await respostaApi.json()
             console.error(message.erro)
-            alert(message.message)
+            geraErro(message.message)
         }
 
         const emprestimos = await respostaApi.json()

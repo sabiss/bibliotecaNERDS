@@ -57,7 +57,7 @@ async function buscarSugestoes() {
             exibirSugestoes(sugestoes);
         }catch(err){
             console.error(err.erro)
-            alert(err.message)
+            geraErro(err.message)
         }
     }else{
         const sugestoesDiv = document.getElementById('sugestoes');

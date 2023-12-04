@@ -34,13 +34,7 @@ async function criarCards(){
     }else{
         let numeroCopias
         for(let livro of livros){
-            console.log(livro)
-            try{
-                numeroCopias = await getCopiasDeUmLivro(livro._id)
-            }catch(err){
-                console.error(err.message)
-                alert("erro ao listar total de cópias")
-            }
+            numeroCopias = await getCopiasDeUmLivro(livro._id)
             tbody.innerHTML += `
                 <tr>
                     <td>${livro.titulo}</td>
@@ -130,7 +124,7 @@ async function buscarLivros(){
         if(!respostaApi.ok){
             const mensagem = await respostaApi.json()
             console.error(mensagem.erro)
-            alert(mensagem.message)
+            geraErro(mensagem.message)
         }
         const livros = await respostaApi.json()
         const livrosComQuantidadeDeCopias = []
@@ -156,7 +150,7 @@ async function getLivros(){
         })
         if(!respostaApi.ok){
             const mensagem = await respostaApi.json()
-            alert(mensagem.message)
+            geraErro(mensagem.message)
         }
 
         const livros = await respostaApi.json()

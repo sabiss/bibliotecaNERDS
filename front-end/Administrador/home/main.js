@@ -62,7 +62,7 @@ async function preencherTotais() {
     if(!respostaApiTotalLivros.ok){
       const messageTotalLivros = await respostaApiTotalLivros.json()
       console.error(messageTotalLivros.erro)
-      alert(messageTotalLivros.message)
+      geraErro(messageTotalLivros.message)
     }else{
       const livros = await respostaApiTotalLivros.json()
       totalLivrosCadastrados.innerHTML = livros.length

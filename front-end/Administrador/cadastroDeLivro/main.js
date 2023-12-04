@@ -53,34 +53,36 @@ async function cadastrarNovoLivro() {
   const genero = formatarTexto(document.querySelector("select#genero"));
 
   if (!titulo || !autor || !isbn || !numeroPaginas || !genero) {
-    return alert("Preencha todos os campos");
+    geraErro("Preencha todos os campos");
+  }else{
+    const token = localStorage.getItem("token");
+    const livro = {
+      titulo: titulo,
+      autor: autor,
+      isbn: isbn,
+      numero_paginas: numeroPaginas,
+      genero: genero
+    }
+    try {
+      const retornoApi = await fetch(`${baseUrl}/cadastrarLivro`, {
+        method: 'POST',
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(livro)
+      })
+      const resposta = await retornoApi.json();
+      geraErro(resposta.message);
+      await criarCopia(titulo)
+    } catch (err) {
+      console.error(err.erro)
+      geraErro(err.message);
+    }
   }
 
-  const token = localStorage.getItem("token");
-  const livro = {
-    titulo: titulo,
-    autor: autor,
-    isbn: isbn,
-    numero_paginas: numeroPaginas,
-    genero: genero
-  }
-  try {
-    const retornoApi = await fetch(`${baseUrl}/cadastrarLivro`, {
-      method: 'POST',
-      mode: "cors",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(livro)
-    })
-    const resposta = await retornoApi.json();
-    geraErro(resposta.message);
-    await criarCopia(titulo)
-  } catch (err) {
-    console.error(err.erro)
-    geraErro(err.message);
-  }
+  
 }
 async function criarCopia(titulo){
   const token = localStorage.getItem("token");
@@ -104,6 +106,6 @@ async function criarCopia(titulo){
     alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
   }catch(err){
     console.error(err.erro)
-    alert(err.message)
+    geraErro(err.message)
   }
 }
