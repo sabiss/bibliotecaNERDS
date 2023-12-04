@@ -29,6 +29,7 @@ function fecharAlert(){
   const alert = document.querySelector("div#anuncioDeErro");
   alert.classList.add('d-none')
   alert.classList.remove('d-flex')
+  location.reload()
 }
 function formatarTexto(input) {
   const textoDigitado = input.value;
@@ -76,7 +77,6 @@ async function cadastrarNovoLivro() {
     const resposta = await retornoApi.json();
     geraErro(resposta.message);
     await criarCopia(titulo)
-    location.reload()
   } catch (err) {
     console.error(err.erro)
     geraErro(err.message);

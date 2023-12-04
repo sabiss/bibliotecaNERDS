@@ -25,6 +25,7 @@ function fecharAlert(){
     const alert = document.querySelector("div#anuncioDeErro");
     alert.classList.add('d-none')
     alert.classList.remove('d-flex')
+    location.reload()
 }
 const sugestoesDiv = document.getElementById('sugestoes');
 const barraPesquisa = document.getElementById('tituloLivro');
@@ -130,9 +131,6 @@ async function realizarEmprestimo(){
                 
                 const mensagem = await respostaApi.json()
                 geraErro(mensagem.message)
-                if(respostaApi.ok){
-                    location.reload()
-                }
             }catch(err){
                 console.error(err.erro)
                 geraErro(err.message)

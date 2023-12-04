@@ -46,6 +46,7 @@ function fecharAlert(){
     const alert = document.querySelector("div#anuncioDeErro");
     alert.classList.add('d-none')
     alert.classList.remove('d-flex')
+    location.reload()
 }
 async function cadastrarNovoUsuario(){
     const nomeSemFormatacao = document.querySelector('input#nome').value
@@ -72,9 +73,6 @@ async function cadastrarNovoUsuario(){
             })
             const mensagem = await respostaApi.json()
             geraErro(mensagem.message)
-            if(respostaApi.ok){
-                location.reload()
-            }
         }catch(err){
             console.error(err.erro)
             geraErro(err.message)
