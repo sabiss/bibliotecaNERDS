@@ -7,6 +7,18 @@ async function paginaCarregou() {
   preencherNomeUsuario()
   await preencherTotais();
 }
+function geraErro(texto) {
+  const alert = document.querySelector("div#anuncioDeErro");
+  alert.classList.remove('d-none')
+  alert.classList.add('d-flex')
+  const text = document.querySelector('strong#textoDoErro')
+  text.innerHTML = `${texto}`;
+}
+function fecharAlert(){
+  const alert = document.querySelector("div#anuncioDeErro");
+  alert.classList.add('d-none')
+  alert.classList.remove('d-flex')
+}
 function verificaUsuario() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -66,7 +78,7 @@ async function preencherTotais() {
     if(!respostaApiTotalEmprestimosAtivos.ok){
       const messageTotalEmprestimosAtivos = await respostaApiTotalEmprestimosAtivos.json()
       console.error(messageTotalEmprestimosAtivos.erro)
-      alert(messageTotalEmprestimosAtivos.message)
+      geraErro(messageTotalEmprestimosAtivos.message)
     }else{
       const emprestimosAtivos = await respostaApiTotalEmprestimosAtivos.json()
       totalEmprestimosAtivos.innerHTML = emprestimosAtivos.length
@@ -82,7 +94,7 @@ async function preencherTotais() {
     if(!respostaApiTotalEmprestimosAtrasados.ok){
       const messageTotalEmprestimosAtrasados = await respostaApiTotalEmprestimosAtrasados.json()
       console.error(messageTotalEmprestimosAtrasados.erro)
-      alert(messageTotalEmprestimosAtrasados.message)
+      geraErro(messageTotalEmprestimosAtrasados.message)
     }else{
       const emprestimosAtrasados = await respostaApiTotalEmprestimosAtrasados.json()
       totalLivrosAtrasados.innerHTML = emprestimosAtrasados.length
@@ -98,14 +110,14 @@ async function preencherTotais() {
     if(!respostaApiTotalEmprestimos.ok){
       const messageTotalEmprestimos = await respostaApiTotalEmprestimos.json()
       console.error(messageTotalEmprestimos.erro)
-      alert(messageTotalEmprestimos.message)
+      geraErro(messageTotalEmprestimos.message)
     }else{
       const emprestimos = await respostaApiTotalEmprestimos.json()
       totalEmprestimos.innerHTML = emprestimos.length
     }
   } catch (err) {
     console.error(err.erro)
-    alert(err.message);
+    geraErro(err.message);
   }
 }
 function preencherNomeUsuario(){
@@ -113,35 +125,6 @@ function preencherNomeUsuario(){
   const payload = JSON.parse(atob(token.split(".")[1]));
   const nome = document.querySelector("p#nomeUser")
   nome.innerHTML += `${payload.nome}`
-}
-async function devolucao() {
-  const nomeLivro = document.querySelector("input#livroDevolucao").value;
-  const cpf = document.querySelector("input#cpfAlunoDevolucao").value;
-  const numeroDaCopia = document.querySelector("input#numeroCopia").value;
-
-  const token = localStorage.getItem("token");
-
-  try {
-    const retornoApi = await fetch(`${baseUrl}/registrarDevolucao`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ nomeLivro, cpf, numeroDaCopia }),
-    });
-
-    const resposta = await retornoApi.json();
-    alert(resposta.message);
-  } catch (err) {
-    alert(`${err}`);
-  }
-}
-function fechaModal(modalEspecifico) {
-  //fecha os modais de formulários
-  modalParaFechar = document.querySelector(`#${modalEspecifico}`);
-  const modal = bootstrap.Modal.getInstance(modalParaFechar);
-  modal.hide();
 }
 function sair() {
   // Remove uma variável específica do localStorage
