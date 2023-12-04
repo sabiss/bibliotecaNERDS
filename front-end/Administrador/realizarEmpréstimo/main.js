@@ -104,13 +104,13 @@ async function realizarEmprestimo(){
     const devolucao = document.querySelector('input#dataDevolucao').value
 
     if(cpf == "" || tituloDoLivro == "" || numeroDaCopia == "" || devolucao == ""){
-        alert("Preencha todos os campos do formulário")
+        geraErro("Preencha todos os campos do formulário")
     }else{
         const hoje = new Date()
         const dataDevolucao = new Date(devolucao)
 
         if(dataDevolucao.getTime() <= hoje.getTime() ){
-            alert("Insira uma data de devolução válida")
+            geraErro("Insira uma data de devolução válida")
         }else{
             const emprestimo = {
                 tituloDoLivro, 
