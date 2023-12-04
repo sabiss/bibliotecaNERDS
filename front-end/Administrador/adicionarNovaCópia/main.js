@@ -14,17 +14,38 @@ function verificaUsuario() {
       window.location.assign("../../login.html");
     }
 }
-function geraErro(texto) {
-    const alert = document.querySelector("div#anuncioDeErro");
+function geraAlerta(texto, alerta = 'Erro') {
+    let alert
+    let text
+    switch(alerta){
+        case 'Erro':
+            alert = document.querySelector("div#anuncioDeErro")
+            text = document.querySelector('strong#textoDoErro')
+            break
+        case 'NovaCopia':
+            alert = document.querySelector("div#anuncioDeNovaCopia")
+            text = document.querySelector('strong#textoDoAnuncio')
+            break
+    }
     alert.classList.remove('d-none')
     alert.classList.add('d-flex')
-    const text = document.querySelector('strong#textoDoErro')
+    
     text.innerHTML = `${texto}`;
 }
-function fecharAlert(){
-    const alert = document.querySelector("div#anuncioDeErro");
+function fecharAlert(alertaParaFechar = 'Erro'){
+    let alert
+    switch(alertaParaFechar){
+        case 'Erro':
+            alert = document.querySelector("div#anuncioDeErro");
+            break
+        case 'AnuncioDeNovaCopia':
+            alert = document.querySelector("div#anuncioDeNovaCopia");
+            break
+    }
+    
     alert.classList.add('d-none')
     alert.classList.remove('d-flex')
+    location.reload()
 }
 const sugestoesDiv = document.getElementById('sugestoes');
 const barraPesquisa = document.getElementById('barraPesquisa');
@@ -56,7 +77,7 @@ async function buscarSugestoes() {
             exibirSugestoes(sugestoes);
         }catch(err){
             console.error(err.erro)
-            alert(err.message)
+            geraAlerta(err.message)
         }
     }else{
         const sugestoesDiv = document.getElementById('sugestoes');
@@ -70,24 +91,31 @@ function selecionarSugestao(sugestao) {
 }
 async function adicionarCopia(){
     const tituloDoLivro = document.querySelector('input#barraPesquisa').value
-    try{
-        const respostaApi = await fetch(`http://localhost:3000/adicionarCopia`, {
-        method: 'POST',
-        mode: "cors",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({titulo: tituloDoLivro})
-        })
-        if(!respostaApi.ok){
-            alert("Erro ao adicionar cópia")
+    if(tituloDoLivro === ""){
+        geraAlerta('Preencha o Nome do Livro')
+    }else{
+        try{
+            const respostaApi = await fetch(`http://localhost:3000/adicionarCopia`, {
+            method: 'POST',
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({titulo: tituloDoLivro})
+            })
+            if(!respostaApi.ok){
+                const mensagemDeErro = await respostaApi.json()
+                console.log(mensagemDeErro.erro)
+                geraAlerta(mensagemDeErro.message)
+            }else{
+                const numeroDaCopia = await respostaApi.json()
+                geraAlerta(`O número de identificação do livro é: ${numeroDaCopia.numero}`, 'NovaCopia')
+            }
+        }catch(err){
+            console.error(err.erro)
+            geraErro(err.message)
         }
-        const numeroDaCopia = await respostaApi.json()
-        alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
-        location.reload()
-    }catch(err){
-        console.error(err.erro)
-        alert(err.message)
     }
+    
 }

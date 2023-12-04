@@ -14,16 +14,20 @@
       crossorigin="anonymous"
     />
 </head>
-<body>
+<body class="bg-body-tertiary">
     <header>
       <a href="../home/index.html"><img src="../../assets/seta.png"></a>
     </header>
-    <main class="bg-body-tertiary d-flex justify-content-around align-items-center flex-column">
+    <main class=" d-flex justify-content-around align-items-center flex-column">
       <div class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeErro">
         <strong id="textoDoErro"></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert('Erro')"></button>
       </div>
-      <div class="container">
+      <div class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeNovaCopia">
+        <strong id="textoDoAnuncio"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert('AnuncioDeNovaCopia')"></button>
+      </div>
+      <div class="container d-flex flex-column justify-content-center" style="min-width: 500px; min-height: 300px;">
         <h2>Cadastro de Nova Cópia</h2>
         <div>
           <div class="form-group">
@@ -37,7 +41,7 @@
               required
             />
           </div>
-          <div id="sugestoes"></div>
+          <div id="sugestoes" style="max-width: 500px;""></div>
           <button class="btn-submit" onclick="adicionarCopia()">
             Criar Cópia
           </button>
