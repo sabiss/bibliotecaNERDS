@@ -8,11 +8,10 @@ body {
   max-height: 60px;
 }
 nav {
-  background-color: #4ea5d9;
-  padding: 20px;
+  background-color: #184e77;
   color: white;
 }
-nav h1{
+nav h1 {
   font-size: 1.5rem;
 }
 .avatar {
@@ -58,7 +57,7 @@ nav h1{
   display: flex;
   align-items: center;
 }
-.menuContainer p{
+.menuContainer p {
   margin: 0px 0px 0px 10px;
 }
 .nav-link:hover,
@@ -76,14 +75,12 @@ main,
   align-items: center;
 }
 main {
-  flex-direction: column;
+  flex-wrap: wrap;
   padding: 30px 10px;
-  height: 100%;
 }
 .botoesContainer {
+  display: flex;
   flex-wrap: wrap;
-  height: 90vh;
-  height: 500px;
 }
 .botoes {
   display: grid;
@@ -101,40 +98,12 @@ main {
   -webkit-box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
+  background-color: #1e6091;
 }
 .botoes:hover {
   cursor: pointer;
 }
-.livrosAtrasados {
-  background-color: rgb(205, 98, 98);
-}
-.emprestimosAtivos {
-  background-color: rgb(76, 146, 76);
-}
-.livrosCadastrados {
-  background-color: #4ea5d9;
-}
-.todosOsEmprestimosJaFeitos {
-  background-color: #f3f37a;
-}
-.novoLivro {
-  background-color: rgb(132, 66, 132);
-}
-.cadastrarUser {
-  background-color: #044b7f;
-}
-.cadastrarResp {
-  background-color: #06a77d;
-}
-.addCopia {
-  background-color: rgb(95, 95, 95);
-}
-.emprestimo {
-  background-color: #07070a;
-}
-.devolucao {
-  background-color: #5dc460;
-}
+
 .imgCard {
   display: flex;
   align-items: center;
@@ -142,9 +111,6 @@ main {
 }
 .textCard {
   color: white;
-}
-.cardAmarelo {
-  color: black;
 }
 
 @keyframes fade-in {
