@@ -18,15 +18,35 @@ function verificaUsuario() {
     window.location.assign("../../login.html");
   }
 }
-function geraErro(texto) {
-  const alert = document.querySelector("div#anuncioDeErro");
+function geraAlerta(texto, alerta = 'Erro') {
+  let alert
+  let text
+  switch(alerta){
+      case 'Erro':
+          alert = document.querySelector("div#anuncioDeErro")
+          text = document.querySelector('strong#textoDoErro')
+          break
+      case 'AnuncioDeSucesso':
+          alert = document.querySelector("div#AnuncioDeSucesso")
+          text = document.querySelector('strong#textoDoAnuncio')
+          break
+  }
   alert.classList.remove('d-none')
   alert.classList.add('d-flex')
-  const text = document.querySelector('strong#textoDoErro')
+  
   text.innerHTML = `${texto}`;
 }
-function fecharAlert(){
-  const alert = document.querySelector("div#anuncioDeErro");
+function fecharAlert(alertaParaFechar = 'Erro'){
+  let alert
+  switch(alertaParaFechar){
+      case 'Erro':
+          alert = document.querySelector("div#anuncioDeErro");
+          break
+      case 'AnuncioDeSucesso':
+          alert = document.querySelector("div#AnuncioDeSucesso");
+          break
+  }
+  
   alert.classList.add('d-none')
   alert.classList.remove('d-flex')
   location.reload()
@@ -53,7 +73,7 @@ async function cadastrarNovoLivro() {
   const genero = formatarTexto(document.querySelector("select#genero"));
 
   if (!titulo || !autor || !isbn || !numeroPaginas || !genero) {
-    geraErro("Preencha todos os campos");
+    geraAlerta("Preencha todos os campos");
   }else{
     const token = localStorage.getItem("token");
     const livro = {
@@ -74,11 +94,16 @@ async function cadastrarNovoLivro() {
         body: JSON.stringify(livro)
       })
       const resposta = await retornoApi.json();
-      geraErro(resposta.message);
-      await criarCopia(titulo)
+      if(!retornoApi.ok){
+        geraAlerta(resposta.message);
+      }else{
+        await criarCopia(titulo)
+      }
+      
+      
     } catch (err) {
       console.error(err.erro)
-      geraErro(err.message);
+      geraAlerta(err.message);
     }
   }
 
@@ -100,12 +125,12 @@ async function criarCopia(titulo){
     if(!respostaApi.ok){
       const mensagem = await respostaApi.json()
       console.error(mensagem.erro)
-      geraErro(mensagem.message)
+      geraAlerta(mensagem.message)
     }
     const numeroDaCopia = await respostaApi.json()
-    alert(`O número de identificação do livro é: ${numeroDaCopia.numero}`)
+    geraAlerta(`O número de identificação do livro é: ${numeroDaCopia.numero}`, 'AnuncioDeSucesso')
   }catch(err){
     console.error(err.erro)
-    geraErro(err.message)
+    geraAlerta(err.message)
   }
 }
