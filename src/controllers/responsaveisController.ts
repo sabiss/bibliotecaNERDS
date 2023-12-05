@@ -16,7 +16,7 @@ class responsaveisController {
       const livroExiste = await livros.findOne({ titulo: req.body.titulo });
 
       if (isbnEmUso) {
-        console.log("isbn")
+        console.log("isbn");
         return res
           .status(400)
           .send({ message: "Já há um livro cadastrado com esse isbn" });
@@ -45,7 +45,9 @@ class responsaveisController {
     }
     const usuario = await usuarios.findOne({ cpf: cpf });
     if (!usuario) {
-      return res.status(404).send({ message: "Nenhum usuário cadastrado possui esse CPF" });
+      return res
+        .status(404)
+        .send({ message: "Nenhum usuário cadastrado possui esse CPF" });
     }
 
     const copiaParaEmprestar = await copias.findOne({
@@ -77,8 +79,8 @@ class responsaveisController {
     }
     const { dataEmprestimo, dataDevolucao } = req.body;
 
-    if(!dataDevolucao || !dataEmprestimo){
-      res.status(400).send({message: "Informe as duas datas"})
+    if (!dataDevolucao || !dataEmprestimo) {
+      res.status(400).send({ message: "Informe as duas datas" });
     }
     try {
       const emprestimo = new emprestimos({
@@ -99,17 +101,7 @@ class responsaveisController {
     }
   };
   static registrarDevolucaoDeLivro = async (req, res) => {
-    const { nomeLivro, cpf, numeroDaCopia } = req.body;
-
-    const livro = await livros.findOne({ titulo: nomeLivro });
-    const usuario = await usuarios.findOne({ cpf: cpf });
-
-    if (!livro) {
-      return res.status(404).send({ message: "Livro não encontrado" });
-    }
-    if (!usuario) {
-      return res.status(404).send({ message: "Usuário não encontrado" });
-    }
+    const { numeroDaCopia } = req.body;
 
     const copiaEmprestada = await copias.findOne({
       codigoDeIdentificacao: numeroDaCopia,
@@ -122,8 +114,6 @@ class responsaveisController {
         .send({ message: "Essa cópia não existe ou não foi emprestada" });
     }
     const emprestimo = await emprestimos.findOne({
-      livro: livro._id,
-      usuario: usuario._id,
       numeroDaCopia: numeroDaCopia,
       emprestimoAtivo: true,
     });
@@ -140,14 +130,14 @@ class responsaveisController {
     } catch (err) {
       return res
         .status(500)
-        .send({ message: `Erro ao registrar devolução - ${err}` });
+        .send({ message: `Erro ao registrar devolução`, erro: err });
     }
   };
   static listarLivros = async (req, res) => {
     try {
       const lista = await livros.find();
 
-      res.status(200).json(lista);//mesmo que dê zero quero que retorne
+      res.status(200).json(lista); //mesmo que dê zero quero que retorne
     } catch (err) {
       return res
         .status(500)
@@ -156,7 +146,9 @@ class responsaveisController {
   };
   static listarEmprestimosAtivos = async (req, res) => {
     try {
-      const listaDeEmprestimos = await emprestimos.find({ emprestimoAtivo: true })
+      const listaDeEmprestimos = await emprestimos.find({
+        emprestimoAtivo: true,
+      });
       return res.status(200).json(listaDeEmprestimos);
     } catch (err) {
       return res
@@ -166,7 +158,7 @@ class responsaveisController {
   };
   static listasTodosOsEmprestimos = async (req, res) => {
     try {
-      const listaDeEmprestimos = await emprestimos.find()
+      const listaDeEmprestimos = await emprestimos.find();
       return res.status(200).json(listaDeEmprestimos);
     } catch (err) {
       return res
@@ -174,25 +166,35 @@ class responsaveisController {
         .send({ message: `Erro ao listar empréstimo já feitos - ${err}` });
     }
   };
-  static listarEmprestimosAtrasados = async (req, res)=>{
-    try{
-      const emprestimosAtivos: Emprestimo[] = await emprestimos.find({emprestimoAtivo: true})
-      
-      const listaAtrasados: EmprestimoAtrasado[] = []
-  
-      for(let emprestimo of emprestimosAtivos){
-        const estaAtrasado: AtrasoInfo = ferramentas.indicarAtraso(emprestimo.dataEmprestimo, emprestimo.dataDevolucao)
-  
-        if(estaAtrasado.atrasado === true){
-          const emprestimoAtrasado: EmprestimoAtrasado = {emprestimo, atraso: estaAtrasado.atraso}
-          listaAtrasados.push(emprestimoAtrasado)
+  static listarEmprestimosAtrasados = async (req, res) => {
+    try {
+      const emprestimosAtivos: Emprestimo[] = await emprestimos.find({
+        emprestimoAtivo: true,
+      });
+
+      const listaAtrasados: EmprestimoAtrasado[] = [];
+
+      for (let emprestimo of emprestimosAtivos) {
+        const estaAtrasado: AtrasoInfo = ferramentas.indicarAtraso(
+          emprestimo.dataEmprestimo,
+          emprestimo.dataDevolucao
+        );
+
+        if (estaAtrasado.atrasado === true) {
+          const emprestimoAtrasado: EmprestimoAtrasado = {
+            emprestimo,
+            atraso: estaAtrasado.atraso,
+          };
+          listaAtrasados.push(emprestimoAtrasado);
         }
       }
-      return res.status(200).send(listaAtrasados)
-    }catch(err){
-      res.status(500).send({message: "Erro ao listar empréstimos atrasados", erro: err})
+      return res.status(200).send(listaAtrasados);
+    } catch (err) {
+      res
+        .status(500)
+        .send({ message: "Erro ao listar empréstimos atrasados", erro: err });
     }
-  }
+  };
   static deletarLivro = async (req, res) => {
     const id = req.params.id;
     if (!mongoose.isValidObjectId(id)) {
@@ -220,9 +222,11 @@ class responsaveisController {
       const copia = new copias({ idLivro: livro._id });
       await copia.save();
 
-      return res.status(201).send({numero: copia.codigoDeIdentificacao});
+      return res.status(201).send({ numero: copia.codigoDeIdentificacao });
     } catch (err) {
-      return res.status(500).send({message: "Erro ao criar cópia do livro", erro: err})
+      return res
+        .status(500)
+        .send({ message: "Erro ao criar cópia do livro", erro: err });
     }
   };
   static listarCopias = async (req, res) => {
@@ -236,15 +240,20 @@ class responsaveisController {
         .send({ message: `Cópias não encontradas para esse livro`, erro: err });
     }
   };
-  static buscarLivro = async(req, res)=>{
-    const palavraChave = req.query.palavra
-    try{
-      const livrosEncontrados = await livros.find({ titulo: { $regex: new RegExp(palavraChave, 'i') } });
-      res.status(200).send(livrosEncontrados)
-    }catch(err){
-      res.status(500).send({message: "Erro ao listar livros com título semelhante", erro: err})
+  static buscarLivro = async (req, res) => {
+    const palavraChave = req.query.palavra;
+    try {
+      const livrosEncontrados = await livros.find({
+        titulo: { $regex: new RegExp(palavraChave, "i") },
+      });
+      res.status(200).send(livrosEncontrados);
+    } catch (err) {
+      res.status(500).send({
+        message: "Erro ao listar livros com título semelhante",
+        erro: err,
+      });
     }
-  }
+  };
 }
 
 export default responsaveisController;
