@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Biblioteca NERDS</title>
@@ -13,22 +13,48 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-</head>
-<body class="bg-body-tertiary">
+  </head>
+  <body class="bg-body-tertiary">
     <header>
-        <nav class="navbar ">
-            <div class="container-fluid">
-                <a href="../home/index.html"><img src="../../assets/iconNavBar.png" class="iconNav mr-2"/></a>
-              <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Pesquise um Empréstimo" aria-label="Search" oninput="buscarEmprestimo()" id="barraDePesquisa">
-              </form>
-            </div>
-          </nav>
+      <nav class="navbar">
+        <div class="container-fluid">
+          <div>
+            <a href="../home/index.html"
+              ><img
+                src="../../assets/setaBranca.png"
+                style="margin-right: 10px"
+            /></a>
+            <a href="../home/index.html">
+              <img src="../../assets/iconNavBar.png" class="iconNav" />
+            </a>
+          </div>
+          <form class="d-flex" role="search">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Pesquise um Empréstimo"
+              aria-label="Search"
+              oninput="buscarEmprestimo()"
+              id="barraDePesquisa"
+            />
+          </form>
+        </div>
+      </nav>
     </header>
     <main class="d-flex justify-content-center align-items-center flex-column">
-      <div class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeErro">
+      <div
+        class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center"
+        role="alert"
+        id="anuncioDeErro"
+      >
         <strong id="textoDoErro"></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+          onclick="fecharAlert()"
+        ></button>
       </div>
       <table class="table">
         <thead class="table-dark">
@@ -41,10 +67,9 @@
             <th scope="col">Data Devolução</th>
           </tr>
         </thead>
-        <tbody class="listaLivros">
-        </tbody>
+        <tbody class="listaLivros"></tbody>
       </table>
     </main>
     <script src="main.js"></script>
-</body>
+  </body>
 </html>
