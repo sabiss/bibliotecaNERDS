@@ -14,3 +14,19 @@ header {
   width: 64px;
   height: 64px;
 }
+.iconesAcao {
+  padding: 5px;
+  width: 50%;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+.iconesAcao:hover {
+  cursor: pointer;
+}
+.editar {
+  background-color: green;
+}
+.remover {
+  background-color: rgb(174, 9, 9);
+}
