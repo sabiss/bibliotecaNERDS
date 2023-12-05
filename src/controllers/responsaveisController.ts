@@ -254,6 +254,20 @@ class responsaveisController {
       });
     }
   };
+  static listarUmLivro = async (req, res) => {
+    const { titulo } = req.params.titulo;
+    if (!titulo) {
+      return res.status(400).send({ message: "Informe o título do livro" });
+    }
+    try {
+      const livro = await livros.find({ titulo: titulo });
+      return res.status(200).send(livro);
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: "Erro ao listar este livro", erro: err });
+    }
+  };
 }
 
 export default responsaveisController;

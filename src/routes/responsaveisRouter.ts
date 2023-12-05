@@ -10,6 +10,7 @@ router
   .get("/listarCopias/:id", checkRole(["resp", "adm"]),responsaveisController.listarCopias)
   .get("/buscarLivros", checkRole(["resp", "adm"]), responsaveisController.buscarLivro)
   .get('/listarEmprestimosAtrasados', checkRole(["resp", "adm"]), responsaveisController.listarEmprestimosAtrasados)
+  .get('/listarUmLivro/:titulo', checkRole(["resp", "adm"]), responsaveisController.listarUmLivro)
 
   .post("/adicionarCopia", checkRole(["resp", "adm"]),responsaveisController.adicionarCopiaDeLivro)
   .post("/cadastrarLivro", checkRole(["resp", "adm"]), responsaveisController.cadastrarLivro)
