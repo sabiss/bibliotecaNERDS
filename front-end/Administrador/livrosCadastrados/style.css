@@ -1,18 +1,16 @@
-body{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-main{
-    padding: 20px;
-    height: 100%;
+main {
+  padding: 20px;
+  height: 100%;
 }
-header{
-    background-color: #4ea5d9;
+header {
+  background-color: #4ea5d9;
 }
-.iconNav{
-    width: 64px;
-    height: 64px;
+.iconNav {
+  width: 64px;
+  height: 64px;
 }
-
-  
