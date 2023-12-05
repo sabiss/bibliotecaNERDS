@@ -19,13 +19,9 @@
       <a href="../home/index.html"><img src="../../assets/seta.png"></a>
     </header>
     <main class=" d-flex justify-content-around align-items-center flex-column">
-      <div class="alert alert-warning alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeErro">
-        <strong id="textoDoErro"></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert('Erro')"></button>
-      </div>
-      <div class="alert alert-success alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeNovaCopia">
-        <strong id="textoDoAnuncio"></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert('AnuncioDeNovaCopia')"></button>
+      <div class="alert alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="alerta">
+        <strong id="textoDoAlerta"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
       </div>
       <div class="container d-flex flex-column justify-content-center" style="min-width: 500px; min-height: 300px;">
         <h2>Cadastro de Nova Cópia</h2>

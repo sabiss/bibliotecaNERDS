@@ -14,18 +14,35 @@ function verificaUsuario() {
       window.location.assign("../../login.html");
     }
 }
-function geraErro(texto) {
-    const alert = document.querySelector("div#anuncioDeErro");
-    alert.classList.remove('d-none')
-    alert.classList.add('d-flex')
-    const text = document.querySelector('strong#textoDoErro')
+function geraAlerta(texto, tipoAlerta) {
+    const alerta = document.querySelector("div#alerta")
+    let text = document.querySelector('strong#textoDoAlerta')
+    switch(tipoAlerta){
+      case 'Erro':
+        alerta.classList.remove('alert-success')
+        alerta.classList.remove('alert-warning')
+        alerta.classList.add('alert-danger')
+          break
+      case 'AnuncioDeSucesso':
+        alerta.classList.remove('alert-danger')
+        alerta.classList.remove('alert-warning')
+        alerta.classList.add('alert-success')
+        break
+      case 'Atencao': 
+        alerta.classList.remove('alert-danger')
+        alerta.classList.remove('alert-success')
+        alerta.classList.add('alert-warning')
+        break
+    }
+    alerta.classList.remove('d-none')
+    alerta.classList.add('d-flex')
+    
     text.innerHTML = `${texto}`;
-}
-function fecharAlert(){
-    const alert = document.querySelector("div#anuncioDeErro");
-    alert.classList.add('d-none')
-    alert.classList.remove('d-flex')
-    location.reload()
+  }
+  function fecharAlert(){
+    const alerta = document.querySelector("div#alerta");
+    alerta.classList.add('d-none')
+    alerta.classList.remove('d-flex')
 }
 const sugestoesDiv = document.getElementById('sugestoes');
 const barraPesquisa = document.getElementById('tituloLivro');
@@ -104,13 +121,13 @@ async function realizarEmprestimo(){
     const devolucao = document.querySelector('input#dataDevolucao').value
 
     if(cpf == "" || tituloDoLivro == "" || numeroDaCopia == "" || devolucao == ""){
-        geraErro("Preencha todos os campos do formulário")
+        geraAlerta("Preencha todos os campos do formulário", "Atencao")
     }else{
         const hoje = new Date()
         const dataDevolucao = new Date(devolucao)
 
         if(dataDevolucao.getTime() <= hoje.getTime() ){
-            geraErro("Insira uma data de devolução válida")
+            geraAlerta("Insira uma data de devolução válida", "Alerta")
         }else{
             const emprestimo = {
                 tituloDoLivro, 
@@ -128,12 +145,11 @@ async function realizarEmprestimo(){
                     },
                     body: JSON.stringify(emprestimo)
                 })
-                
                 const mensagem = await respostaApi.json()
-                geraErro(mensagem.message)
+                geraAlerta(mensagem.message, "AnuncioDeSucesso")
             }catch(err){
                 console.error(err.erro)
-                geraErro(err.message)
+                geraAlerta(err.message, "Erro")
             }
         }
     }

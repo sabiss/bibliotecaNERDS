@@ -18,38 +18,35 @@ function verificaUsuario() {
     window.location.assign("../../login.html");
   }
 }
-function geraAlerta(texto, alerta = 'Erro') {
-  let alert
-  let text
-  switch(alerta){
-      case 'Erro':
-          alert = document.querySelector("div#anuncioDeErro")
-          text = document.querySelector('strong#textoDoErro')
-          break
-      case 'AnuncioDeSucesso':
-          alert = document.querySelector("div#AnuncioDeSucesso")
-          text = document.querySelector('strong#textoDoAnuncio')
-          break
+function geraAlerta(texto, tipoAlerta) {
+  const alerta = document.querySelector("div#alerta")
+  let text = document.querySelector('strong#textoDoAlerta')
+  switch(tipoAlerta){
+    case 'Erro':
+      alerta.classList.remove('alert-success')
+      alerta.classList.remove('alert-warning')
+      alerta.classList.add('alert-danger')
+        break
+    case 'AnuncioDeSucesso':
+      alerta.classList.remove('alert-danger')
+      alerta.classList.remove('alert-warning')
+      alerta.classList.add('alert-success')
+      break
+    case 'Atencao': 
+      alerta.classList.remove('alert-danger')
+      alerta.classList.remove('alert-success')
+      alerta.classList.add('alert-warning')
+      break
   }
-  alert.classList.remove('d-none')
-  alert.classList.add('d-flex')
+  alerta.classList.remove('d-none')
+  alerta.classList.add('d-flex')
   
   text.innerHTML = `${texto}`;
 }
-function fecharAlert(alertaParaFechar = 'Erro'){
-  let alert
-  switch(alertaParaFechar){
-      case 'Erro':
-          alert = document.querySelector("div#anuncioDeErro");
-          break
-      case 'AnuncioDeSucesso':
-          alert = document.querySelector("div#AnuncioDeSucesso");
-          break
-  }
-  
-  alert.classList.add('d-none')
-  alert.classList.remove('d-flex')
-  location.reload()
+function fecharAlert(){
+  const alerta = document.querySelector("div#alerta");
+  alerta.classList.add('d-none')
+  alerta.classList.remove('d-flex')
 }
 function formatarTexto(input) {
   const textoDigitado = input.value;
@@ -73,7 +70,7 @@ async function cadastrarNovoLivro() {
   const genero = formatarTexto(document.querySelector("select#genero"));
 
   if (!titulo || !autor || !isbn || !numeroPaginas || !genero) {
-    geraAlerta("Preencha todos os campos");
+    geraAlerta("Preencha todos os campos", "Atencao");
   }else{
     const token = localStorage.getItem("token");
     const livro = {
@@ -95,7 +92,7 @@ async function cadastrarNovoLivro() {
       })
       const resposta = await retornoApi.json();
       if(!retornoApi.ok){
-        geraAlerta(resposta.message);
+        geraAlerta(resposta.message, 'Erro');
       }else{
         await criarCopia(titulo)
       }
@@ -103,7 +100,7 @@ async function cadastrarNovoLivro() {
       
     } catch (err) {
       console.error(err.erro)
-      geraAlerta(err.message);
+      geraAlerta(err.message, "Erro");
     }
   }
 
@@ -125,12 +122,12 @@ async function criarCopia(titulo){
     if(!respostaApi.ok){
       const mensagem = await respostaApi.json()
       console.error(mensagem.erro)
-      geraAlerta(mensagem.message)
+      geraAlerta(mensagem.message, "Erro")
     }
     const numeroDaCopia = await respostaApi.json()
     geraAlerta(`O número de identificação do livro é: ${numeroDaCopia.numero}`, 'AnuncioDeSucesso')
   }catch(err){
     console.error(err.erro)
-    geraAlerta(err.message)
+    geraAlerta(err.message, "Erro")
   }
 }
