@@ -207,7 +207,7 @@ class responsaveisController {
     } catch (err) {
       return res
         .status(404)
-        .send({ message: `Erro ao deletar livro - ${err}` });
+        .send({ message: `Erro ao deletar livro`, erro: err });
     }
   };
   static adicionarCopiaDeLivro = async (req, res) => {
