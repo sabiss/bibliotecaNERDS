@@ -138,13 +138,6 @@ function preencherNomeUsuario() {
 
   const nome = document.querySelector("p#nomeUser");
   nome.innerHTML += `${payload.nome}`;
-
-  const usuarioDaPagina = document.querySelector("span#tipoDeUsuario");
-  if (payload.tipo === "adm") {
-    usuarioDaPagina.innerHTML = "ADMINISTRADOR";
-  } else {
-    usuarioDaPagina.innerHTML = "BIBIOTECÁRIO";
-  }
 }
 function sair() {
   // Remove uma variável específica do localStorage
