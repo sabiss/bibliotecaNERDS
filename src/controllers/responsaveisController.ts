@@ -210,7 +210,7 @@ class responsaveisController {
         .send({ message: `Erro ao deletar livro`, erro: err });
     }
   };
-  static deletarCopiasDeUmLivro = async (req, res) => {
+  static deletarTodasAsCopiasDeUmLivro = async (req, res) => {
     const { idLivro } = req.body;
     try {
       await copias.deleteMany({ idLivro: idLivro });

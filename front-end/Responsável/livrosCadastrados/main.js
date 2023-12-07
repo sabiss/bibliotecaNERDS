@@ -302,7 +302,7 @@ async function getLivros() {
 async function remover(idLivro) {
   try {
     const respostaApiDeletarCopias = await fetch(
-      "http://localhost:3000/deletarCopias",
+      "http://localhost:3000/deletarTodasAsCopias",
       {
         method: "DELETE",
         mode: "cors",
