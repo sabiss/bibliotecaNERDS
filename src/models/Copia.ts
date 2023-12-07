@@ -3,7 +3,7 @@ import ferramentas from "../funcoesAuxiliares/ferramentas";
 
 const copiaSchema = new mongoose.Schema({
   idLivro: { type: mongoose.Schema.ObjectId, ref: "livros", required: true },
-  codigoDeIdentificacao: { type: Number },
+  codigoDeIdentificacao: { type: String },
   emprestado: { type: Boolean, default: false },
 });
 
