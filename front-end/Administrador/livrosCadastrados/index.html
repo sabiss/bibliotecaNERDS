@@ -33,8 +33,8 @@
               type="search"
               placeholder="Pesquise um Livro"
               aria-label="Search"
-              oninput="buscarLivros()"
-              id="palavra"
+              oninput="buscarLivro()"
+              id="barraDePesquisa"
             />
           </form>
         </div>
@@ -42,11 +42,11 @@
     </header>
     <main class="d-flex justify-content-around align-items-center flex-column">
       <div
-        class="alert alert-danger alert-dismissible fade show d-none justify-content-center align-items-center"
+        class="alert alert-dismissible fade show d-none justify-content-center align-items-center"
         role="alert"
-        id="anuncioDeErro"
+        id="alerta"
       >
-        <strong id="textoDoErro"></strong>
+        <strong id="textoDoAlerta"></strong>
         <button
           type="button"
           class="btn-close"
@@ -69,6 +69,88 @@
         <tbody class="listaLivros"></tbody>
       </table>
     </main>
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Edição de Livro
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label"
+                  >Título:</label
+                >
+                <input type="text" class="form-control" id="novoTitulo" />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label">Autor:</label>
+                <input type="text" class="form-control" id="novoAutor" />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label">ISBN:</label>
+                <input type="text" class="form-control" id="novoISBN" />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label"
+                  >Número de Páginas:</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="novoNumeroDePaginas"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="novoGenero">Gênero</label>
+                <select id="novoGenero" required style="width: 100%">
+                  <option value="" disabled selected>Selecione o gênero</option>
+                  <option value="Ficção">Ficção</option>
+                  <option value="Não Ficção">Não Ficção</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Aventura">Aventura</option>
+                  <option value="Mistério">Mistério</option>
+                  <option value="Biografia">Biografia</option>
+                  <option value="Acadêmico">Acadêmico</option>
+                  <option value="Acadêmico">Auto Ajuda</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="atualizarLivro()"
+              data-bs-dismiss="modal"
+            >
+              Atualizar Livro
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
   </body>
