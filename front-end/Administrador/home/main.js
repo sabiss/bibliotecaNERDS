@@ -4,20 +4,20 @@ document.addEventListener("DOMContentLoaded", paginaCarregou());
 
 async function paginaCarregou() {
   verificaUsuario();
-  preencherNomeUsuario()
+  preencherNomeUsuario();
   await preencherTotais();
 }
 function geraErro(texto) {
   const alert = document.querySelector("div#anuncioDeErro");
-  alert.classList.remove('d-none')
-  alert.classList.add('d-flex')
-  const text = document.querySelector('strong#textoDoErro')
+  alert.classList.remove("d-none");
+  alert.classList.add("d-flex");
+  const text = document.querySelector("strong#textoDoErro");
   text.innerHTML = `${texto}`;
 }
-function fecharAlert(){
+function fecharAlert() {
   const alert = document.querySelector("div#anuncioDeErro");
-  alert.classList.add('d-none')
-  alert.classList.remove('d-flex')
+  alert.classList.add("d-none");
+  alert.classList.remove("d-flex");
 }
 function verificaUsuario() {
   const token = localStorage.getItem("token");
@@ -57,80 +57,100 @@ async function preencherTotais() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-    }
-    })
-    if(!respostaApiTotalLivros.ok){
-      const messageTotalLivros = await respostaApiTotalLivros.json()
-      console.error(messageTotalLivros.erro)
-      geraErro(messageTotalLivros.message)
-    }else{
-      const livros = await respostaApiTotalLivros.json()
-      totalLivrosCadastrados.innerHTML = livros.length
+      },
+    });
+    if (!respostaApiTotalLivros.ok) {
+      const messageTotalLivros = await respostaApiTotalLivros.json();
+      console.error(messageTotalLivros.erro);
+      geraErro(messageTotalLivros.message);
+    } else {
+      const livros = await respostaApiTotalLivros.json();
+      totalLivrosCadastrados.innerHTML = livros.length;
     }
 
     //Empréstimos Ativos
-    const respostaApiTotalEmprestimosAtivos = await fetch(`${baseUrl}/listarEmprestimosAtivos`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+    const respostaApiTotalEmprestimosAtivos = await fetch(
+      `${baseUrl}/listarEmprestimosAtivos`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
-    })
-    if(!respostaApiTotalEmprestimosAtivos.ok){
-      const messageTotalEmprestimosAtivos = await respostaApiTotalEmprestimosAtivos.json()
-      console.error(messageTotalEmprestimosAtivos.erro)
-      geraErro(messageTotalEmprestimosAtivos.message)
-    }else{
-      const emprestimosAtivos = await respostaApiTotalEmprestimosAtivos.json()
-      totalEmprestimosAtivos.innerHTML = emprestimosAtivos.length
+    );
+    if (!respostaApiTotalEmprestimosAtivos.ok) {
+      const messageTotalEmprestimosAtivos =
+        await respostaApiTotalEmprestimosAtivos.json();
+      console.error(messageTotalEmprestimosAtivos.erro);
+      geraErro(messageTotalEmprestimosAtivos.message);
+    } else {
+      const emprestimosAtivos = await respostaApiTotalEmprestimosAtivos.json();
+      totalEmprestimosAtivos.innerHTML = emprestimosAtivos.length;
     }
 
     //Livros atrasados
-    const respostaApiTotalEmprestimosAtrasados = await fetch(`${baseUrl}/listarEmprestimosAtrasados`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+    const respostaApiTotalEmprestimosAtrasados = await fetch(
+      `${baseUrl}/listarEmprestimosAtrasados`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
-    })
-    if(!respostaApiTotalEmprestimosAtrasados.ok){
-      const messageTotalEmprestimosAtrasados = await respostaApiTotalEmprestimosAtrasados.json()
-      console.error(messageTotalEmprestimosAtrasados.erro)
-      geraErro(messageTotalEmprestimosAtrasados.message)
-    }else{
-      const emprestimosAtrasados = await respostaApiTotalEmprestimosAtrasados.json()
-      totalLivrosAtrasados.innerHTML = emprestimosAtrasados.length
+    );
+    if (!respostaApiTotalEmprestimosAtrasados.ok) {
+      const messageTotalEmprestimosAtrasados =
+        await respostaApiTotalEmprestimosAtrasados.json();
+      console.error(messageTotalEmprestimosAtrasados.erro);
+      geraErro(messageTotalEmprestimosAtrasados.message);
+    } else {
+      const emprestimosAtrasados =
+        await respostaApiTotalEmprestimosAtrasados.json();
+      totalLivrosAtrasados.innerHTML = emprestimosAtrasados.length;
     }
 
     //Todos os empréstimos já feitos
-    const respostaApiTotalEmprestimos = await fetch(`${baseUrl}/listarTodosOsEmprestimos`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+    const respostaApiTotalEmprestimos = await fetch(
+      `${baseUrl}/listarTodosOsEmprestimos`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
-    })
-    if(!respostaApiTotalEmprestimos.ok){
-      const messageTotalEmprestimos = await respostaApiTotalEmprestimos.json()
-      console.error(messageTotalEmprestimos.erro)
-      geraErro(messageTotalEmprestimos.message)
-    }else{
-      const emprestimos = await respostaApiTotalEmprestimos.json()
-      totalEmprestimos.innerHTML = emprestimos.length
+    );
+    if (!respostaApiTotalEmprestimos.ok) {
+      const messageTotalEmprestimos = await respostaApiTotalEmprestimos.json();
+      console.error(messageTotalEmprestimos.erro);
+      geraErro(messageTotalEmprestimos.message);
+    } else {
+      const emprestimos = await respostaApiTotalEmprestimos.json();
+      totalEmprestimos.innerHTML = emprestimos.length;
     }
   } catch (err) {
-    console.error(err.erro)
+    console.error(err.erro);
     geraErro(err.message);
   }
 }
-function preencherNomeUsuario(){
+function preencherNomeUsuario() {
   const token = localStorage.getItem("token");
   const payload = JSON.parse(atob(token.split(".")[1]));
-  const nome = document.querySelector("p#nomeUser")
-  nome.innerHTML += `${payload.nome}`
+
+  const nome = document.querySelector("p#nomeUser");
+  nome.innerHTML += `${payload.nome}`;
+
+  const usuarioDaPagina = document.querySelector("span#tipoDeUsuario");
+  if (payload.tipo === "adm") {
+    usuarioDaPagina.innerHTML = "ADMINISTRADOR";
+  } else {
+    usuarioDaPagina.innerHTML = "BIBIOTECÁRIO";
+  }
 }
 function sair() {
   // Remove uma variável específica do localStorage
   localStorage.removeItem("token");
   // Recarregar a página atual
-  verificaUsuario()
+  verificaUsuario();
 }
 function cpf(input) {
   let valor = input.value;
