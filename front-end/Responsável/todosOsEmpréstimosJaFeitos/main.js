@@ -15,9 +15,7 @@ function verificaUsuario() {
   const dataExpiracaoToken = new Date(payload.exp * 1000);
 
   if (
-    payload.tipo != "adm" ||
-    payload.tipo != "adm" ||
-    payload.tipo != "resp" ||
+    (payload.tipo != "adm" && payload.tipo != "resp") ||
     dataExpiracaoToken < dataAtual
   ) {
     window.location.assign("../../login.html");

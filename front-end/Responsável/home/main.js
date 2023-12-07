@@ -28,7 +28,7 @@ function verificaUsuario() {
   const payload = JSON.parse(atob(token.split(".")[1]));
   const dataExpiracaoToken = new Date(payload.exp * 1000);
 
-  if (payload.tipo != "adm" || dataExpiracaoToken < dataAtual) {
+  if (payload.tipo != "resp" || dataExpiracaoToken < dataAtual) {
     window.location.assign("../../login.html");
   }
 }
@@ -138,13 +138,6 @@ function preencherNomeUsuario() {
 
   const nome = document.querySelector("p#nomeUser");
   nome.innerHTML += `${payload.nome}`;
-
-  const usuarioDaPagina = document.querySelector("span#tipoDeUsuario");
-  if (payload.tipo === "adm") {
-    usuarioDaPagina.innerHTML = "ADMINISTRADOR";
-  } else {
-    usuarioDaPagina.innerHTML = "BIBIOTECÁRIO";
-  }
 }
 function sair() {
   // Remove uma variável específica do localStorage
