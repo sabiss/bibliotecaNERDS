@@ -1,0 +1,127 @@
+body {
+  min-height: 100vh;
+  font-family: "Montserrat", sans-serif;
+  background-color: #e9fff9;
+}
+.iconNav {
+  max-width: 60px;
+  max-height: 60px;
+}
+i {
+  color: white;
+  font-size: 60px;
+}
+nav {
+  background-color: #184e77;
+  color: white;
+}
+nav h1 {
+  font-size: 1.5rem;
+}
+.avatar {
+  max-width: 50px;
+  max-height: 50px;
+}
+.avatar:hover {
+  cursor: pointer;
+}
+.nomeDaSessao img {
+  margin-right: 20px;
+}
+.nomeDaSessao h1 {
+  color: white;
+  font-size: 30px;
+}
+.avatar-options {
+  display: none;
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  list-style: none; /* Remove as marcações de lista */
+  padding: 5px 10px; /* Remove o espaçamento interno padrão das listas */
+  right: 0px;
+  top: 50px;
+  z-index: 1;
+}
+
+.options a:hover {
+  background-color: #f0f0f0; /* Adiciona um efeito de hover ao fundo dos links */
+}
+.options a {
+  text-decoration: none;
+  color: grey; /* Define a cor do texto dos links */
+  display: block;
+  padding: 5px 20px;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid grey;
+}
+.menuContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.menuContainer p {
+  margin: 0px 0px 0px 10px;
+}
+.nav-link:hover,
+.iconNav:hover,
+.avatar:hover,
+.botoes:hover,
+.nomeDaSessao h1:hover {
+  transform: scale(1.1); /* Aumenta em 10% quando o mouse passa por cima */
+  transition: transform 0.2s; /* Adiciona uma transição suave para a animação */
+}
+main,
+.botoesContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+main {
+  flex-wrap: wrap;
+  padding: 30px 10px;
+}
+.botoesContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+.botoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-width: 300px;
+  max-width: 300px;
+  min-height: 150px;
+  max-height: 150px;
+  padding: 20px;
+  border-radius: 15px;
+  margin-right: 50px;
+  margin-bottom: 20px;
+  opacity: 0; /* Comece com opacidade zero para ocultar os cards */
+  animation: fade-in 1s ease-in-out forwards;
+  -webkit-box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 1px 1px 13px 0px rgba(0, 0, 0, 0.75);
+  background-color: #1e6091;
+}
+.botoes:hover {
+  cursor: pointer;
+}
+
+.imgCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.textCard {
+  color: white;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0; /* Opacidade inicial */
+  }
+  to {
+    opacity: 1; /* Opacidade final */
+  }
+}

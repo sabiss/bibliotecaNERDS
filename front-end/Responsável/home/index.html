@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biblioteca NERDS</title>
+    <link rel="icon" href="../../assets/iconDaPagina.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid justify-content-around">
+          <img src="../../assets/iconNavBar.png" class="iconNav mr-2"/>
+        <h1>PÁGINA DO BIBLIOTECÁRIO</h1>
+          <div class="menuContainer">
+            <img
+              src="../../assets/avatar.png"
+              alt="avatar com fundo cinza e silhueta de pessoa branca"
+              class="avatar"
+              id="avatar-img" onclick="abreFechaMenu()"
+            />
+            <p id="nomeUser">Olá, </p>
+            <ul class="avatar-options" id="avatar-options">
+              <li class="options"><a href="#">Config</a></li>
+              <li class="options"><a href="#" onclick="sair()">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+      <div class="alert alert-danger alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="anuncioDeErro">
+        <strong id="textoDoErro"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
+      </div>
+      <div class="botoesContainer">
+        <a class="botoes livrosAtrasados text-decoration-none" href="../../Administrador/empréstimoAtrasados/index.html">
+          <div class="imgCard"><i class="bi bi-alarm fas fas-icon fa-3x"></i></div>
+          <div class="textCard"><h5>Ver Livros Atrasados</h5><small>Total: <span id="totalAtrasados"></span></small></div>
+        </a>
+        <a class="botoes emprestimosAtivos text-decoration-none" href="../../Administrador/emprestimosAtivos/index.html">
+          <div class="imgCard"><i class="bi bi-journal-check"></i></div>
+          <div class="textCard"><h5>Ver Empréstimos Ativos</h5><small>Total: <span id="totalAtivos"></span></small></div>
+        </a>
+        <a class="botoes livrosCadastrados text-decoration-none" href=".../../Administrador/livrosCadastrados/index.html">
+          <div class="imgCard"><i class="bi bi-bookshelf"></i></div>
+          <div class="textCard"><h5>Ver Todos Os Livros Cadastrados</h5><small>Total: <span id="totalCadastrados"></span></small></div>
+        </a>
+        <a class="botoes todosOsEmprestimosJaFeitos text-decoration-none" href="../../Administrador/todosOsEmpréstimosJaFeitos/index.html">
+          <div class="imgCard"><i class="bi bi-bookmarks"></i></div>
+          <div class="textCard cardAmarelo"><h5>Ver Todos Os Empréstimos Já Feitos</h5><small>Total: <spa id="totalEmprestados"></spa></small></div>
+        </a>
+        <a class="botoes novoLivro text-decoration-none" href="../../Administrador/cadastroDeLivro/index.html">
+          <div class="imgCard"><i class="bi bi-journal-plus"></i></div>
+          <div class="textCard"><h5>Cadastrar Novo Livro</h5></div>
+        </a>
+        <a class="botoes cadastrarUser text-decoration-none" href="../../Administrador/cadastrarUsuário/index.html">
+          <div class="imgCard"><i class="bi bi-person"></i></div>
+          <div class="textCard"><h5>Cadastrar Usuário</h5></div>
+        </a>
+        <a class="botoes addCopia text-decoration-none" href="../../Administrador/adicionarNovaCópia/index.html">
+          <div class="imgCard"><i class="bi bi-copy"></i></div>
+          <div class="textCard"><h5>Adicionar Nova Cópia de Livro</h5></div>
+        </a>
+        <a class="botoes emprestimo text-decoration-none" href="../../Administrador/realizarEmpréstimo/index.html">
+          <div class="imgCard"><i class="bi bi-arrow-left-right"></i></div>
+          <div class="textCard"><h5>Realizar Empréstimo</h5></div>
+        </a>
+        <a class="botoes devolucao text-decoration-none" href="../../Administrador/registrarDevolucao/index.html" data-bs-toggle="modal" data-bs-target="#modalRegistrarDevolucao">
+          <div class="imgCard"><i class="bi bi-journal-arrow-up"></i></div>
+          <div class="textCard"><h5>Registrar Devolução</h5></div>
+        </a>
+      </div>
+    </main>
+    <div class="loading-overlay" style="display: none">
+      <div class="loading-spinner"></div>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+</html>

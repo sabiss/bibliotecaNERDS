@@ -14,7 +14,11 @@ async function verificarToken() {
     const dataAtual = new Date();
     const dataExpiracaoToken = new Date(payload.exp * 1000);
 
-    if (dataAtual > dataExpiracaoToken) {
+    if (
+      payload.tipo != "adm" ||
+      payload.tipo != "resp" ||
+      dataAtual > dataExpiracaoToken
+    ) {
       window.location.assign("../../login.html");
     }
   } else {

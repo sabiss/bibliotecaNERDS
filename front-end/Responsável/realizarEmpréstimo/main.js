@@ -10,7 +10,11 @@ function verificaUsuario() {
   const payload = JSON.parse(atob(token.split(".")[1]));
   const dataExpiracaoToken = new Date(payload.exp * 1000);
 
-  if (payload.tipo != "adm" || dataExpiracaoToken < dataAtual) {
+  if (
+    payload.tipo != "adm" ||
+    payload.tipo != "resp" ||
+    dataExpiracaoToken < dataAtual
+  ) {
     window.location.assign("../../login.html");
   }
 }
@@ -45,7 +49,7 @@ function fecharAlert() {
   alerta.classList.remove("d-flex");
 }
 const sugestoesDiv = document.getElementById("sugestoes");
-const barraPesquisa = document.getElementById("barraPesquisa");
+const barraPesquisa = document.getElementById("tituloLivro");
 
 function exibirSugestoes(sugestoes) {
   sugestoesDiv.innerHTML = "";
@@ -77,7 +81,7 @@ async function buscarSugestoes() {
       exibirSugestoes(sugestoes);
     } catch (err) {
       console.error(err.erro);
-      geraAlerta(err.message);
+      geraErro(err.message);
     }
   } else {
     const sugestoesDiv = document.getElementById("sugestoes");
@@ -88,35 +92,82 @@ function selecionarSugestao(sugestao) {
   barraPesquisa.value = sugestao;
   sugestoesDiv.style.display = "none";
 }
-async function adicionarCopia() {
-  const tituloDoLivro = document.querySelector("input#barraPesquisa").value;
-  if (tituloDoLivro === "") {
-    geraAlerta("Preencha o Nome do Livro", "Atencao");
+function formatarCpf(event) {
+  let cpf = event.target.value;
+
+  // Remove qualquer caractere que não seja número
+  cpf = cpf.replace(/\D/g, "");
+
+  // Adiciona a máscara de CPF dinamicamente
+  if (cpf.length <= 3) {
+    cpf = cpf.replace(/(\d{1,3})/, "$1");
+  } else if (cpf.length <= 6) {
+    cpf = cpf.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+  } else if (cpf.length <= 9) {
+    cpf = cpf.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
   } else {
-    try {
-      const respostaApi = await fetch(`http://localhost:3000/adicionarCopia`, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ titulo: tituloDoLivro }),
-      });
-      if (!respostaApi.ok) {
-        const mensagemDeErro = await respostaApi.json();
-        console.log(mensagemDeErro.erro);
-        geraAlerta(mensagemDeErro.message, "Erro");
-      } else {
-        const numeroDaCopia = await respostaApi.json();
-        geraAlerta(
-          `O número de identificação do livro é: ${numeroDaCopia.numero}`,
-          "AnuncioDeSucesso"
+    cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+  }
+
+  // Atualiza o valor do campo
+  event.target.value = cpf;
+}
+
+function formatarDataParaString(data) {
+  const ano = data.getFullYear();
+  const mes = (data.getMonth() + 1).toString().padStart(2, "0"); // adiciona zero à esquerda se for necessário
+  const dia = data.getDate().toString().padStart(2, "0"); // adiciona zero à esquerda se for necessário
+
+  return `${ano}-${mes}-${dia}`;
+}
+async function realizarEmprestimo() {
+  const cpf = document.querySelector("input#cpf").value;
+  const tituloDoLivro = document.querySelector("input#tituloLivro").value;
+  const numeroDaCopia = document.querySelector("input#numeroCopia").value;
+  const devolucao = document.querySelector("input#dataDevolucao").value;
+
+  if (
+    cpf == "" ||
+    tituloDoLivro == "" ||
+    numeroDaCopia == "" ||
+    devolucao == ""
+  ) {
+    geraAlerta("Preencha todos os campos do formulário", "Atencao");
+  } else {
+    const hoje = new Date();
+    const dataDevolucao = new Date(devolucao);
+
+    if (dataDevolucao.getTime() <= hoje.getTime()) {
+      geraAlerta("Insira uma data de devolução válida", "Atencao");
+    } else {
+      const emprestimo = {
+        tituloDoLivro,
+        cpf,
+        numeroDaCopia,
+        dataEmprestimo: formatarDataParaString(new Date()),
+        dataDevolucao: devolucao,
+      };
+      try {
+        const respostaApi = await fetch(
+          "http://localhost:3000/emprestarLivro",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(emprestimo),
+          }
         );
+        const mensagem = await respostaApi.json();
+        geraAlerta(mensagem.message, "AnuncioDeSucesso");
+        setTimeout(function () {
+          window.location.reload();
+        }, 5000);
+      } catch (err) {
+        console.error(err.erro);
+        geraAlerta(err.message, "Erro");
       }
-    } catch (err) {
-      console.error(err.erro);
-      geraAlerta(err.message, "Erro");
     }
   }
 }
