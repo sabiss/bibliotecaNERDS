@@ -210,6 +210,17 @@ class responsaveisController {
         .send({ message: `Erro ao deletar livro`, erro: err });
     }
   };
+  static deletarCopiasDeUmLivro = async (req, res) => {
+    const { idLivro } = req.body;
+    try {
+      await copias.deleteMany({ idLivro: idLivro });
+      res.status(200).send({ message: "Cópia Deletada Com Sucesso!" });
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: "Erro ao Apagar Cópias Deste Livro", erro: err });
+    }
+  };
   static adicionarCopiaDeLivro = async (req, res) => {
     const { titulo } = req.body;
     const livro = await livros.findOne({ titulo: titulo });
@@ -301,12 +312,10 @@ class responsaveisController {
       });
       res.status(200).send({ message: "Livro Atualizado!" });
     } catch (err) {
-      return res
-        .status(500)
-        .send({
-          message: "Erro ao encontrar o livro par atualizá-lo",
-          erro: err,
-        });
+      return res.status(500).send({
+        message: "Erro ao encontrar o livro par atualizá-lo",
+        erro: err,
+      });
     }
   };
 }
