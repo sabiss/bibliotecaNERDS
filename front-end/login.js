@@ -18,10 +18,10 @@ function verificaSeAindaTemToken() {
           window.location.assign("./Administrador/home/index.html");
           break;
         case "resp":
-          window.location.assign("https://www.facebook.com");
+          window.location.assign("./Responsável/home/index.html");
           break;
         default:
-          window.location.assign("https://www.youtuber.com");
+          geraAlerta("Você não é cadastrado no sistema", "Erro");
           break;
       }
     }
