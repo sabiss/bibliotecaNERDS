@@ -10,7 +10,7 @@ router
   .get("/listarCopias/:id", checkRole(["resp", "adm"]),responsaveisController.listarCopias)
   .get("/buscarLivros", checkRole(["resp", "adm"]), responsaveisController.buscarLivro)
   .get('/listarEmprestimosAtrasados', checkRole(["resp", "adm"]), responsaveisController.listarEmprestimosAtrasados)
-  .get('/listarUmLivro/:titulo', checkRole(["resp", "adm"]), responsaveisController.listarUmLivro)
+  .get('/listarUmLivro/:id', checkRole(["resp", "adm"]), responsaveisController.listarUmLivro)
 
   .post("/adicionarCopia", checkRole(["resp", "adm"]),responsaveisController.adicionarCopiaDeLivro)
   .post("/cadastrarLivro", checkRole(["resp", "adm"]), responsaveisController.cadastrarLivro)
@@ -19,7 +19,7 @@ router
   .delete("/deletarLivro/:id", checkRole(["resp", "adm"]), responsaveisController.deletarLivro)
   
   .put("/registrarDevolucao", checkRole(["resp", "adm"]), responsaveisController.registrarDevolucaoDeLivro)
-  
+  .put('/atualizarLivro/:id', checkRole(["resp", "adm"]), responsaveisController.atualizarLivro)
   
   
 

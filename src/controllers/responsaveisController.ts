@@ -1,6 +1,6 @@
-import { AtrasoInfo } from "../interfaces/ferramentas";
-import { EmprestimoAtrasado } from "../interfaces/emprestimoAtrasado";
-import { Emprestimo } from "../interfaces/emprestimo";
+import { AtrasoInfo } from "../entities/ferramentas";
+import { EmprestimoAtrasado } from "../entities/emprestimoAtrasado";
+import { Emprestimo } from "../entities/emprestimo";
 import mongoose from "mongoose";
 import livros from "../models/Livro";
 import emprestimos from "../models/Emprestimo";
@@ -255,17 +255,58 @@ class responsaveisController {
     }
   };
   static listarUmLivro = async (req, res) => {
-    const { titulo } = req.params.titulo;
-    if (!titulo) {
-      return res.status(400).send({ message: "Informe o título do livro" });
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).send({ message: "Informe o ID do livro" });
     }
     try {
-      const livro = await livros.find({ titulo: titulo });
+      const livro = await livros.findById(id);
+      if (!livro) {
+        return res.status(404).send({ message: "Livro não encotrado" });
+      }
       return res.status(200).send(livro);
     } catch (err) {
       return res
         .status(500)
         .send({ message: "Erro ao listar este livro", erro: err });
+    }
+  };
+  static atualizarLivro = async (req, res) => {
+    const id = req.params.id;
+    const { novoTitulo, novoAutor, novoISBN, novoNumeroDePaginas, novoGenero } =
+      req.body;
+    if (
+      !novoTitulo ||
+      !novoAutor ||
+      !novoISBN ||
+      !novoNumeroDePaginas ||
+      !novoGenero
+    ) {
+      return res.status(400).send({ message: "Forneça todos os campos" });
+    }
+    try {
+      const livro = await livros.findById(id);
+      if (!livro) {
+        return res.status(404).send({ message: "O livro não foi encontrado" });
+      }
+      console.log(livro);
+      await livro.updateOne({
+        $set: {
+          titulo: novoTitulo,
+          autor: novoAutor,
+          isbn: novoISBN,
+          numero_paginas: novoNumeroDePaginas,
+          genero: novoGenero,
+        },
+      });
+      res.status(200).send({ message: "Livro Atualizado!" });
+    } catch (err) {
+      return res
+        .status(500)
+        .send({
+          message: "Erro ao encontrar o livro par atualizá-lo",
+          erro: err,
+        });
     }
   };
 }
