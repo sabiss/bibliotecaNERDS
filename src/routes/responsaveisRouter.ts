@@ -18,7 +18,7 @@ router
 
   .delete("/deletarLivro/:id", checkRole(["resp", "adm"]), responsaveisController.deletarLivro)
   .delete("/deletarTodasAsCopias", checkRole(["resp", "adm"]), responsaveisController.deletarTodasAsCopiasDeUmLivro)
-  .delete("/deletarUmaCopia", checkRole(["resp", "adm"]), responsaveisController.deletarTodasAsCopiasDeUmLivro)
+  .delete("/deletarUmaCopia", checkRole(["resp", "adm"]), responsaveisController.deletarUmCopia)
 
   .put("/registrarDevolucao", checkRole(["resp", "adm"]), responsaveisController.registrarDevolucaoDeLivro)
   .put('/atualizarLivro/:id', checkRole(["resp", "adm"]), responsaveisController.atualizarLivro)
