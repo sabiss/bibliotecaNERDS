@@ -11,6 +11,7 @@ router
   .get("/buscarLivros", checkRole(["resp", "adm"]), responsaveisController.buscarLivro)
   .get('/listarEmprestimosAtrasados', checkRole(["resp", "adm"]), responsaveisController.listarEmprestimosAtrasados)
   .get('/listarUmLivro/:id', checkRole(["resp", "adm"]), responsaveisController.listarUmLivro)
+  .get('/getResponsavelPorId/:id', checkRole(["resp", "adm"]), responsaveisController.buscarResponsavelPorId)
 
   .post("/adicionarCopia", checkRole(["resp", "adm"]),responsaveisController.adicionarCopiaDeLivro)
   .post("/cadastrarLivro", checkRole(["resp", "adm"]), responsaveisController.cadastrarLivro)

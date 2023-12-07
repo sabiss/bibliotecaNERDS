@@ -7,6 +7,7 @@ import emprestimos from "../models/Emprestimo";
 import copias from "../models/Copia";
 import usuarios from "../models/Usuario";
 import ferramentas from "../funcoesAuxiliares/ferramentas";
+import responsaveis from "../models/Responsavel";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
@@ -332,6 +333,23 @@ class responsaveisController {
         message: "Erro ao encontrar o livro par atualizá-lo",
         erro: err,
       });
+    }
+  };
+  static buscarResponsavelPorId = async (req, res) => {
+    const id = req.params.id;
+    try {
+      const responsavel = await responsaveis
+        .findOne({ _id: id })
+        .select("nome email fotoPerfil");
+      if (!responsavel) {
+        return res.status(404).send({ message: "Dados Não Encontrados" });
+      } else {
+        return res.status(200).send(responsavel);
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .send({ message: "Erro ao buscar dados do responsável", erro: err });
     }
   };
 }
