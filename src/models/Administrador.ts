@@ -5,6 +5,7 @@ const schemaAdm = new Schema({
   email: { type: String, required: true },
   senha: { type: String, required: true },
   tipo: { type: String, required: true },
+  fotoPerfil: { type: Buffer },
 });
 
 const administradores = mongoose.model("administradores", schemaAdm);
