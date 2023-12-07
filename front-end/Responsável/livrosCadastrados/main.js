@@ -53,6 +53,7 @@ function fecharAlerta() {
   const alerta = document.querySelector("div#alerta");
   alerta.classList.add("d-none");
   alerta.classList.remove("d-flex");
+  location.reload();
 }
 async function getLivros() {
   try {

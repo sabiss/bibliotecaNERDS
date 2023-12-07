@@ -66,6 +66,7 @@ function fecharAlert() {
   const alerta = document.querySelector("div#alerta");
   alerta.classList.add("d-none");
   alerta.classList.remove("d-flex");
+  location.reload();
 }
 async function cadastrarNovoUsuario() {
   const nomeSemFormatacao = document.querySelector("input#nome").value;
