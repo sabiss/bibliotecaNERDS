@@ -30,7 +30,11 @@ function verificaUsuario() {
   const payload = JSON.parse(atob(token.split(".")[1]));
   const dataExpiracaoToken = new Date(payload.exp * 1000);
 
-  if (payload.tipo != "adm" || dataExpiracaoToken < dataAtual) {
+  if (
+    payload.tipo != "adm" ||
+    payload.tipo != "resp" ||
+    dataExpiracaoToken < dataAtual
+  ) {
     window.location.assign("../../login.html");
   }
 }
