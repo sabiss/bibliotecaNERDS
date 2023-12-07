@@ -300,8 +300,8 @@ async function getLivros() {
 }
 async function remover(idLivro) {
   try {
-    const respostaApi = await fetch(
-      `http://localhost:3000/deletarLivro/${idLivro}`,
+    const respostaApiDeletarCopias = await fetch(
+      "http://localhost:3000/deletarCopias",
       {
         method: "DELETE",
         mode: "cors",
@@ -309,12 +309,30 @@ async function remover(idLivro) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify({ idLivro }),
       }
     );
-    if (respostaApi.ok) {
-      const mensagem = await respostaApi.json();
-      geraAlerta(mensagem.message, "AnuncioDeSucesso");
-      await criarTr();
+    if (respostaApiDeletarCopias.ok) {
+      const respostaApiDeletarLivros = await fetch(
+        `http://localhost:3000/deletarLivro/${idLivro}`,
+        {
+          method: "DELETE",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (respostaApiDeletarLivros.ok) {
+        const mensagem = await respostaApiDeletarLivros.json();
+        geraAlerta(mensagem.message, "AnuncioDeSucesso");
+        await criarTr();
+      }
+    } else {
+      const mensagem = await respostaApiDeletarCopias.json();
+      geraAlerta(mensagem.message, "Erro");
+      console.error(mensagem.err);
     }
   } catch (err) {
     if (err.erro) {
