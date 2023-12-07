@@ -221,6 +221,22 @@ class responsaveisController {
         .send({ message: "Erro ao Apagar Cópias Deste Livro", erro: err });
     }
   };
+  static deletarUmCopia = async (req, res) => {
+    const { numeroCopia } = req.body;
+    try {
+      const copiaParaSerDeletadaExiste = await copias.findOne({
+        codigoDeIdentificacao: numeroCopia,
+      });
+      if (!copiaParaSerDeletadaExiste) {
+        res.status(404).send({ message: "Essa Cópia Não Existe" });
+      } else {
+        await copias.findOneAndDelete({ codigoDeIdentificacao: numeroCopia });
+        res.status(200).send({ message: "Cópia Excluída Com Sucesso!" });
+      }
+    } catch (err) {
+      res.status(500).send({ message: "Erro ao Apagar Cópia", erro: err });
+    }
+  };
   static adicionarCopiaDeLivro = async (req, res) => {
     const { titulo } = req.body;
     const livro = await livros.findOne({ titulo: titulo });
