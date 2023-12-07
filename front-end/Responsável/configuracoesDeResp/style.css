@@ -1,0 +1,22 @@
+.circle {
+  width: 200px;
+  height: 200px;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin: 20px auto;
+  position: relative;
+  background: url("../../assets/avatarGrande.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.icon {
+  position: absolute;
+  bottom: 0;
+  left: 90%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+}
+.icon:hover {
+  cursor: pointer;
+}
