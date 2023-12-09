@@ -1,6 +1,6 @@
-# Sistema de Gerenciamento de Livros - Biblioteca Escolar de Mossoró
+# Sistema de Gerenciamento de Livros - Biblioteca Escolar
 
-Bem-vindo ao Sistema de Gerenciamento de Livros, desenvolvido como parte do projeto de extensão NERDS do IFRN para uma escola da cidade Mossoró - RN.
+Bem-vindo ao Sistema de Gerenciamento de Livros, desenvolvido como parte do projeto de extensão NERDS do IFRN para ser entregue a bibliotecas que necessitem de um sistema
 
 ## Tecnologias Utilizadas
 
