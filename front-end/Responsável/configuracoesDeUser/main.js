@@ -3,7 +3,7 @@ const token = localStorage.getItem("token");
 document.addEventListener("DOMContentLoaded", paginaCarregou());
 async function paginaCarregou() {
   verificaUsuario();
-  await preencherFormsComDadosDoResponsavel();
+  await preencherFormsComDadosDoUser();
 }
 function verificaUsuario() {
   const token = localStorage.getItem("token");
@@ -87,20 +87,85 @@ async function getResponsavel() {
     }
   }
 }
-async function preencherFormsComDadosDoResponsavel() {
+async function getAdministrador() {
+  const payload = JSON.parse(atob(decodeURIComponent(token.split(".")[1])));
+  if (!payload) {
+    geraAlerta("Erro com o token", "Erro");
+  } else {
+    const id = payload.id;
+    try {
+      const respostaApi = await fetch(
+        `http://localhost:3000/listarAdministradorPorId/${id}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!respostaApi.ok) {
+        const mensagem = await respostaApi.json();
+        geraAlerta(mensagem.message, "Erro");
+        if (message.erro) {
+          console.error(mensagem.erro);
+        }
+      } else {
+        const administrador = await respostaApi.json();
+        return administrador;
+      }
+    } catch (err) {
+      geraAlerta(err.message, "Erro");
+      if (err.erro) {
+        console.error(err.erro);
+      }
+    }
+  }
+}
+async function preencherFormsComDadosDoUser() {
   const fotoPerfil = document.querySelector("#fotoPerfil");
   const nome = document.querySelector("#nome");
   const email = document.querySelector("#email");
 
-  const responsavel = await getResponsavel();
+  let user;
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  if (payload.tipo === "adm") {
+    user = await getAdministrador();
+  } else if (payload.tipo === "resp") {
+    user = await getResponsavel();
+  } else {
+    window.location.assign("../../login.html");
+  }
 
-  nome.value = responsavel.nome;
-  email.value = responsavel.email;
+  nome.value = user.nome;
+  email.value = user.email;
 
-  if (responsavel.fotoPerfil) {
-    fotoPerfil.style.backgroundImage = `url("${responsavel.fotoPerfil}")'`;
+  if (user.fotoPerfil) {
+    fotoPerfil.style.backgroundImage = `url("${user.fotoPerfil}")'`;
     fotoPerfil.style.backgroundSize = "cover"; // Ajuste o tamanho conforme necessário
     fotoPerfil.style.backgroundPosition = "center"; // Centralize a imagem
     fotoPerfil.style.backgroundRepeat = "no-repeat";
   }
+}
+function pegarImagem(event) {
+  const arquivo = event.target;
+  const formData = new FormData();
+
+  formData.append("image", arquivo.files[0]);
+
+  exibirParaOUserAImagemSubmetida(arquivo.files[0]);
+}
+function exibirParaOUserAImagemSubmetida(file) {
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const imageUrl = e.target.result;
+    const imageContainer = document.getElementById("fotoPerfil");
+    imageContainer.style.backgroundImage = `url('${imageUrl}')`;
+    // Outras manipulações de estilo, se necessário
+  };
+
+  reader.readAsDataURL(file);
 }
