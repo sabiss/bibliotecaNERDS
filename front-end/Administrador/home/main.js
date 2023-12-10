@@ -28,7 +28,9 @@ function verificaUsuario() {
   const payload = JSON.parse(atob(token.split(".")[1]));
   const dataExpiracaoToken = new Date(payload.exp * 1000);
 
-  if (payload.tipo != "adm" || dataExpiracaoToken < dataAtual) {
+  if (payload.tipo != "adm") {
+    window.location.assign("../../login.html");
+  } else if (dataExpiracaoToken < dataAtual) {
     window.location.assign("../../login.html");
   }
 }
