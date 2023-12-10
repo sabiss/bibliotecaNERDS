@@ -81,6 +81,8 @@ main,
 main {
   flex-wrap: wrap;
   padding: 30px 10px;
+  flex-grow: 1;
+  box-sizing: border-box;
 }
 .botoesContainer {
   display: flex;
