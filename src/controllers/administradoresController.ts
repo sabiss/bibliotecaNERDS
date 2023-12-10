@@ -34,7 +34,8 @@ class administradorController {
       res.status(201).send({ message: "Usuário Criado com Sucesso" });
     } catch (error) {
       res.status(500).send({
-        message: `Erro ao salvar usuário no Banco`, erro: error,
+        message: `Erro ao salvar usuário no Banco`,
+        erro: error,
       });
     }
   };
@@ -74,6 +75,30 @@ class administradorController {
       return res
         .status(500)
         .send({ message: `Erro ao listar administradores - ${err}` });
+    }
+  };
+  static listarAdministradorPorId = async (req, res) => {
+    const id = req.params.id;
+
+    if (!id) {
+      return res
+        .status(400)
+        .send({ message: "Erro ao reconhecer id do usuário" });
+    } else {
+      try {
+        const adm = await administradores.findOne({ _id: id });
+        if (!adm) {
+          return res
+            .status(404)
+            .send({ message: "Administrador não encontrado" });
+        } else {
+          return res.status(200).send(adm);
+        }
+      } catch (err) {
+        return req
+          .status(500)
+          .send({ message: "Erro ao buscar o Administrador", erro: err });
+      }
     }
   };
   static cadastraResponsavel = async (req, res) => {

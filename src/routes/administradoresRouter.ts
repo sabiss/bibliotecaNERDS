@@ -8,6 +8,7 @@ router
   .get("/listarUsers",checkRole(["adm"]),administradoresController.listarUsuarios)
   .get("/listarAdministradores", checkRole(["adm"]), administradoresController.listarAdministradores)
   .get("/listarResponsaveis", checkRole(["adm"]),administradoresController.listarResponsaveis)
+  .get("/listarAdministradorPorId/:id", checkRole(["adm"]),administradoresController.listarAdministradorPorId)
 
   .post("/cadastroAdm", checkRole(["adm"]), administradoresController.cadastrarAdministrador)
   .post("/cadastroUser", checkRole(["adm"]),administradoresController.cadastrarUsuario)
