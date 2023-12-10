@@ -14,10 +14,9 @@ async function verificarToken() {
     const dataAtual = new Date();
     const dataExpiracaoToken = new Date(payload.exp * 1000);
 
-    if (
-      (payload.tipo != "adm" && payload.tipo != "resp") ||
-      dataExpiracaoToken < dataAtual
-    ) {
+    if (payload.tipo != "adm" && payload.tipo != "resp") {
+      window.location.assign("../../login.html");
+    } else if (dataExpiracaoToken < dataAtual) {
       window.location.assign("../../login.html");
     }
   } else {
