@@ -79,6 +79,8 @@ main,
   align-items: center;
 }
 main {
+  flex-grow: 1;
+  box-sizing: border-box;
   flex-wrap: wrap;
   padding: 30px 10px;
 }
