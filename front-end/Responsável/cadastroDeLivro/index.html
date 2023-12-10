@@ -13,14 +13,24 @@
       crossorigin="anonymous"
     />
   </head>
-  <body>
+  <body style="background-color: #1e6091">
     <header>
-      <a href="../home/index.html"><img src="../../assets/seta.png"></a>
+      <a href="../home/index.html"><img src="../../assets/setaBranca.png" /></a>
     </header>
     <main class="d-flex flex-column justify-content-around align-items-center">
-      <div class="alert alert-dismissible fade show d-none justify-content-center align-items-center" role="alert" id="alerta">
+      <div
+        class="alert alert-dismissible fade show d-none justify-content-center align-items-center"
+        role="alert"
+        id="alerta"
+      >
         <strong id="textoDoAlerta"></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="fecharAlert()"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+          onclick="fecharAlert()"
+        ></button>
       </div>
       <div class="container">
         <h2>Formulário de Cadastro de Livro</h2>
@@ -34,7 +44,7 @@
               required
             />
           </div>
-  
+
           <div class="form-group">
             <label for="nomeAutor">Nome do Autor</label>
             <input
@@ -44,7 +54,7 @@
               required
             />
           </div>
-  
+
           <div class="form-group">
             <label for="isbn">Número ISBN</label>
             <input
@@ -54,7 +64,7 @@
               required
             />
           </div>
-  
+
           <div class="form-group">
             <label for="numeroPaginas">Número de Páginas</label>
             <input
@@ -64,7 +74,7 @@
               required
             />
           </div>
-  
+
           <div class="form-group">
             <label for="genero">Gênero</label>
             <select id="genero" required>
@@ -79,14 +89,14 @@
               <option value="Acadêmico">Auto Ajuda</option>
             </select>
           </div>
-  
+
           <button class="btn-submit" onclick="cadastrarNovoLivro()">
             Cadastrar Livro
           </button>
         </div>
       </div>
     </main>
-    
+
     <script src="./main.js"></script>
   </body>
 </html>
