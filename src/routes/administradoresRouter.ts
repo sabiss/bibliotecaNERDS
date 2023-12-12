@@ -17,7 +17,7 @@ router
   
   .put("/editarDadosAdm", checkRole(["adm"]),administradoresController.atualizarDados)
 
-  .delete("/deletarUser/:id", checkRole(["adm"]),administradoresController.deletarUsuario)
+  .delete("/deletarUser", checkRole(["adm"]),administradoresController.deletarUsuario)
   .delete("/deletarResponsavel/:id", checkRole(["adm"]),administradoresController.deletarResponsavel)
 
 export default router;
