@@ -177,7 +177,6 @@ class administradorController {
       return res.status(500).send(`Erro ao deletar usuário - ${error}`);
     }
   };
-
   static listarUsuarios = async (
     req: express.Request,
     res: express.Response
@@ -189,6 +188,36 @@ class administradorController {
       res.status(500).send({
         message: `Erro ao buscar lista de usuários no banco - ${error}`,
       });
+    }
+  };
+  static atualizarDados = async (req, res) => {
+    const { nome, email, senha, id } = req.body;
+    let administrador;
+    try {
+      if (!senha) {
+        administrador = await administradores.findOneAndUpdate(
+          { _id: id },
+          { $set: { nome: nome, email: email } },
+          { new: true }
+        );
+      } else {
+        administrador = await administradores.findOneAndUpdate(
+          { _id: id },
+          { $set: { nome: nome, email: email, senha: senha } },
+          { new: true }
+        );
+      }
+      if (!administrador) {
+        return res
+          .status(404)
+          .send({ message: "Administrador não encontrado" });
+      }
+      return res.status(200).send({ message: "Dados Atualizados" });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .send({ message: "Erro ao atualizar dados", erro: error });
     }
   };
 }

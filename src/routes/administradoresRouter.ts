@@ -14,6 +14,8 @@ router
   .post("/cadastroUser", checkRole(["adm"]),administradoresController.cadastrarUsuario)
   .post("/cadastrarResponsavel",checkRole(["adm"]),administradoresController.cadastraResponsavel)
   
+  .put("/editarDadosAdm", checkRole(["adm"]),administradoresController.atualizarDados)
+
   .delete("/deletarUser/:id", checkRole(["adm"]),administradoresController.deletarUsuario)
   .delete("/deletarResponsavel/:id", checkRole(["adm"]),administradoresController.deletarResponsavel)
 

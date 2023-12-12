@@ -352,6 +352,35 @@ class responsaveisController {
         .send({ message: "Erro ao buscar dados do responsável", erro: err });
     }
   };
+  static atualizarDados = async (req, res) => {
+    const { nome, email, senha, id } = req.body;
+    let responsavel;
+    try {
+      if (!senha) {
+        responsavel = await responsaveis.findOneAndUpdate(
+          { _id: id },
+          { $set: { nome: nome, email: email } },
+          { new: true }
+        );
+      } else {
+        responsavel = await responsaveis.findOneAndUpdate(
+          { _id: id },
+          { $set: { nome: nome, email: email, senha: senha } },
+          { new: true }
+        );
+      }
+      if (!responsavel) {
+        return res
+          .status(404)
+          .send({ message: "Bibliotecário não encontrado" });
+      }
+      return res.status(200).send({ message: "Dados Atualizados" });
+    } catch (error) {
+      return res
+        .status(500)
+        .send({ message: "Erro ao atualizar dados", erro: error });
+    }
+  };
 }
 
 export default responsaveisController;

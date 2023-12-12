@@ -23,6 +23,7 @@ router
 
   .put("/registrarDevolucao", checkRole(["resp", "adm"]), responsaveisController.registrarDevolucaoDeLivro)
   .put('/atualizarLivro/:id', checkRole(["resp", "adm"]), responsaveisController.atualizarLivro)
+  .put("/editarDadosResp", checkRole(["resp"]), responsaveisController.atualizarDados)
   
   
 
