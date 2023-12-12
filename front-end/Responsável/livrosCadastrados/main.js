@@ -96,7 +96,8 @@ async function criarTr() {
                     <td>${numeroCopias.length}</td>
                     <td>${livro.numero_paginas}</td>
                     <td onclick="preencherInputsParaEdicao('${livro._id}')" data-bs-toggle="modal" data-bs-target="#exampleModal"><div class="editar iconesAcao"><img src="../../assets/lapisEdicao.png"></div></td>
-                    <td onclick= "remover('${livro._id}')"><div class = "iconesAcao remover"><img src="../../assets/lixo.png"></div></td>
+                    <td data-bs-toggle="modal"
+                    data-bs-target="#modalConfirmacaoExclusao" onclick="capturarIdDoLivroParaDeletar('${livro._id}')"><div class = "iconesAcao remover"><img src="../../assets/lixo.png"></div></td>
                 </tr>
             `;
     }
@@ -125,7 +126,8 @@ async function exibirSugestoes(livros) {
         <td>${numeroCopias.length}</td>
         <td>${livro.numero_paginas}</td>
         <td onclick="preencherInputsParaEdicao('${livro._id}')" data-bs-toggle="modal" data-bs-target="#exampleModal"><div class="editar iconesAcao"><img src="../../assets/lapisEdicao.png"></div></td>
-        <td onclick= "remover('${livro._id}')"><div class = "iconesAcao remover"><img src="../../assets/lixo.png"></div></td>
+        <td data-bs-toggle="modal"
+        data-bs-target="#modalConfirmacaoExclusao" onclick="capturarIdDoLivroParaDeletar('${livro._id}')><div class = "iconesAcao remover"><img src="../../assets/lixo.png"></div></td>
       </tr> 
     `;
   }
@@ -298,7 +300,11 @@ async function getLivros() {
     geraAlerta(err.message, "Erro");
   }
 }
-async function remover(idLivro) {
+let idLivroParaDeletar;
+function capturarIdDoLivroParaDeletar(id) {
+  idLivroParaDeletar = id;
+}
+async function remover() {
   try {
     const respostaApiDeletarCopias = await fetch(
       "http://localhost:3000/deletarTodasAsCopias",
@@ -309,12 +315,12 @@ async function remover(idLivro) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ idLivro }),
+        body: JSON.stringify({ idLivro: idLivroParaDeletar }),
       }
     );
     if (respostaApiDeletarCopias.ok) {
       const respostaApiDeletarLivros = await fetch(
-        `http://localhost:3000/deletarLivro/${idLivro}`,
+        `http://localhost:3000/deletarLivro/${idLivroParaDeletar}`,
         {
           method: "DELETE",
           mode: "cors",
