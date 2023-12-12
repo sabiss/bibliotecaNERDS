@@ -144,20 +144,24 @@ class administradorController {
     }
   };
   static deletarResponsavel = async (req, res) => {
-    const id = req.params.id;
+    const { email } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "ID de usuário inválido" });
-    }
     try {
-      await responsaveis.findByIdAndDelete(id);
+      const bibliotecarioDeletado = await responsaveis.findOneAndDelete({
+        email: email,
+      });
+      if (!bibliotecarioDeletado) {
+        return res
+          .status(404)
+          .send({ message: "Bibliotecário não encontrado" });
+      }
       return res
         .status(200)
         .send({ message: "Responsável deletado com sucesso" });
     } catch (err) {
       return res
-        .status(404)
-        .send({ message: `Responsável não encontrado - Erro: ${err}` });
+        .status(500)
+        .send({ message: `Erro ao deletar bibliotecário`, erro: err });
     }
   };
   static deletarUsuario = async (
