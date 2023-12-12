@@ -164,17 +164,18 @@ class administradorController {
     req: express.Request,
     res: express.Response
   ) => {
-    const id = req.params.id;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "ID de usuário inválido" });
-    }
+    const { email } = req.body;
 
     try {
-      await usuarios.findByIdAndDelete(id);
+      const usuarioDeletado = await usuarios.findOneAndDelete({ email: email });
+      if (!usuarioDeletado) {
+        return res.status(404).send({ message: "Usuário não encontrado" });
+      }
       return res.status(200).send({ message: "Usuário deletado com sucesso" });
     } catch (error) {
-      return res.status(500).send(`Erro ao deletar usuário - ${error}`);
+      return res
+        .status(500)
+        .send({ message: `Erro ao deletar usuário`, erro: error });
     }
   };
   static listarUsuarios = async (
