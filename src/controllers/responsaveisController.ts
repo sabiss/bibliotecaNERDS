@@ -8,6 +8,7 @@ import copias from "../models/Copia";
 import usuarios from "../models/Usuario";
 import ferramentas from "../funcoesAuxiliares/ferramentas";
 import responsaveis from "../models/Responsavel";
+import bcrypt from "bcrypt";
 
 class responsaveisController {
   static cadastrarLivro = async (req, res) => {
@@ -363,9 +364,11 @@ class responsaveisController {
           { new: true }
         );
       } else {
+        const salt = await bcrypt.genSalt();
+        const senhaHash = await bcrypt.hash(`${senha}`, salt);
         responsavel = await responsaveis.findOneAndUpdate(
           { _id: id },
-          { $set: { nome: nome, email: email, senha: senha } },
+          { $set: { nome: nome, email: email, senha: senhaHash } },
           { new: true }
         );
       }
