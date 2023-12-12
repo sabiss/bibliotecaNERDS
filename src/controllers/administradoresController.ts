@@ -220,6 +220,25 @@ class administradorController {
         .send({ message: "Erro ao atualizar dados", erro: error });
     }
   };
+  static buscarUsuarioPorEmail = async (req, res) => {
+    const email = req.params.email;
+    if (!email) {
+      return res.status(400).send({ message: "Digite o email do usuário" });
+    }
+    try {
+      const usuario = await usuarios.findOne({ email: email });
+      if (!usuario) {
+        return res
+          .status(404)
+          .send({ message: "Usuário com esse email não encontrado" });
+      }
+      return res.status(200).send(usuario);
+    } catch (error) {
+      return res
+        .status(500)
+        .send({ message: "Erro ao buscar usuário", erro: error });
+    }
+  };
 }
 
 export default administradorController;

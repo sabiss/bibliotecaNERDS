@@ -9,6 +9,7 @@ router
   .get("/listarAdministradores", checkRole(["adm"]), administradoresController.listarAdministradores)
   .get("/listarResponsaveis", checkRole(["adm"]),administradoresController.listarResponsaveis)
   .get("/listarAdministradorPorId/:id", checkRole(["adm"]),administradoresController.listarAdministradorPorId)
+  .get('/getUsuarioPorEmail/:email', checkRole(["adm"]),administradoresController.buscarUsuarioPorEmail)
 
   .post("/cadastroAdm", checkRole(["adm"]), administradoresController.cadastrarAdministrador)
   .post("/cadastroUser", checkRole(["adm"]),administradoresController.cadastrarUsuario)
