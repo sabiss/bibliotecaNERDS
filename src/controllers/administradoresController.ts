@@ -244,6 +244,25 @@ class administradorController {
         .send({ message: "Erro ao buscar usuário", erro: error });
     }
   };
+  static buscarBibliotecarioPorEmail = async (req, res) => {
+    const email = req.params.email;
+    if (!email) {
+      return res.status(400).send({ message: "Insira um email" });
+    }
+    try {
+      const bibliotecario = await responsaveis.findOne({
+        email: email,
+      });
+      if (!bibliotecario) {
+        return res
+          .status(404)
+          .send({ message: "Bibliotecário não encontrado" });
+      }
+      return res.status(200).send(bibliotecario);
+    } catch (error) {
+      return res.status(500).send({ message: "Erro ao deletar", erro: error });
+    }
+  };
 }
 
 export default administradorController;
