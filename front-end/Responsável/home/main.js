@@ -139,7 +139,7 @@ function preencherNomeUsuario() {
   const payload = JSON.parse(atob(token.split(".")[1]));
 
   const nome = document.querySelector("p#nomeUser");
-  nome.innerHTML += `${payload.nome}`;
+  nome.innerHTML += `${decodeURIComponent(escape(payload.nome))}`;
 }
 function sair() {
   // Remove uma variável específica do localStorage
