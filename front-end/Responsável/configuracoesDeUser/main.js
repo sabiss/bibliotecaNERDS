@@ -169,3 +169,63 @@ function exibirParaOUserAImagemSubmetida(file) {
 
   reader.readAsDataURL(file);
 }
+async function editarDados() {
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const fotoPerfil = document.querySelector("#fotoPerfil").imageUrl;
+  const senha = document.querySelector("#senha").value;
+  const nome = document.querySelector("#nome").value;
+  const email = document.querySelector("#email").value;
+
+  if (!nome && !email && !senha) {
+    geraAlerta(
+      "A atualização não poderá ser com informações nulas. Digite algo",
+      "Atencao"
+    );
+  } else {
+    let respostaApi;
+    if (payload.tipo === "adm") {
+      try {
+        respostaApi = await fetch("http://localhost:3000/editarDadosAdm", {
+          method: "PUT",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ nome, email, senha, id: payload.id }),
+        });
+      } catch (error) {
+        if (error.erro) {
+          console.error(error.erro);
+        }
+        geraAlerta(error.message, "Erro");
+      }
+    } else {
+      try {
+        respostaApi = await fetch("http://localhost:3000/editarDadosResp", {
+          method: "PUT",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ nome, email, senha, id: payload.id }),
+        });
+      } catch (error) {
+        if (error.erro) {
+          console.error(error.erro);
+        }
+        geraAlerta(error.message, "Erro");
+      }
+    }
+    const mensagem = await respostaApi.json();
+    if (respostaApi.ok) {
+      geraAlerta(
+        `${mensagem.message}. Os novos dados passarão a ser exibidos quando você realizar login novamente`,
+        "AnuncioDeSucesso"
+      );
+    } else {
+      geraAlerta(mensagem.message, "Erro");
+    }
+  }
+}
