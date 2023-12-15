@@ -40,7 +40,7 @@ class administradorController {
     }
   };
   static cadastrarAdministrador = async (req, res) => {
-    const { email, senha, tipo, nome } = req.body;
+    const { email, senha, nome, cpf } = req.body;
 
     try {
       const existe = await ferramentas.verificarUsoDeEmail(req, res);
@@ -54,6 +54,7 @@ class administradorController {
           email,
           senha: senhaHash,
           tipo: "adm",
+          cpf,
         });
 
         await novoAdm.save();
