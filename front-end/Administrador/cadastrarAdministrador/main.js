@@ -99,7 +99,11 @@ async function cadastrarNovoAdm() {
         body: JSON.stringify(administrador),
       });
       const mensagem = await respostaApi.json();
-      geraAlerta(mensagem.message, "AnuncioDeSucesso");
+      if (!respostaApi.ok) {
+        geraAlerta(mensagem.message, "Erro");
+      } else {
+        geraAlerta(mensagem.message, "AnuncioDeSucesso");
+      }
     } catch (err) {
       console.error(err.erro);
       geraAlerta(err.message, "Erro");
