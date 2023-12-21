@@ -3,6 +3,7 @@ import conexaoComDataBase from "./config/dbconnect";
 import router from "./routes/index";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 dotenv.config({ path: `${__dirname}/.env` });
 
@@ -17,7 +18,8 @@ conexaoComDataBase.once("open", () => {
   console.log("Banco conectado");
 });
 
-app.use(express.json(), cors('*'));
+app.use("/public", express.static(path.join(__dirname, "..", "uploads")));
+app.use(express.json(), cors("*"));
 router(app);
 
 export default app;
