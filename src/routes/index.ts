@@ -3,6 +3,7 @@ import administradores from "../routes/administradoresRouter";
 import responsaveis from "../routes/responsaveisRouter";
 import login from "../routes/login";
 import authMiddleware from "../middlewares/authMiddleware";
+import fotos from "../routes/fotosRoutes";
 
 const routes = (app) => {
   //pega a instância do express que é o app
@@ -12,7 +13,8 @@ const routes = (app) => {
     login,
     authMiddleware,
     administradores,
-    responsaveis
+    responsaveis,
+    fotos
   );
 };
 
