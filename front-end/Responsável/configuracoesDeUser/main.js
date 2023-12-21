@@ -1,5 +1,4 @@
 const token = localStorage.getItem("token");
-
 document.addEventListener("DOMContentLoaded", paginaCarregou());
 async function paginaCarregou() {
   verificaUsuario();
@@ -125,6 +124,7 @@ async function getAdministrador() {
   }
 }
 async function preencherFormsComDadosDoUser() {
+  abrirTelaDeLoading();
   const fotoPerfil = document.querySelector("#fotoPerfil");
   const nome = document.querySelector("#nome");
   const email = document.querySelector("#email");
@@ -141,23 +141,23 @@ async function preencherFormsComDadosDoUser() {
 
   nome.value = user.nome;
   email.value = user.email;
-
   if (user.fotoPerfil) {
-    fotoPerfil.style.backgroundImage = `url("${user.fotoPerfil}")'`;
-    fotoPerfil.style.backgroundSize = "cover"; // Ajuste o tamanho conforme necessário
-    fotoPerfil.style.backgroundPosition = "center"; // Centralize a imagem
-    fotoPerfil.style.backgroundRepeat = "no-repeat";
+    const foto = await getFotoPerfil(user.fotoPerfil);
+    fotoPerfil.style.background = `url("../../../uploads/${foto}") center/cover no-repeat`;
+  } else {
+    fotoPerfil.style.background =
+      "url('../../assets/avatarGrande.png') center/cover no-repeat";
   }
+  fecharTelaDeLoading();
 }
 function pegarImagem(event) {
   const arquivo = event.target;
-  const formData = new FormData();
-
-  formData.append("image", arquivo.files[0]);
 
   exibirParaOUserAImagemSubmetida(arquivo.files[0]);
 }
+let usuarioEnviouImagem = false;
 function exibirParaOUserAImagemSubmetida(file) {
+  usuarioEnviouImagem = true;
   const reader = new FileReader();
 
   reader.onload = function (e) {
@@ -170,8 +170,8 @@ function exibirParaOUserAImagemSubmetida(file) {
   reader.readAsDataURL(file);
 }
 async function editarDados() {
+  abrirTelaDeLoading();
   const payload = JSON.parse(atob(token.split(".")[1]));
-  const fotoPerfil = document.querySelector("#fotoPerfil").imageUrl;
   const senha = document.querySelector("#senha").value;
   const nome = document.querySelector("#nome").value;
   const email = document.querySelector("#email").value;
@@ -228,4 +228,148 @@ async function editarDados() {
       geraAlerta(mensagem.message, "Erro");
     }
   }
+  await editarFoto();
+  fecharTelaDeLoading();
+}
+async function removerFotoAntiga(usuario) {
+  try {
+    const respostaApi = await fetch(
+      `http://localhost:3000/deletarFoto/${usuario.fotoPerfil}`,
+      {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ src: usuario.fotoPerfil }),
+      }
+    );
+    const mensagem = await respostaApi.json();
+    if (!respostaApi.ok) {
+      if (mensagem.erro) {
+        console.error(mensagem.erro);
+      }
+      geraAlerta(mensagem.message, "Erro");
+    }
+  } catch (error) {
+    if (error.erro) {
+      console.error(error.erro);
+    }
+    geraAlerta(error.message, "Erro");
+  }
+}
+async function salvarFotoNoBanco() {
+  const foto = document.querySelector("input#inputImagem").files[0];
+  const formData = new FormData();
+  formData.append("file", foto);
+
+  try {
+    const respostaApi = await fetch("http://localhost:3000/adicionarFoto", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const foto = await respostaApi.json();
+
+    if (respostaApi.ok) {
+      return foto;
+    } else {
+      geraAlerta(foto.message, "Erro");
+    }
+  } catch (error) {
+    geraAlerta(error.message, "Erro");
+    if (error.erro) {
+      console.error(error.erro);
+    }
+  }
+}
+async function atualizarFotoDePerfil(idUsuario, srcDaFoto) {
+  try {
+    const respostaApi = await fetch(
+      "http://localhost:3000/atualizarFotoDePerfil",
+      {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ idUsuario, src: srcDaFoto }),
+      }
+    );
+    const retorno = await respostaApi.json();
+
+    if (respostaApi.ok) {
+      geraAlerta(retorno.message, "AnuncioDeSucesso");
+    } else {
+      if (retorno.erro) {
+        console.error(retorno.erro);
+      }
+      geraAlerta(retorno.message, "Erro");
+    }
+  } catch (error) {
+    if (error.erro) {
+      console.error(error.erro);
+    }
+    geraAlerta(error.message, "Erro");
+  }
+}
+async function editarFoto() {
+  try {
+    if (usuarioEnviouImagem) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      let user;
+
+      if (payload.tipo === "adm") {
+        user = await getAdministrador();
+      } else if (payload.tipo === "resp") {
+        user = await getResponsavel();
+      } else {
+        window.location.assign("../../login.html");
+      }
+
+      if (user.fotoPerfil) {
+        await removerFotoAntiga(user);
+      }
+
+      const foto = await salvarFotoNoBanco();
+      if (foto) {
+        const retorno = await atualizarFotoDePerfil(user._id, foto.src);
+        geraAlerta(retorno.message, "AnuncioDeSucesso");
+      }
+    }
+  } catch (error) {
+    geraAlerta(error.message, "erro");
+  }
+}
+async function getFotoPerfil(idFoto) {
+  try {
+    const respostaApi = await fetch(`http://localhost:3000/foto/${idFoto}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const foto = await respostaApi.json();
+
+    if (respostaApi.ok) {
+      return foto.nome;
+    } else {
+      geraAlerta(foto.message, "Erro");
+    }
+  } catch (error) {
+    geraAlerta(error.message, "Erro");
+  }
+}
+function abrirTelaDeLoading() {
+  const telaDeLoading = document.querySelector("div#telaDeLoading");
+  telaDeLoading.style.display = "flex";
+}
+function fecharTelaDeLoading() {
+  const telaDeLoading = document.querySelector("div#telaDeLoading");
+  telaDeLoading.style.display = "none";
 }
