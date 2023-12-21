@@ -31,6 +31,7 @@ function verificaUsuario() {
   if (payload.tipo != "adm") {
     window.location.assign("../../login.html");
   } else if (dataExpiracaoToken < dataAtual) {
+    localStorage.clear();
     window.location.assign("../../login.html");
   }
 }
